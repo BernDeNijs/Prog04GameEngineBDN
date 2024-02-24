@@ -10,6 +10,8 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 
+#include "Time.h"
+
 SDL_Window* g_window{};
 
 void PrintSDLVersion()
@@ -82,13 +84,34 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
+	auto& time = Time::GetInstance();
 
 	// todo: this update loop could use some work.
 	bool doContinue = true;
 	while (doContinue)
 	{
+		//Update gametime
+		time.Update();
+
+		//Check for exit + process input
 		doContinue = input.ProcessInput();
+
+		//Update game
 		sceneManager.Update();
+
+		//Fixed update game
+		
+		m_Lag += time.GetFixedTimeStep();
+		while (m_Lag >= time.GetFixedTimeStep())
+		{
+			sceneManager.FixedUpdate();
+			m_Lag -= time.GetFixedTimeStep();
+		}
+
+		//Render
 		renderer.Render();
+
+		//Limit FPS
+		time.FPSDelay();
 	}
 }

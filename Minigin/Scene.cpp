@@ -26,11 +26,22 @@ void Scene::RemoveAll()
 	m_objects.clear();
 }
 
-void Scene::Update()
+void Scene::Update() const
+{
+	for(const auto& object : m_objects)
+	{
+		object->Update();
+	}
+	for (const auto& object : m_objects)
+	{
+		object->LateUpdate();
+	}
+}
+void Scene::FixedUpdate()
 {
 	for(auto& object : m_objects)
 	{
-		object->Update();
+		object->FixedUpdate();
 	}
 }
 

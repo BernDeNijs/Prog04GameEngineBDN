@@ -2,23 +2,41 @@
 #include "GameObject.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
+#include "GameComponent.h"
+#include "ranges"
+
+
+dae::GameObject::GameObject()
+{
+	//AddComponent<TransformComponent>();
+}
+
+
 
 dae::GameObject::~GameObject() = default;
 
-void dae::GameObject::Update(){}
-
+void dae::GameObject::Update()
+{
+	for (const auto& component : m_pComponents| std::views::values) {
+		component->Update();
+	}
+}
+void dae::GameObject::LateUpdate()
+{
+	for (const auto& component : m_pComponents | std::views::values) {
+		component->LateUpdate();
+	}
+}
+void dae::GameObject::FixedUpdate()
+{
+	for (const auto& component : m_pComponents | std::views::values) {
+		component->FixedUpdate();
+	}
+}
 void dae::GameObject::Render() const
 {
-	const auto& pos = m_transform.GetPosition();
-	Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
+	for (const auto& component : m_pComponents | std::views::values) {
+		component->Render();
+	}
 }
 
-void dae::GameObject::SetTexture(const std::string& filename)
-{
-	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
-}
-
-void dae::GameObject::SetPosition(float x, float y)
-{
-	m_transform.SetPosition(x, y, 0.0f);
-}
