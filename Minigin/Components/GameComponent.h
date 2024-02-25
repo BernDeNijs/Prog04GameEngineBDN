@@ -1,14 +1,12 @@
 #pragma once
-#include "GameObject.h"
+#include "../GameObject.h"
 
 namespace dae
 {
 	class GameComponent
 	{
 	public:
-
-
-		GameComponent() = default;
+		GameComponent(GameObject* owner) :m_pOwner(owner) {}
 		virtual ~GameComponent() = default;
 		GameComponent(const GameComponent& other) = delete;
 		GameComponent(GameComponent&& other) = delete;
@@ -20,14 +18,14 @@ namespace dae
 		virtual void FixedUpdate() = 0;
 		virtual void Render() const = 0;
 		virtual void RenderImGui() = 0;
-		void SetOwner(GameObject* owner) { m_pOwner = owner; };
+		void SetOwner(GameObject* owner) { m_pOwner = owner; }
 
-		void SetMarkedForDeath(bool b) { m_MarkedForDeath = b; };
-		bool GetMarkedForDeath() const { return m_MarkedForDeath; };
+		void SetMarkedForDeath(bool b) { m_MarkedForDeath = b; }
+		bool GetMarkedForDeath() const { return m_MarkedForDeath; }
 
 	private:
 		bool m_MarkedForDeath{ false };
 	protected:
-		GameObject* m_pOwner{ nullptr };
+		GameObject* m_pOwner = nullptr;
 	};
 }

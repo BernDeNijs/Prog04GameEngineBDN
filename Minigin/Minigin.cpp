@@ -10,7 +10,7 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 
-#include "Time.h"
+#include "GameTime.h"
 
 SDL_Window* g_window{};
 
@@ -67,6 +67,10 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	Renderer::GetInstance().Init(g_window);
 
 	ResourceManager::GetInstance().Init(dataPath);
+
+	
+
+	
 }
 
 dae::Minigin::~Minigin()
@@ -84,14 +88,23 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
-	auto& time = Time::GetInstance();
 
-	// todo: this update loop could use some work.
+
+	//Set MaxFps with screen refreshRate
+	DEVMODE dm;
+	memset(&dm, 0, sizeof(dm));
+	dm.dmSize = sizeof(dm);
+	if (EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm) != 0)
+	{
+		GameTime::SetMaxFPS(static_cast<float>(dm.dmDisplayFrequency));
+	}
+
+
 	bool doContinue = true;
 	while (doContinue)
 	{
-		//Update gametime
-		time.Update();
+		//Update GameTime
+		GameTime::Update();
 
 		//Check for exit + process input
 		doContinue = input.ProcessInput();
@@ -101,17 +114,17 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 		//Fixed update game
 		
-		m_Lag += time.GetFixedTimeStep();
-		while (m_Lag >= time.GetFixedTimeStep())
+		m_Lag += GameTime::GetFixedTimeStep();
+		while (m_Lag >= GameTime::GetFixedTimeStep())
 		{
 			sceneManager.FixedUpdate();
-			m_Lag -= time.GetFixedTimeStep();
+			m_Lag -= GameTime::GetFixedTimeStep();
 		}
 
 		//Render
 		renderer.Render();
 
 		//Limit FPS
-		time.FPSDelay();
+		GameTime::FPSDelay();
 	}
 }

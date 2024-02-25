@@ -5,10 +5,13 @@
 #include "Singleton.h"
 
 
-class Time : public dae::Singleton<Time>
+
+class GameTime : public dae::Singleton<GameTime>
 {
 public:
-    void Update()
+
+
+    static void Update()
     {
         const auto now = std::chrono::high_resolution_clock::now();
         const auto elapsed = now - m_LastTime;
@@ -16,18 +19,18 @@ public:
         m_LastTime = now;
     }
 
-    void SetMaxFPS(float newMax)
+    static void SetMaxFPS(float newMax)
     {
         m_MaxFPS = newMax ;
         m_MsPerFrame = 1000.f / m_MaxFPS ;
     }
 
-    float GetDeltaTime() const { return m_DeltaTime; }
-    float GetFixedTimeStep() const { return m_FixedTimeStep; }
-    float GetMaxFPS() const { return m_MaxFPS; }
-    float GetMsPerFrame() const { return m_MsPerFrame; }
+    static float GetDeltaTime() { return m_DeltaTime; }
+    static float GetFixedTimeStep()  { return m_FixedTimeStep; }
+    static float GetMaxFPS()  { return m_MaxFPS; }
+    static float GetMsPerFrame()  { return m_MsPerFrame; }
     
-    void FPSDelay() const
+    static void FPSDelay()
     {
         const auto frameEndTime = m_LastTime + std::chrono::milliseconds(static_cast<long long>(m_MsPerFrame));
         const auto now = std::chrono::high_resolution_clock::now();
@@ -42,11 +45,12 @@ public:
     
 
 private:
-    std::chrono::time_point<std::chrono::high_resolution_clock> m_LastTime = std::chrono::high_resolution_clock::now();
-    float m_DeltaTime = 0.0f;
-    float m_FixedTimeStep = 0.02f;
-    float m_MaxFPS{ 60.f };
-    float m_MsPerFrame{ 1000.f / m_MaxFPS };
+    inline static std::chrono::time_point<std::chrono::high_resolution_clock> m_LastTime = std::chrono::high_resolution_clock::now();
+    inline static float m_DeltaTime = 0.0f;
+    inline static float m_FixedTimeStep = 0.02f;
+    inline static float m_MaxFPS{ 60.f };
+    inline static float m_MsPerFrame{ 1000.f / m_MaxFPS };
+
 
 };
 

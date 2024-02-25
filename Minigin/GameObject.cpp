@@ -2,18 +2,23 @@
 #include "GameObject.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
-#include "GameComponent.h"
+#include "Components/GameComponent.h"
 #include "ranges"
+#include "Components/TransformComponent.h"
 
 
 dae::GameObject::GameObject()
 {
-	//AddComponent<TransformComponent>();
+	m_pTransform = AddComponent<TransformComponent>();
+	//m_pTransform = std::make_shared<TransformComponent>(std::weak_ptr<GameObject>());
+	//m_pComponents.emplace(typeid(TransformComponent), m_pTransform);
 }
 
 
 
 dae::GameObject::~GameObject() = default;
+
+
 
 void dae::GameObject::Update()
 {
@@ -38,5 +43,17 @@ void dae::GameObject::Render() const
 	for (const auto& component : m_pComponents | std::views::values) {
 		component->Render();
 	}
+}
+
+
+//POSITION
+void dae::GameObject::SetTransform(glm::vec2 position) const
+{
+	m_pTransform->SetTransform(position);
+}
+
+void dae::GameObject::SetTransform(glm::vec3 position) const
+{
+	m_pTransform->SetTransform(position);
 }
 

@@ -2,14 +2,15 @@
 #include <memory>
 #include <typeindex>
 #include <unordered_map>
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 
-#include "Transform.h"
 
 namespace dae
 {
 	class GameComponent;
-
-	class GameObject final
+	class TransformComponent;
+	class GameObject final 
 	{
 	public:
 		virtual void Update();
@@ -28,29 +29,31 @@ namespace dae
 
 		//COMPONENT FUNCTIONS
 		template<typename T, typename... Args>
-		T* AddComponent(Args&&... args) {
-			auto component = std::make_unique<T>(std::forward<Args>(args)...);
-			T* ptr = component.get();
-			m_pComponents.emplace(typeid(T), std::move(component));
-			m_pComponents[typeid(T)]->SetOwner(this);
-			return ptr;
+		std::shared_ptr<T> AddComponent(Args&&... args)
+		{
+			auto component = std::make_shared<T>(this, args...);
+			m_pComponents.emplace(typeid(T),component);
+			return component;
 		}
 
 		template<typename T>
-		void RemoveComponent() {
+		void RemoveComponent()
+		{
 			m_pComponents.erase(typeid(T));
 		}
 
 		template<typename T>
-		T* GetComponent() {			
-			if (const auto found = m_pComponents.find(typeid(T)); 
+		T* GetComponent()
+		{
+			if (const auto found = m_pComponents.find(typeid(T));
 				found != m_pComponents.end()) {
 				return static_cast<T*>(found->second.get());
 			}
-			else {
-				return nullptr;
-			}
+
+			return nullptr;
+
 		}
+
 		template <typename T> bool HasComponent()const
 		{
 			const auto it = m_pComponents.find(typeid(T));
@@ -58,8 +61,16 @@ namespace dae
 		}
 
 
+		//POSITION
+		std::shared_ptr<TransformComponent> GetTransform() { return m_pTransform; }
+		void SetTransform(glm::vec2 position) const;
+
+		void SetTransform(glm::vec3 position) const;
 
 	private:
 		std::unordered_map<std::type_index, std::shared_ptr<GameComponent>> m_pComponents;
+		std::shared_ptr<TransformComponent> m_pTransform;
 	};
+
+
 }
