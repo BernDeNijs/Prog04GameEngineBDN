@@ -36,7 +36,10 @@ namespace dae
 
 				if (m_pOwner != nullptr)
 				{
-					m_pOwner->GetComponent<RenderComponent>()->SetTexture(m_textTexture);
+
+					if (const auto sharedPtr = m_pOwner->GetComponent<RenderComponent>().lock()) { 
+						sharedPtr->SetTexture(m_textTexture);
+					}					
 					m_needsUpdate = false;
 				}
 			}

@@ -31,6 +31,7 @@ namespace dae
 		template<typename T, typename... Args>
 		std::shared_ptr<T> AddComponent(Args&&... args)
 		{
+			static_assert(std::is_base_of<GameComponent, T>::value, "Cannot add component that does not inherit from GameComponent");
 			auto component = std::make_shared<T>(this, args...);
 			m_pComponents.emplace(typeid(T),component);
 			return component;
@@ -43,15 +44,13 @@ namespace dae
 		}
 
 		template<typename T>
-		T* GetComponent()
+		std::weak_ptr<T> GetComponent()
 		{
 			if (const auto found = m_pComponents.find(typeid(T));
 				found != m_pComponents.end()) {
-				return static_cast<T*>(found->second.get());
+				return std::static_pointer_cast<T>(found->second);
 			}
-
-			return nullptr;
-
+			return std::weak_ptr<T>();
 		}
 
 		template <typename T> bool HasComponent()const
@@ -62,14 +61,18 @@ namespace dae
 
 
 		//POSITION
-		std::shared_ptr<TransformComponent> GetTransform() { return m_pTransform; }
+		std::weak_ptr<TransformComponent> GetTransform() { return m_pTransform; }
 		void SetTransform(glm::vec2 position) const;
 
 		void SetTransform(glm::vec3 position) const;
 
+		bool GetDeathFlag() const { return m_MarkedForDeath; }
+		void SetDeathFlag() { m_MarkedForDeath = true; }
+
 	private:
 		std::unordered_map<std::type_index, std::shared_ptr<GameComponent>> m_pComponents;
 		std::shared_ptr<TransformComponent> m_pTransform;
+		bool m_MarkedForDeath{ false };
 	};
 
 

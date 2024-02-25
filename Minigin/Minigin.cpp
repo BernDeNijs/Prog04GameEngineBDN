@@ -124,6 +124,9 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		//Render
 		renderer.Render();
 
+		//DeleteDeadGameObjects
+		sceneManager.DeleteDeadGameObjects();
+
 		//Limit FPS
 		GameTime::FPSDelay();
 	}

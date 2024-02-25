@@ -53,3 +53,14 @@ void Scene::Render() const
 	}
 }
 
+void Scene::DeleteDeadGameObjects()
+{
+	for (const auto& object : m_objects)
+	{
+		if (object->GetDeathFlag())
+		{
+			Remove(object);
+		}
+	}
+}
+

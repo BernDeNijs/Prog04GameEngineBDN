@@ -57,3 +57,4 @@ void dae::GameObject::SetTransform(glm::vec3 position) const
 	m_pTransform->SetTransform(position);
 }
 
+

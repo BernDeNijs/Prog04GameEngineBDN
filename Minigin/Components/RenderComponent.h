@@ -26,7 +26,10 @@ namespace dae
         void LateUpdate() override {}
         void Render() const override
         {
-            const auto position = m_TransformComponent->GetTransform();
+            glm::vec3 position{ 0,0,0 };
+            if (const auto sharedPtr = m_TransformComponent.lock()) { // lock() converts weak_ptr to shared_ptr
+                position = sharedPtr->GetTransform(); // Call function through shared_ptr
+            }
             dae::Renderer::GetInstance().RenderTexture(*m_pTexture, position.x, position.y);
         }
         void RenderImGui() override {}
@@ -42,7 +45,7 @@ namespace dae
 
     private:
         std::shared_ptr<dae::Texture2D> m_pTexture;
-        std::shared_ptr<TransformComponent> m_TransformComponent;
+        std::weak_ptr<TransformComponent> m_TransformComponent;
 
     };
 }

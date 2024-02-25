@@ -18,13 +18,7 @@ namespace dae
 		virtual void FixedUpdate() = 0;
 		virtual void Render() const = 0;
 		virtual void RenderImGui() = 0;
-		void SetOwner(GameObject* owner) { m_pOwner = owner; }
 
-		void SetMarkedForDeath(bool b) { m_MarkedForDeath = b; }
-		bool GetMarkedForDeath() const { return m_MarkedForDeath; }
-
-	private:
-		bool m_MarkedForDeath{ false };
 	protected:
 		GameObject* m_pOwner = nullptr;
 	};
