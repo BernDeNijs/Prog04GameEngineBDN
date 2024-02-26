@@ -15,13 +15,6 @@ namespace dae
         explicit TransformComponent(GameObject* owner) : TransformComponent(owner, { 0, 0, 0 }) {}
         explicit TransformComponent(GameObject* owner, glm::vec3 position) : GameComponent(owner), m_Position(position) {}
         explicit TransformComponent(GameObject* owner, glm::vec2 position) : TransformComponent(owner, { position.x,position.y,0 }) {}
-       
-
-        void Update() override {}
-        void LateUpdate() override {}
-        void FixedUpdate() override {}
-        void Render() const override {}
-        void RenderImGui() override {}
 
         glm::vec3 GetTransform() const { return m_Position; }
         void SetTransform(glm::vec3 position) { m_Position = position; }

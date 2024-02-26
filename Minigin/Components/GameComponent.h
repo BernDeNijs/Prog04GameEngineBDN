@@ -13,13 +13,14 @@ namespace dae
 		GameComponent& operator=(const GameComponent& other) = delete;
 		GameComponent& operator=(GameComponent&& other) = delete;
 
-		virtual void Update() = 0;
-		virtual void LateUpdate() = 0;
-		virtual void FixedUpdate() = 0;
-		virtual void Render() const = 0;
-		virtual void RenderImGui() = 0;
+		virtual void Update() {}
+		virtual void LateUpdate() {}
+		virtual void FixedUpdate() {}
+		virtual void Render() const {}
+		virtual void RenderImGui() {}
 
-	protected:
+		GameObject* GetOwner() const { return m_pOwner; }
+	private:
 		GameObject* m_pOwner = nullptr;
 	};
 }

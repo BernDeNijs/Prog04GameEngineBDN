@@ -20,12 +20,10 @@ namespace dae
         explicit RenderComponent(GameObject* owner, const std::shared_ptr<dae::Texture2D>& texture) : RenderComponent(owner) { SetTexture(texture); }
         explicit RenderComponent(GameObject* owner, const std::string& texture) : RenderComponent(owner) { SetTexture(texture); }
 
-
-        void Update() override {}
-        void FixedUpdate() override {}
-        void LateUpdate() override {}
         void Render() const override
         {
+            if (m_pTexture == nullptr) return;
+
             glm::vec3 position{ 0,0,0 };
             if (const auto sharedPtr = m_TransformComponent.lock()) { // lock() converts weak_ptr to shared_ptr
                 position = sharedPtr->GetTransform(); // Call function through shared_ptr

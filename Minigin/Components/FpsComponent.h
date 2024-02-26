@@ -9,11 +9,20 @@
 
 namespace dae
 {
-	class FpsComponent :public TextComponent
+	class FpsComponent :public GameComponent
 	{
 	public:
-		using TextComponent::TextComponent;
-		
+
+		explicit FpsComponent(GameObject* owner) : GameComponent(owner) 
+		{
+			if (owner->HasComponent<TextComponent>() == false)
+			{
+				owner->AddComponent<TextComponent>();
+			}
+
+			m_pTextComponent = owner->GetComponent<TextComponent>();
+		}
+				
 		void Update() override
 		{
 			const float deltaT = GameTime::GetDeltaTime();
@@ -23,37 +32,22 @@ namespace dae
 			}
 
 			m_Timer += deltaT;
+			m_count++;
 
 			if (m_Timer >= m_RefreshRate)
 			{
+				if (const auto sharedPtr = m_pTextComponent.lock()) {
+					sharedPtr->SetText(std::format("{:.1f}", m_count / m_Timer));
+				}
+				m_count = 0;
 				m_Timer = 0.f;
-				float fps{ 1.f/deltaT };
-
-
-
-				std::stringstream stream;
-				stream << std::fixed << std::setprecision(2) << fps;
-				std::string s = stream.str();
-
-
-				if (fps < 30)
-				{
-					SetColor({ 255,0,0 });
-				}
-				else
-				{
-					SetColor({ 255,255,255 });
-				}
-				
-				//SetText(std::to_string(fps));
-				SetText(s);
 			}
-			TextComponent::Update();
 		}
-
 	private:
-		float m_RefreshRate = 1.0f;
+		float m_RefreshRate = 0.2f;
 		float m_Timer{m_RefreshRate};
+		int m_count{ 0 };
+		std::weak_ptr<TextComponent> m_pTextComponent;
 
 	};
 }

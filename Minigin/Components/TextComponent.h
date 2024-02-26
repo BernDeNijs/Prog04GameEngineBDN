@@ -12,9 +12,21 @@ namespace dae
 	class TextComponent : public GameComponent
 	{
 	public:
-		explicit TextComponent(GameObject* owner) : GameComponent(owner) { m_font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);}
-		explicit TextComponent(GameObject* owner, const std::string& text) : GameComponent(owner) { SetText(text); }
-		explicit TextComponent(GameObject* owner, const std::string& text, const std::shared_ptr<dae::Font>& font) : GameComponent(owner) { SetText(text, font); }
+		explicit TextComponent(GameObject* owner) : GameComponent(owner) 
+		{ 
+			m_font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+
+			if (owner->HasComponent<RenderComponent>() == false)
+			{
+				owner->AddComponent<RenderComponent>();
+			}
+			
+			m_pRenderer = owner->GetComponent<RenderComponent>();
+
+		
+		}
+		explicit TextComponent(GameObject* owner, const std::string& text) : TextComponent(owner) { SetText(text); }
+		explicit TextComponent(GameObject* owner, const std::string& text, const std::shared_ptr<dae::Font>& font) : TextComponent(owner) { SetText(text, font); }
 
 
 		void Update() override
@@ -34,22 +46,18 @@ namespace dae
 				SDL_FreeSurface(surf);
 				m_textTexture = std::make_shared<dae::Texture2D>(texture);
 
-				if (m_pOwner != nullptr)
+				if (GetOwner() != nullptr)
 				{
 
-					if (const auto sharedPtr = m_pOwner->GetComponent<RenderComponent>().lock()) { 
+					if (const auto sharedPtr = m_pRenderer.lock()) {
 						sharedPtr->SetTexture(m_textTexture);
 					}					
 					m_needsUpdate = false;
 				}
 			}
 		}
-		void LateUpdate() override {}
-		void FixedUpdate() override {}
-		void Render() const override
-		{
-		}
-		void RenderImGui() override {}
+
+
 		void SetText(const std::string& text)
 		{
 			const auto font =  dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
@@ -57,24 +65,20 @@ namespace dae
 		}
 		void SetText(const std::string& text, const std::shared_ptr<dae::Font>& font)
 		{
+			if (text == m_text && font == m_font) return;
 			m_text = text;
 			m_font = font;
 			m_needsUpdate = true;
-			if (m_pOwner != nullptr)
-			{
-				if (m_pOwner->HasComponent<RenderComponent>() == false)
-				{
-					m_pOwner->AddComponent<RenderComponent>();
-				}
-			}
+			
 		}
 		void SetColor(SDL_Color newColor) { m_Color = newColor; m_needsUpdate = true; }
 	private:
 		bool m_needsUpdate{true};
-		std::string m_text;
-		std::shared_ptr<dae::Font> m_font;
+		std::string m_text{};
+		std::shared_ptr<dae::Font> m_font{};
 		std::shared_ptr<dae::Texture2D> m_textTexture;
 		SDL_Color m_Color = { 255,255,255 };
+		std::weak_ptr<RenderComponent> m_pRenderer;
 
 	};
 }

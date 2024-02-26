@@ -88,6 +88,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
+	auto& time = GameTime::GetInstance();
 
 
 	//Set MaxFps with screen refreshRate
@@ -96,7 +97,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	dm.dmSize = sizeof(dm);
 	if (EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm) != 0)
 	{
-		GameTime::SetMaxFPS(static_cast<float>(dm.dmDisplayFrequency));
+		time.SetMaxFPS(static_cast<float>(dm.dmDisplayFrequency));
 	}
 
 
@@ -104,7 +105,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	while (doContinue)
 	{
 		//Update GameTime
-		GameTime::Update();
+		time.Update();
 
 		//Check for exit + process input
 		doContinue = input.ProcessInput();
@@ -114,11 +115,11 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 		//Fixed update game
 		
-		m_Lag += GameTime::GetFixedTimeStep();
-		while (m_Lag >= GameTime::GetFixedTimeStep())
+		m_Lag += time.GetFixedTimeStep();
+		while (m_Lag >= time.GetFixedTimeStep())
 		{
 			sceneManager.FixedUpdate();
-			m_Lag -= GameTime::GetFixedTimeStep();
+			m_Lag -= time.GetFixedTimeStep();
 		}
 
 		//Render
@@ -128,6 +129,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		sceneManager.DeleteDeadGameObjects();
 
 		//Limit FPS
-		GameTime::FPSDelay();
+		time.FPSDelay();
 	}
 }

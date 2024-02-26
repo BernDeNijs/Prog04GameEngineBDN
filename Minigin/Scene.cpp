@@ -55,12 +55,18 @@ void Scene::Render() const
 
 void Scene::DeleteDeadGameObjects()
 {
-	for (const auto& object : m_objects)
-	{
-		if (object->GetDeathFlag())
-		{
-			Remove(object);
-		}
-	}
+	m_objects.erase(std::remove_if(m_objects.begin(), m_objects.end(),
+		[](const std::shared_ptr<GameObject>& obj) {
+			return obj->GetDeathFlag();
+		}),
+		m_objects.end());
+	//for (int i = m_objects.size(); i >= 0 ; i--)
+	//{
+	//	if (m_objects[i]->GetDeathFlag())
+	//	{
+	//		m_objects.erase(m_objects.begin() + i);
+	//	}
+	//}
+
 }
 
