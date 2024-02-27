@@ -5,20 +5,20 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
-
 namespace dae
 {
 	class GameComponent;
-	class TransformComponent;
 	class GameObject final 
 	{
 	public:
-		virtual void Update();
-		virtual void LateUpdate();
-		virtual void FixedUpdate();
-		virtual void Render() const;
+		void Update();
+		void LateUpdate();
+		void FixedUpdate();
+		void Render() const;
 
 		GameObject();
+		GameObject(const std::shared_ptr<GameObject>& parent, bool keepWorldPosition);
+
 		virtual ~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
@@ -59,20 +59,44 @@ namespace dae
 			return (it != m_pComponents.end());
 		}
 
-
-		//POSITION
-		std::weak_ptr<TransformComponent> GetTransform() { return m_pTransform; }
-		void SetTransform(glm::vec2 position) const;
-
-		void SetTransform(glm::vec3 position) const;
-
+		//DEATH
 		bool GetDeathFlag() const { return m_MarkedForDeath; }
 		void SetDeathFlag() { m_MarkedForDeath = true; }
 
+
+		//POSITION
+		glm::vec3 GetLocalPosition();
+		glm::vec3 GetWorldPosition();
+
+		void SetLocalPosition(glm::vec3 position);
+		void SetLocalPosition(glm::vec2 position);
+
+		//SCENEGRAPH
+		std::weak_ptr<GameObject> GetParent() { return m_pParent; }
+		void SetParent(const std::shared_ptr<GameObject>& parent, bool keepWorldPosition);
+
+
+
 	private:
 		std::unordered_map<std::type_index, std::shared_ptr<GameComponent>> m_pComponents;
-		std::shared_ptr<TransformComponent> m_pTransform;
 		bool m_MarkedForDeath{ false };
+
+		//SCENEGRAPH
+		std::weak_ptr<GameObject> m_pParent{ std::weak_ptr<GameObject>()};
+		std::vector<std::shared_ptr<GameObject>> m_pChildren{};
+		bool IsChild(std::shared_ptr<dae::GameObject> potentialChild) const;
+
+		//POSITION
+		bool m_PositionDirty = false;
+		glm::vec3 m_LocalPosition { 0,0,0 };
+		glm::vec3 m_WorldPosition { 0,0,0 };
+		//glm::vec3 m_LocalRotation { 0,0,0 };
+		//glm::vec3 m_WorldRotation { 0,0,0 };
+		//glm::vec3 m_LocalScale { 0,0,0 };
+		//glm::vec3 m_WorldScale { 0,0,0 };
+
+		void SetPositionDirty();
+		void UpdateWorldPosition();
 	};
 
 

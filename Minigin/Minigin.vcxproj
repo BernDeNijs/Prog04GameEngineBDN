@@ -176,7 +176,6 @@
     <ClInclude Include="Components\FpsComponent.h" />
     <ClInclude Include="Components\RenderComponent.h" />
     <ClInclude Include="Components\TextComponent.h" />
-    <ClInclude Include="Components\TransformComponent.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Components\GameComponent.h" />
     <ClInclude Include="GameObject.h" />
@@ -194,7 +193,6 @@
     <ClCompile Include="Components\FpsComponent.cpp" />
     <ClCompile Include="Components\RenderComponent.cpp" />
     <ClCompile Include="Components\TextComponent.cpp" />
-    <ClCompile Include="Components\TransformComponent.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Components\GameComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />

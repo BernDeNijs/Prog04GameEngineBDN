@@ -52,7 +52,7 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	}
 
 	g_window = SDL_CreateWindow(
-		"Programming 4 assignment",
+		"Programming_4_assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		640,
@@ -65,12 +65,8 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	}
 
 	Renderer::GetInstance().Init(g_window);
-
 	ResourceManager::GetInstance().Init(dataPath);
 
-	
-
-	
 }
 
 dae::Minigin::~Minigin()
@@ -100,6 +96,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		time.SetMaxFPS(static_cast<float>(dm.dmDisplayFrequency));
 	}
 
+	float lag = 0.f;
 
 	bool doContinue = true;
 	while (doContinue)
@@ -115,11 +112,11 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 		//Fixed update game
 		
-		m_Lag += time.GetFixedTimeStep();
-		while (m_Lag >= time.GetFixedTimeStep())
+		lag += time.GetFixedTimeStep();
+		while (lag >= time.GetFixedTimeStep())
 		{
 			sceneManager.FixedUpdate();
-			m_Lag -= time.GetFixedTimeStep();
+			lag -= time.GetFixedTimeStep();
 		}
 
 		//Render
