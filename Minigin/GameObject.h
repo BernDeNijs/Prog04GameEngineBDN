@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include "GameTime.h"
 
 namespace dae
 {
@@ -83,7 +84,7 @@ namespace dae
 
 		//SCENEGRAPH
 		std::weak_ptr<GameObject> m_pParent{ std::weak_ptr<GameObject>()};
-		std::vector<std::shared_ptr<GameObject>> m_pChildren{};
+		std::vector<GameObject*> m_pChildren{};
 		bool IsChild(std::shared_ptr<dae::GameObject> potentialChild) const;
 
 		//POSITION

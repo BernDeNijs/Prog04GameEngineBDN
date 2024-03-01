@@ -124,9 +124,10 @@ void dae::GameObject::SetParent(const std::shared_ptr<dae::GameObject>& parent, 
 	{
 		//sharedPtr->RemoveChild(this);
 		auto& parentChildren = sharedPtr->m_pChildren;
-		parentChildren.erase(std::remove_if(parentChildren.begin(), parentChildren.end(),
+		/*parentChildren.erase(std::remove_if(parentChildren.begin(), parentChildren.end(),
 			[this](const std::shared_ptr<GameObject>& ptr) { return ptr.get() == this; }),
-			parentChildren.end());
+			parentChildren.end());*/
+		parentChildren.erase(std::remove(parentChildren.begin(), parentChildren.end(), this));
 
 	}
 	//Set new parent
@@ -135,7 +136,7 @@ void dae::GameObject::SetParent(const std::shared_ptr<dae::GameObject>& parent, 
 	//Add self to new parent
 	if (const auto sharedPtr = m_pParent.lock())
 	{
-		sharedPtr->m_pChildren.push_back(std::shared_ptr<GameObject>(this));
+		sharedPtr->m_pChildren.push_back(this);
 		//sharedPtr->AddChild(this);
 	}
 }
@@ -144,7 +145,7 @@ bool dae::GameObject::IsChild(std::shared_ptr<dae::GameObject> potentialChild) c
 {
 	for (const auto& child : m_pChildren)
 	{
-		if (potentialChild.get() == child.get() or child->IsChild(potentialChild))
+		if (potentialChild.get() == child or child->IsChild(potentialChild))
 		{
 			return true;
 		}

@@ -20,7 +20,7 @@ namespace dae
 		virtual void RenderImGui() {}
 
 		GameObject* GetOwner() const { return m_pOwner; }
-	private:
+	protected:
 		GameObject* m_pOwner = nullptr;
 	};
 }
