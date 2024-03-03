@@ -155,12 +155,26 @@ void dae::GameObject::SetParent(const std::shared_ptr<dae::GameObject>& parent, 
 	}
 	//UpdatePosition
 	if (parent == nullptr)
-		SetLocalTransform(GetWorldTransform());
+	{
+		if (keepWorldPosition)
+		{
+			SetLocalTransform(GetWorldTransform());
+		}
+		else
+		{
+			SetTransformDirty();
+		}
+	}		
 	else
 	{
 		if (keepWorldPosition)
+		{
 			SetLocalTransform(GetLocalTransform() - parent->GetWorldTransform());
-		SetTransformDirty();
+		}
+		else
+		{
+			SetTransformDirty();
+		}	
 	}
 	//Remove self from parent
 	if (const auto sharedPtr = m_pParent.lock())

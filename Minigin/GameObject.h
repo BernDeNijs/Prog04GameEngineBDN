@@ -26,7 +26,7 @@ namespace dae
 			Transform result;
 			result.Position = Position - other.Position;
 			result.Rotation = Rotation - other.Rotation;
-			result.Scale = Scale * other.Scale;
+			result.Scale = Scale / other.Scale;
 			return result;
 		}
 	};
