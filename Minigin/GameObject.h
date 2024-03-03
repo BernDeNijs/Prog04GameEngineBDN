@@ -4,10 +4,39 @@
 #include <unordered_map>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
-#include "GameTime.h"
+//#include "GameTime.h"
+
 
 namespace dae
 {
+	struct Transform
+	{
+		glm::vec3 Position = { 0,0,0 };
+		glm::vec3 Rotation = { 0,0,0 };
+		glm::vec3 Scale = { 0,0,0 };
+
+		Transform operator+(const Transform& other) const {
+			Transform result;
+			result.Position = Position + other.Position;
+			result.Rotation = Rotation + other.Rotation;
+			result.Scale = Scale * other.Scale;
+			return result;
+		}
+		Transform operator-(const Transform& other) const {
+			Transform result;
+			result.Position = Position - other.Position;
+			result.Rotation = Rotation - other.Rotation;
+			result.Scale = Scale * other.Scale;
+			return result;
+		}
+	};
+	struct ObjectTransform
+	{
+		Transform LocalTransform = Transform();
+		Transform WorldTransform = Transform();
+		bool IsDirty = false;
+	};
+
 	class GameComponent;
 	class GameObject final 
 	{
@@ -66,11 +95,19 @@ namespace dae
 
 
 		//POSITION
-		glm::vec3 GetLocalPosition();
-		glm::vec3 GetWorldPosition();
+		dae::Transform GetLocalTransform() const;
+		dae::Transform GetWorldTransform();
 
+		void SetLocalTransform(const Transform& transform);
 		void SetLocalPosition(glm::vec3 position);
 		void SetLocalPosition(glm::vec2 position);
+		
+		void SetLocalRotation(glm::vec3 rotation);
+
+		void SetLocalScale(glm::vec3 scale);
+		void SetLocalScale(float scale);
+
+	
 
 		//SCENEGRAPH
 		std::weak_ptr<GameObject> GetParent() { return m_pParent; }
@@ -85,19 +122,21 @@ namespace dae
 		//SCENEGRAPH
 		std::weak_ptr<GameObject> m_pParent{ std::weak_ptr<GameObject>()};
 		std::vector<GameObject*> m_pChildren{};
-		bool IsChild(std::shared_ptr<dae::GameObject> potentialChild) const;
+		bool IsChild(const std::shared_ptr<dae::GameObject>& potentialChild) const;
 
 		//POSITION
-		bool m_PositionDirty = false;
-		glm::vec3 m_LocalPosition { 0,0,0 };
-		glm::vec3 m_WorldPosition { 0,0,0 };
+		//bool m_PositionDirty = false;
+		ObjectTransform m_Transform = ObjectTransform();
+
+		//glm::vec3 m_LocalPosition { 0,0,0 };
+		//glm::vec3 m_WorldPosition { 0,0,0 };
 		//glm::vec3 m_LocalRotation { 0,0,0 };
 		//glm::vec3 m_WorldRotation { 0,0,0 };
 		//glm::vec3 m_LocalScale { 0,0,0 };
 		//glm::vec3 m_WorldScale { 0,0,0 };
 
-		void SetPositionDirty();
-		void UpdateWorldPosition();
+		void SetTransformDirty();
+		void UpdateWorldTransform();
 	};
 
 

@@ -23,7 +23,7 @@ namespace dae
         {
             if (m_pTexture == nullptr) return;
 
-            glm::vec3 position = GetOwner()->GetWorldPosition();
+            glm::vec3 position = GetOwner()->GetWorldTransform().Position;
             //if (const auto sharedPtr = m_TransformComponent.lock()) { // lock() converts weak_ptr to shared_ptr
             //    position = sharedPtr->GetPosition(); // Call function through shared_ptr
             //}
