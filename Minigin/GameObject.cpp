@@ -6,13 +6,6 @@
 #include "ranges"
 
 
-
-dae::GameObject::GameObject()
-{
-	//m_pTransform = std::make_shared<Transform>(std::weak_ptr<GameObject>());
-	//m_pComponents.emplace(typeid(Transform), m_pTransform);
-}
-
 dae::GameObject::GameObject(const std::shared_ptr<GameObject>& parent, bool keepWorldPosition): GameObject()
 {
 	SetParent(parent, keepWorldPosition);
@@ -24,7 +17,7 @@ dae::GameObject::~GameObject() = default;
 
 
 
-
+//UPDATES
 void dae::GameObject::Update()
 {
 	for (const auto& component : m_pComponents| std::views::values) {
@@ -53,10 +46,9 @@ void dae::GameObject::Render() const
 
 
 
-//POSITION
+//TRANSFORM
 void dae::GameObject::SetTransformDirty()
 {
-	//m_PositionDirty = true;
 	m_Transform.IsDirty = true;
 	for (const auto& child : m_pChildren)
 	{
@@ -66,7 +58,6 @@ void dae::GameObject::SetTransformDirty()
 
 dae::Transform dae::GameObject::GetLocalTransform() const
 {
-	//return m_LocalPosition;
 	return m_Transform.LocalTransform;
 }
 
@@ -76,7 +67,6 @@ dae::Transform dae::GameObject::GetWorldTransform()
 	{
 		UpdateWorldTransform();
 	}
-	//return m_WorldPosition;
 	return m_Transform.WorldTransform;
 }
 
@@ -86,7 +76,6 @@ void dae::GameObject::UpdateWorldTransform()
 {	
 	if (const auto sharedPtr = m_pParent.lock())
 	{
-		//m_WorldPosition = sharedPtr->GetWorldPosition() + m_LocalPosition;
 		const auto parentTransform = sharedPtr->GetWorldTransform();
 		m_Transform.WorldTransform.Position = parentTransform.Position + m_Transform.LocalTransform.Position;
 		m_Transform.WorldTransform.Rotation = parentTransform.Rotation + m_Transform.LocalTransform.Rotation;
@@ -95,7 +84,6 @@ void dae::GameObject::UpdateWorldTransform()
 	}
 	else
 	{
-		//m_WorldPosition = m_LocalPosition;
 		m_Transform.WorldTransform.Position = m_Transform.LocalTransform.Position;
 		m_Transform.WorldTransform.Rotation = m_Transform.LocalTransform.Rotation;
 		m_Transform.WorldTransform.Scale = m_Transform.LocalTransform.Scale;
@@ -179,11 +167,7 @@ void dae::GameObject::SetParent(const std::shared_ptr<dae::GameObject>& parent, 
 	//Remove self from parent
 	if (const auto sharedPtr = m_pParent.lock())
 	{
-		//sharedPtr->RemoveChild(this);
 		auto& parentChildren = sharedPtr->m_pChildren;
-		/*parentChildren.erase(std::remove_if(parentChildren.begin(), parentChildren.end(),
-			[this](const std::shared_ptr<GameObject>& ptr) { return ptr.get() == this; }),
-			parentChildren.end());*/
 		parentChildren.erase(std::remove(parentChildren.begin(), parentChildren.end(), this));
 
 	}
@@ -194,7 +178,6 @@ void dae::GameObject::SetParent(const std::shared_ptr<dae::GameObject>& parent, 
 	if (const auto sharedPtr = m_pParent.lock())
 	{
 		sharedPtr->m_pChildren.push_back(this);
-		//sharedPtr->AddChild(this);
 	}
 }
 

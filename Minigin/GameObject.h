@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
-//#include "GameTime.h"
 
 
 namespace dae
@@ -30,23 +29,13 @@ namespace dae
 			return result;
 		}
 	};
-	struct ObjectTransform
-	{
-		Transform LocalTransform = Transform();
-		Transform WorldTransform = Transform();
-		bool IsDirty = false;
-	};
 
 	class GameComponent;
 	class GameObject final 
 	{
 	public:
-		void Update();
-		void LateUpdate();
-		void FixedUpdate();
-		void Render() const;
 
-		GameObject();
+		GameObject() = default;
 		GameObject(const std::shared_ptr<GameObject>& parent, bool keepWorldPosition);
 
 		virtual ~GameObject();
@@ -55,7 +44,11 @@ namespace dae
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
-
+		//UPDATES
+		void Update();
+		void LateUpdate();
+		void FixedUpdate();
+		void Render() const;
 
 		//COMPONENT FUNCTIONS
 		template<typename T, typename... Args>
@@ -70,12 +63,14 @@ namespace dae
 		template<typename T>
 		void RemoveComponent()
 		{
+			static_assert(std::is_base_of<GameComponent, T>::value, "Cannot remove component that does not inherit from GameComponent");
 			m_pComponents.erase(typeid(T));
 		}
 
 		template<typename T>
 		std::weak_ptr<T> GetComponent()
 		{
+			static_assert(std::is_base_of<GameComponent, T>::value, "Cannot get component that does not inherit from GameComponent");
 			if (const auto found = m_pComponents.find(typeid(T));
 				found != m_pComponents.end()) {
 				return std::static_pointer_cast<T>(found->second);
@@ -83,8 +78,11 @@ namespace dae
 			return std::weak_ptr<T>();
 		}
 
+		
+
 		template <typename T> bool HasComponent()const
 		{
+			static_assert(std::is_base_of<GameComponent, T>::value, "Cannot get component that does not inherit from GameComponent");
 			const auto it = m_pComponents.find(typeid(T));
 			return (it != m_pComponents.end());
 		}
@@ -94,7 +92,7 @@ namespace dae
 		void SetDeathFlag() { m_MarkedForDeath = true; }
 
 
-		//POSITION
+		//TRANSFORM
 		dae::Transform GetLocalTransform() const;
 		dae::Transform GetWorldTransform();
 
@@ -107,15 +105,13 @@ namespace dae
 		void SetLocalScale(glm::vec3 scale);
 		void SetLocalScale(float scale);
 
-	
-
 		//SCENEGRAPH
 		std::weak_ptr<GameObject> GetParent() { return m_pParent; }
 		void SetParent(const std::shared_ptr<GameObject>& parent, bool keepWorldPosition);
-
-
+		std::vector<GameObject*> GetChildren() { return m_pChildren; }
 
 	private:
+		//COMPONENTS
 		std::unordered_map<std::type_index, std::shared_ptr<GameComponent>> m_pComponents;
 		bool m_MarkedForDeath{ false };
 
@@ -124,17 +120,14 @@ namespace dae
 		std::vector<GameObject*> m_pChildren{};
 		bool IsChild(const std::shared_ptr<dae::GameObject>& potentialChild) const;
 
-		//POSITION
-		//bool m_PositionDirty = false;
+		//TRANSFORM
+		struct ObjectTransform
+		{
+			Transform LocalTransform = Transform();
+			Transform WorldTransform = Transform();
+			bool IsDirty = false;
+		};
 		ObjectTransform m_Transform = ObjectTransform();
-
-		//glm::vec3 m_LocalPosition { 0,0,0 };
-		//glm::vec3 m_WorldPosition { 0,0,0 };
-		//glm::vec3 m_LocalRotation { 0,0,0 };
-		//glm::vec3 m_WorldRotation { 0,0,0 };
-		//glm::vec3 m_LocalScale { 0,0,0 };
-		//glm::vec3 m_WorldScale { 0,0,0 };
-
 		void SetTransformDirty();
 		void UpdateWorldTransform();
 	};
