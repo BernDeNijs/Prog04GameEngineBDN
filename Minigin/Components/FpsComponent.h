@@ -2,10 +2,10 @@
 #include "GameComponent.h"
 #include "TextComponent.h"
 
-#include "../GameTime.h"
-
-#include <iomanip>
-#include <sstream>
+//#include "../GameTime.h"
+//
+//#include <iomanip>
+//#include <sstream>
 
 namespace dae
 {
