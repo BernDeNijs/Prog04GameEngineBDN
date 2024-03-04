@@ -1,5 +1,7 @@
 #pragma once
 #include "GameComponent.h"
+#include <numbers>
+#define TWO_PI std::numbers::pi *2.f
 
 namespace dae
 {
@@ -17,6 +19,14 @@ namespace dae
 		void Update() override
 		{
 			m_Angle += m_Speed * GameTime::GetDeltaTime();
+			if (m_Angle > TWO_PI)
+			{
+				m_Angle -= TWO_PI;
+			}
+			else if (m_Angle < TWO_PI)
+			{
+				m_Angle += TWO_PI;
+			}
 
 			glm::vec3 position;
 			position.x = cosf(m_Angle) * m_Radius;
