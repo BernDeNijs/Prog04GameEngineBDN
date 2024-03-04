@@ -1,7 +1,7 @@
 #pragma once
 #include "GameComponent.h"
 #include <numbers>
-#define TWO_PI std::numbers::pi *2.f
+#define TWO_PI 2.f * std::numbers::pi_v<float>
 
 namespace dae
 {
