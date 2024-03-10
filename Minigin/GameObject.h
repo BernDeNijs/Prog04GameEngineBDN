@@ -36,7 +36,7 @@ namespace dae
 	public:
 
 		GameObject() = default;
-		GameObject(const std::shared_ptr<GameObject>& parent, bool keepWorldPosition);
+		GameObject(GameObject* parent, bool keepWorldPosition);
 
 		virtual ~GameObject();
 		GameObject(const GameObject& other) = delete;
@@ -106,8 +106,8 @@ namespace dae
 		void SetLocalScale(float scale);
 
 		//SCENEGRAPH
-		std::weak_ptr<GameObject> GetParent() { return m_pParent; }
-		void SetParent(const std::shared_ptr<GameObject>& parent, bool keepWorldPosition);
+		GameObject* GetParent() { return m_pParent; }
+		void SetParent(dae::GameObject* parent, bool keepWorldPosition);
 		std::vector<GameObject*> GetChildren() { return m_pChildren; }
 
 	private:
@@ -116,9 +116,9 @@ namespace dae
 		bool m_MarkedForDeath{ false };
 
 		//SCENEGRAPH
-		std::weak_ptr<GameObject> m_pParent{ std::weak_ptr<GameObject>()};
+		GameObject* m_pParent{ nullptr};
 		std::vector<GameObject*> m_pChildren{};
-		bool IsChild(const std::shared_ptr<dae::GameObject>& potentialChild) const;
+		bool IsChild(dae::GameObject* potentialChild) const;
 
 		//TRANSFORM
 		struct ObjectTransform

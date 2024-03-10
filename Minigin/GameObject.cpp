@@ -6,7 +6,7 @@
 #include "ranges"
 
 
-dae::GameObject::GameObject(const std::shared_ptr<GameObject>& parent, bool keepWorldPosition): GameObject()
+dae::GameObject::GameObject(GameObject* parent, bool keepWorldPosition): GameObject()
 {
 	SetParent(parent, keepWorldPosition);
 }
@@ -74,9 +74,9 @@ dae::Transform dae::GameObject::GetWorldTransform()
 
 void dae::GameObject::UpdateWorldTransform()
 {	
-	if (const auto sharedPtr = m_pParent.lock())
+	if (m_pParent != nullptr)
 	{
-		const auto parentTransform = sharedPtr->GetWorldTransform();
+		const auto parentTransform = m_pParent->GetWorldTransform();
 		m_Transform.WorldTransform.Position = parentTransform.Position + m_Transform.LocalTransform.Position;
 		m_Transform.WorldTransform.Rotation = parentTransform.Rotation + m_Transform.LocalTransform.Rotation;
 		m_Transform.WorldTransform.Scale = parentTransform.Scale + m_Transform.LocalTransform.Scale;
@@ -129,14 +129,14 @@ void dae::GameObject::SetLocalScale(float scale)
 
 
 //SCENEGRAPH
-void dae::GameObject::SetParent(const std::shared_ptr<dae::GameObject>& parent, bool keepWorldPosition)
+void dae::GameObject::SetParent(dae::GameObject* parent, bool keepWorldPosition)
 {
 	//Check if new parent is valid
-	if (IsChild(parent) || parent.get() == this)
+	if (IsChild(parent) || parent == this)
 		return;
-	if (const auto sharedPtr = m_pParent.lock())
+	if (m_pParent != nullptr)
 	{
-		if (parent.get() == sharedPtr.get())
+		if (parent == m_pParent)
 		{
 			return;
 		}
@@ -165,9 +165,9 @@ void dae::GameObject::SetParent(const std::shared_ptr<dae::GameObject>& parent, 
 		}	
 	}
 	//Remove self from parent
-	if (const auto sharedPtr = m_pParent.lock())
+	if (m_pParent != nullptr)
 	{
-		auto& parentChildren = sharedPtr->m_pChildren;
+		auto& parentChildren = m_pParent->m_pChildren;
 		parentChildren.erase(std::remove(parentChildren.begin(), parentChildren.end(), this));
 
 	}
@@ -175,17 +175,17 @@ void dae::GameObject::SetParent(const std::shared_ptr<dae::GameObject>& parent, 
 	m_pParent = parent;
 
 	//Add self to new parent
-	if (const auto sharedPtr = m_pParent.lock())
+	if (m_pParent != nullptr)
 	{
-		sharedPtr->m_pChildren.push_back(this);
+		m_pParent->m_pChildren.push_back(this);
 	}
 }
 
-bool dae::GameObject::IsChild(const std::shared_ptr<dae::GameObject>& potentialChild) const
+bool dae::GameObject::IsChild(dae::GameObject* potentialChild) const
 {
 	for (const auto& child : m_pChildren)
 	{
-		if (potentialChild.get() == child or child->IsChild(potentialChild))
+		if (potentialChild == child or child->IsChild(potentialChild))
 		{
 			return true;
 		}
