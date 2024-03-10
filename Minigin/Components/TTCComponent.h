@@ -123,6 +123,11 @@ namespace dae
         ImGui::PlotConfig m_3DConfig;
         ImGui::PlotConfig m_3DAltConfig;
 
+        std::vector<float> calculationResultInt;
+        std::vector<float> calculationResult3D;
+        std::vector<float> calculationResult3DAlt;
+
+
         void CalculateIntGraph()
         {
             std::vector<int> intVector{};
@@ -130,37 +135,25 @@ namespace dae
             std::fill(intVector.begin(), intVector.end(), 7);
 
             //Calculate Results
-            std::vector<float> calculationResult = SpeedTestOperations(intVector, m_NumTests);
-
-            calculationResult.pop_back();
-            std::cout << "we get here i swear" << std::endl;
-            std::cout << calculationResult.size() << std::endl;
-            for (const auto& result : calculationResult)
+            calculationResultInt = SpeedTestOperations(intVector, m_NumTests);
+            for (const auto& result : calculationResultInt)
             {
                 std::cout << result << std::endl;
             }
             
 
             //Set Graph
-            const int numElements = static_cast<int> (calculationResult.size());
-            float* ysArray = new float[numElements];
-            for (int i = 0; i < numElements; ++i) {
-                ysArray[i] = calculationResult[i];
-            }
-            delete[] m_IntConfig.values.ys;
-
-
-            const auto maxElementIterator = std::max_element(calculationResult.begin(), calculationResult.end());
+            const int numElements = static_cast<int> (calculationResultInt.size());
+            const auto maxElementIterator = std::max_element(calculationResultInt.begin(), calculationResultInt.end());
 
             float largestElement{ 0.f };
             // Check if the iterator is valid
-            if (maxElementIterator != calculationResult.end()) {
+            if (maxElementIterator != calculationResultInt.end()) {
                 // Get the value of the largest element
                 largestElement = *maxElementIterator;
             }
 
-            //m_3DConfig.values.xs = new float[10] {0.f, 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f}; // this line is optional
-            m_IntConfig.values.ys = ysArray;
+            m_IntConfig.values.ys = calculationResultInt.data();
             m_IntConfig.values.count = numElements;
             m_IntConfig.scale.min = 0.f;
             m_IntConfig.scale.max = largestElement;
@@ -181,37 +174,26 @@ namespace dae
             std::fill(gameObjectVector.begin(), gameObjectVector.end(), GameObject3D());
 
             //Calculate Results
-            std::vector<float> calculationResult = SpeedTestOperations(gameObjectVector, m_NumTestsGameObject);
+            calculationResult3D = SpeedTestOperations(gameObjectVector, m_NumTestsGameObject);
 
-            calculationResult.pop_back();
-            std::cout << "we get here i swear" << std::endl;
-            std::cout << calculationResult.size() << std::endl;
-            for (const auto& result : calculationResult)
+            for (const auto& result : calculationResult3D)
             {
                 std::cout << result << std::endl;
             }
             
   
             //Set Graph
-            const int numElements = static_cast<int> (calculationResult.size());
-            float* ysArray = new float[numElements];
-            for (int i = 0; i < numElements; ++i) {
-                ysArray[i] = calculationResult[i];
-            }
-            delete[] m_3DConfig.values.ys;
-
-
-            const auto maxElementIterator = std::max_element(calculationResult.begin(), calculationResult.end());
+            const int numElements = static_cast<int> (calculationResult3D.size());
+            const auto maxElementIterator = std::max_element(calculationResult3D.begin(), calculationResult3D.end());
 
             float largestElement{ 0.f };
             // Check if the iterator is valid
-            if (maxElementIterator != calculationResult.end()) {
+            if (maxElementIterator != calculationResult3D.end()) {
                 // Get the value of the largest element
                 largestElement = *maxElementIterator;
             }
 
-            //m_3DConfig.values.xs = new float[10] {0.f, 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f}; // this line is optional
-            m_3DConfig.values.ys = ysArray;
+            m_3DConfig.values.ys = calculationResult3D.data();
             m_3DConfig.values.count = numElements;
             m_3DConfig.scale.min = 0.f;
             m_3DConfig.scale.max = largestElement;
@@ -232,28 +214,22 @@ namespace dae
             std::fill(gameObjectPtrVector.begin(), gameObjectPtrVector.end(), GameObject3DAlt());
 
             //Calculate Results
-            const auto calculationResult = SpeedTestOperations(gameObjectPtrVector, m_NumTests);
+            calculationResult3DAlt = SpeedTestOperations(gameObjectPtrVector, m_NumTests);
 
             //Set Graph
-            const int numElements = static_cast<int> (calculationResult.size());
-            float* ysArray = new float[numElements];
-            for (int i = 0; i < numElements; ++i) {
-                ysArray[i] = calculationResult[i];
-            }
-            delete[] m_3DAltConfig.values.ys;
+            const int numElements = static_cast<int> (calculationResult3DAlt.size());
+           
 
 
-            const auto maxElementIterator = std::max_element(calculationResult.begin(), calculationResult.end());
+            const auto maxElementIterator = std::max_element(calculationResult3DAlt.begin(),calculationResult3DAlt.end());
 
             float largestElement{ 0.f };
             // Check if the iterator is valid
-            if (maxElementIterator != calculationResult.end()) {
+            if (maxElementIterator != calculationResult3DAlt.end()) {
                 // Get the value of the largest element
                 largestElement = *maxElementIterator;
-            }
-
-            //m_3DConfig.values.xs = new float[10] {0.f, 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f}; // this line is optional
-            m_3DAltConfig.values.ys = ysArray;
+            }          
+            m_3DAltConfig.values.ys = calculationResult3DAlt.data();
             m_3DAltConfig.values.count = numElements;
             m_3DAltConfig.scale.min = 0.f;
             m_3DAltConfig.scale.max = largestElement;
