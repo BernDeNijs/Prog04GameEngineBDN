@@ -1,5 +1,5 @@
 #include "Scene.h"
-#include "GameObject.h"
+//#include "GameObject.h"
 
 #include <algorithm>
 
@@ -11,35 +11,47 @@ Scene::Scene(const std::string& name) : m_name(name) {}
 
 Scene::~Scene() = default;
 
-void Scene::Add(std::shared_ptr<GameObject> object)
+//void Scene::Add(std::shared_ptr<GameObject> object)
+//{
+//	m_Objects.emplace_back(std::move(object));
+//}
+
+GameObject* Scene::CreateGameObject()
 {
-	m_objects.emplace_back(std::move(object));
+	m_Objects.emplace_back(std::make_unique<GameObject>());
+	return m_Objects.back().get();
 }
 
-void Scene::Remove(std::shared_ptr<GameObject> object)
+GameObject* Scene::CreateGameObject(GameObject* parent, bool keepWorldPosition)
 {
-	m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), object), m_objects.end());
+	m_Objects.emplace_back(std::make_unique<GameObject>(parent, keepWorldPosition));
+	return m_Objects.back().get();
 }
 
-void Scene::RemoveAll()
-{
-	m_objects.clear();
-}
+//void Scene::Remove(std::shared_ptr<GameObject> object)
+//{
+//	m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), object), m_objects.end());
+//}
+
+//void Scene::RemoveAll()
+//{
+//	m_objects.clear();
+//}
 
 void Scene::Update() const
 {
-	for(const auto& object : m_objects)
+	for(const auto& object : m_Objects)
 	{
 		object->Update();
 	}
-	for (const auto& object : m_objects)
+	for (const auto& object : m_Objects)
 	{
 		object->LateUpdate();
 	}
 }
 void Scene::FixedUpdate()
 {
-	for(auto& object : m_objects)
+	for(auto& object : m_Objects)
 	{
 		object->FixedUpdate();
 	}
@@ -47,7 +59,7 @@ void Scene::FixedUpdate()
 
 void Scene::Render() const
 {
-	for (const auto& object : m_objects)
+	for (const auto& object : m_Objects)
 	{
 		object->Render();
 	}
@@ -55,11 +67,11 @@ void Scene::Render() const
 
 void Scene::DeleteDeadGameObjects()
 {
-	m_objects.erase(std::remove_if(m_objects.begin(), m_objects.end(),
-		[](const std::shared_ptr<GameObject>& obj) {
+	m_Objects.erase(std::remove_if(m_Objects.begin(), m_Objects.end(),
+		[](const std::unique_ptr<GameObject>& obj) {
 			return obj->GetDeathFlag();
 		}),
-		m_objects.end());
+		m_Objects.end());
 	//for (int i = m_objects.size(); i >= 0 ; i--)
 	//{
 	//	if (m_objects[i]->GetDeathFlag())
