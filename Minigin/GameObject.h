@@ -49,6 +49,7 @@ namespace dae
 		void LateUpdate();
 		void FixedUpdate();
 		void Render() const;
+		void RenderImgui() const;
 
 		//COMPONENT FUNCTIONS
 		template<typename T, typename... Args>

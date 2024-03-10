@@ -25,6 +25,14 @@ void dae::SceneManager::Render() const
 	}
 }
 
+void dae::SceneManager::RenderImgui() const
+{
+	for (const auto& scene : m_Scenes)
+	{
+		scene->RenderImgui();
+	}
+}
+
 void dae::SceneManager::DeleteDeadGameObjects() const
 {
 	for (const auto& scene : m_Scenes)

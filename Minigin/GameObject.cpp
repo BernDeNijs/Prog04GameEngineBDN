@@ -43,7 +43,12 @@ void dae::GameObject::Render() const
 	}
 }
 
-
+void dae::GameObject::RenderImgui() const
+{
+	for (const auto& component : m_pComponents | std::views::values) {
+		component->RenderImGui();
+	}
+}
 
 
 //TRANSFORM

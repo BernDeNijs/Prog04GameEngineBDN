@@ -15,6 +15,7 @@ namespace dae
 		void Update() const;
 		void FixedUpdate() const;
 		void Render() const;
+		void RenderImgui() const;
 		void DeleteDeadGameObjects() const;
 	private:
 		friend class Singleton<SceneManager>;
