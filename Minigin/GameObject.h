@@ -106,7 +106,7 @@ namespace dae
 		void SetLocalScale(float scale);
 
 		//SCENEGRAPH
-		GameObject* GetParent() { return m_pParent; }
+		GameObject* GetParent() const { return m_pParent; }
 		void SetParent(dae::GameObject* parent, bool keepWorldPosition);
 		std::vector<GameObject*> GetChildren() { return m_pChildren; }
 

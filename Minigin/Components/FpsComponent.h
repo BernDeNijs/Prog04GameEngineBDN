@@ -48,6 +48,5 @@ namespace dae
 		float m_Timer{m_RefreshRate};
 		int m_count{ 0 };
 		std::weak_ptr<TextComponent> m_pTextComponent;
-
 	};
 }
