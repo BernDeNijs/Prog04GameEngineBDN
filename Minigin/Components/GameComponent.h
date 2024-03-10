@@ -1,6 +1,7 @@
 #pragma once
 #include "../GameObject.h"
 #include "../GameTime.h"
+#include "imgui.h"
 
 namespace dae
 {
