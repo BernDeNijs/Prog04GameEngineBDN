@@ -186,6 +186,7 @@
     <ClInclude Include="..\3rdParty\imgui-1.90.4\imstb_rectpack.h" />
     <ClInclude Include="..\3rdParty\imgui-1.90.4\imstb_textedit.h" />
     <ClInclude Include="..\3rdParty\imgui-1.90.4\imstb_truetype.h" />
+    <ClInclude Include="Buttons.h" />
     <ClInclude Include="Commands\Command.h" />
     <ClInclude Include="Components\FpsComponent.h" />
     <ClInclude Include="Components\RenderComponent.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="Components\GameComponent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="KeyboardControl.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="Components\OrbitComponent.h" />
     <ClInclude Include="Commands\MoveCommands.h" />
@@ -225,6 +227,7 @@
     <ClCompile Include="Components\GameComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="KeyboardControl.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="Components\OrbitComponent.cpp" />

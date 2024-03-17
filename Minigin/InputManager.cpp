@@ -30,6 +30,7 @@ bool dae::InputManager::ProcessInput()
 	{
 		pController->HandleInputs();
 	}
+	m_Keyboard->HandleInputs();
 	return true;
 }
 

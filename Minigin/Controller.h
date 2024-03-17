@@ -1,8 +1,6 @@
 #pragma once
+#include "Buttons.h"
 #include <memory>
-
-
-class Command;
 
 enum class ControllerButton
 {
@@ -25,21 +23,13 @@ enum class ControllerButton
 	ButtonX = 0x4000,
 	ButtonY = 0x8000
 };
-enum class KeyState
-{
-	pressed,
-	pressedThisFrame,
-	releasedThisFrame
-};
-struct Binding
+
+struct ControllerBinding
 {
 	ControllerButton button{};
 	KeyState keyState{};
 	std::shared_ptr<Command> command{};
 };
-
-
-
 
 class Controller
 {
@@ -56,7 +46,7 @@ public:
 
 	void HandleInputs();
 	void AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<Command> command) const;
-	void AddButtonBinding(const Binding& keyBind) const;
+	void AddButtonBinding(const ControllerBinding& keyBind) const;
 
 private:
 

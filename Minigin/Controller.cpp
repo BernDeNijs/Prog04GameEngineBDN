@@ -62,9 +62,9 @@ public:
 
 	void AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<Command> command)
 	{
-		AddButtonBinding(Binding{ button,keyState,std::move( command) });
+		AddButtonBinding(ControllerBinding{ button,keyState,std::move( command) });
 	}
-	void AddButtonBinding(const Binding& keyBind)
+	void AddButtonBinding(const ControllerBinding& keyBind)
 	{
 		m_ActionBindings.emplace_back(keyBind);
 	}
@@ -79,7 +79,7 @@ private:
 	WORD m_ButtonsReleasedThisFrame{};
 
 	const int m_ControllerIndex;
-	std::vector<Binding> m_ActionBindings{};
+	std::vector<ControllerBinding> m_ActionBindings{};
 
 };
 
@@ -100,7 +100,7 @@ void Controller::AddButtonBinding(ControllerButton button, KeyState keyState, st
 	m_pImpl->AddButtonBinding(button, keyState, std::move(command));
 }
 
-void Controller::AddButtonBinding(const Binding& keyBind) const
+void Controller::AddButtonBinding(const ControllerBinding& keyBind) const
 {
 	m_pImpl->AddButtonBinding(keyBind);
 }
