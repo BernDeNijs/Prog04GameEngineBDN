@@ -48,10 +48,6 @@ void dae::Renderer::Render() const
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
-	if (m_ShowDemoWindow)
-	{
-		ImGui::ShowDemoWindow();
-	}
 	SceneManager::GetInstance().RenderImgui();
 
 	ImGui::Render();
