@@ -22,7 +22,21 @@ bool dae::InputManager::ProcessInput()
 		}
 		ImGui_ImplSDL2_ProcessEvent(&e);
 		// etc...
-	}
 
+
+	}
+	//Update controllers
+	for (const auto& pController : m_pControllers)
+	{
+		pController->HandleInputs();
+	}
 	return true;
+}
+
+Controller* dae::InputManager::AddController()
+{
+	const int index{ static_cast<int>(m_pControllers.size()) };
+	m_pControllers.push_back(std::make_unique<Controller>(index));
+
+	return m_pControllers.back().get();
 }

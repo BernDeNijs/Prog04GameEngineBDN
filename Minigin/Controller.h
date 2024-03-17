@@ -1,0 +1,65 @@
+#pragma once
+#include <memory>
+
+
+class Command;
+
+enum class ControllerButton
+{
+	DPadUp = 0x0001,
+	DPadDown = 0x0002,
+	DPadLeft = 0x0004,
+	DPadRight = 0x0008,
+
+	Start = 0x0010,
+	Back = 0x0020,
+
+	LeftThumbstick = 0x0040,
+	RightThumbstick = 0x0080,
+
+	LeftBumper = 0x0100,
+	RightBumper = 0x0200,
+
+	ButtonA = 0x1000,
+	ButtonB = 0x2000,
+	ButtonX = 0x4000,
+	ButtonY = 0x8000
+};
+enum class KeyState
+{
+	pressed,
+	pressedThisFrame,
+	releasedThisFrame
+};
+struct Binding
+{
+	ControllerButton button{};
+	KeyState keyState{};
+	std::shared_ptr<Command> command{};
+};
+
+
+
+
+class Controller
+{
+public:
+	
+
+	explicit Controller(int controllerIndex);
+	~Controller();
+
+	Controller(Controller&) = delete;
+	Controller(Controller&&) = delete;
+	Controller& operator=(Controller&) = delete;
+	Controller& operator=(Controller&&) = delete;
+
+	void HandleInputs();
+	void AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<Command> command) const;
+	void AddButtonBinding(const Binding& keyBind) const;
+
+private:
+
+	class ControllerImpl;
+	std::unique_ptr<ControllerImpl> m_pImpl;
+};
