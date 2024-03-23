@@ -26,6 +26,12 @@ namespace dae
 		
 		}
 		explicit TextComponent(GameObject* owner, const std::string& text) : TextComponent(owner) { SetText(text); }
+		explicit TextComponent(GameObject* owner, const std::string& text, int fontSize) : TextComponent(owner) 
+		{ 
+			m_font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", fontSize);
+			SetText(text); 
+		}
+
 		explicit TextComponent(GameObject* owner, const std::string& text, const std::shared_ptr<dae::Font>& font) : TextComponent(owner) { SetText(text, font); }
 
 
@@ -60,7 +66,12 @@ namespace dae
 
 		void SetText(const std::string& text)
 		{
-			const auto font =  dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+			//const auto font =  dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+			SetText(text, 36);
+		}
+		void SetText(const std::string& text, int fontSize)
+		{
+			const auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", fontSize);
 			SetText(text, font);
 		}
 		void SetText(const std::string& text, const std::shared_ptr<dae::Font>& font)
