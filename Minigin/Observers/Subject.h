@@ -5,7 +5,6 @@
 #include "Observer.h"
 namespace dae
 {
-	class GameObject;
 	class Subject
 	{
 	public:
@@ -17,23 +16,22 @@ namespace dae
 		}
 		void RemoveObserver(Observer* observer)
 		{
-			if (const auto it = std::find(m_pObservers.begin(), m_pObservers.end(), observer); 
-				it != m_pObservers.end())
-			{
-				m_pObservers.erase(it);
-			}
+			m_pObservers.erase(std::remove(m_pObservers.begin(), m_pObservers.end(), observer));
 		}
 
-		void Notify(const std::string& eventName, GameObject* pGameObject)
+		void Notify(const std::string& eventName)
 		{
 			for (const auto& observer : m_pObservers)
 			{
-				observer->OnNotify(eventName, pGameObject); 
+				observer->OnNotify(eventName, m_EventData);
 			}
 		}
+	protected:
+		std::unordered_map<std::string, std::any> m_EventData;
 
 	private:
 		std::vector<Observer*> m_pObservers{};
+		
 	};
 }
 

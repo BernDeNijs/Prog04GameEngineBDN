@@ -28,8 +28,7 @@ namespace dae
 		explicit TextComponent(GameObject* owner, const std::string& text) : TextComponent(owner) { SetText(text); }
 		explicit TextComponent(GameObject* owner, const std::string& text, int fontSize) : TextComponent(owner) 
 		{ 
-			m_font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", fontSize);
-			SetText(text); 
+			SetText(text, fontSize); 
 		}
 
 		explicit TextComponent(GameObject* owner, const std::string& text, const std::shared_ptr<dae::Font>& font) : TextComponent(owner) { SetText(text, font); }
@@ -85,7 +84,7 @@ namespace dae
 		void SetColor(SDL_Color newColor) { m_Color = newColor; m_needsUpdate = true; }
 	private:
 		bool m_needsUpdate{true};
-		std::string m_text{""};
+		std::string m_text{"Lorem Ipsum"};
 		std::shared_ptr<dae::Font> m_font{};
 		std::shared_ptr<dae::Texture2D> m_textTexture;
 		SDL_Color m_Color = { 255,255,255 };

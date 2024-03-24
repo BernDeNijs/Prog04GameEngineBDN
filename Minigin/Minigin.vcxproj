@@ -205,10 +205,13 @@
     <ClInclude Include="Components\MoveComponent.h" />
     <ClInclude Include="Observers\Observer.h" />
     <ClInclude Include="Components\RemainingLivesDisplayComponent.h" />
+    <ClInclude Include="Components\PointsDisplayComponent.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Components\ScoreComponent.h" />
+    <ClInclude Include="Commands\ScoreCommand.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Observers\Subject.h" />
     <ClInclude Include="Texture2D.h" />
@@ -238,10 +241,12 @@
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="Components\OrbitComponent.cpp" />
     <ClCompile Include="Components\RemainingLivesDisplayComponent.cpp" />
+    <ClCompile Include="Components\PointsDisplayComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Components\ScoreComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="Components\TTCComponent.cpp" />
   </ItemGroup>

@@ -2,16 +2,16 @@
 #include "../Observers/Observer.h"
 #include "GameComponent.h"
 #include "TextComponent.h"
-#include "HealthComponent.h"
+#include "ScoreComponent.h"
 #include <unordered_map> // For using std::unordered_map
 #include <any> // For using std::any
 
 namespace dae
 {
-    class RemainingLivesDisplayComponent :public Observer, public GameComponent
+    class PointsDisplayComponent :public Observer, public GameComponent
     {
     public:
-        explicit RemainingLivesDisplayComponent(GameObject* owner) : GameComponent(owner)
+        explicit PointsDisplayComponent(GameObject* owner) : GameComponent(owner)
         {
             if (owner->HasComponent<TextComponent>() == false)
             {
@@ -22,20 +22,20 @@ namespace dae
 
         virtual void OnNotify(const std::string& eventName, const std::unordered_map<std::string, std::any>& eventData) override
         {
-            if (eventName == "PlayerDied")
+            if (eventName == "PickedUpAnItem")
             {
-                auto iter = eventData.find("HealthComponent");
+                auto iter = eventData.find("ScoreComponent");
                 if (iter != eventData.end()) {
-                    SetLivesDisplay(std::any_cast<HealthComponent*>(iter->second));
+                    SetScoreDisplay(std::any_cast<ScoreComponent*>(iter->second));
                 }
             }
         }
     private:
-        void SetLivesDisplay(HealthComponent* healthComponent) const
+        void SetScoreDisplay(ScoreComponent* scoreComponent) const
         {
             if (const auto textComponent = m_pTextComponent.lock())
             {
-                const std::string text = "Lives: " + std::to_string(healthComponent->GetLives());
+                const std::string text = "#Score: " + std::to_string(scoreComponent->GetScore());
                 textComponent->SetText(text, 16);
             }
         }
