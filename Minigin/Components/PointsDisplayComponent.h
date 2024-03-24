@@ -5,6 +5,7 @@
 #include "ScoreComponent.h"
 #include <unordered_map> // For using std::unordered_map
 #include <any> // For using std::any
+#include "../Steam/CSteamAchievements.h"
 
 namespace dae
 {
@@ -28,7 +29,15 @@ namespace dae
                 if (iter != eventData.end()) {
                     SetScoreDisplay(std::any_cast<ScoreComponent*>(iter->second));
                 }
+
+               
+
             }
+        }
+
+        void SetSteamAchievements(CSteamAchievements* steamAchievements)
+        {
+            m_pSteamAchievements = steamAchievements;
         }
     private:
         void SetScoreDisplay(ScoreComponent* scoreComponent) const
@@ -38,7 +47,16 @@ namespace dae
                 const std::string text = "#Score: " + std::to_string(scoreComponent->GetScore());
                 textComponent->SetText(text, 16);
             }
+            if (m_pSteamAchievements != nullptr)
+            {
+                if (scoreComponent->GetScore() >= 500)
+                {
+                    m_pSteamAchievements->SetAchievement("ACH_WIN_ONE_GAME");
+                }
+            }
+            
         }
         std::weak_ptr<TextComponent> m_pTextComponent;
+        CSteamAchievements* m_pSteamAchievements;
     };
 }
