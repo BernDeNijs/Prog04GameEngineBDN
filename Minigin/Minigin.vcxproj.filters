@@ -129,16 +129,13 @@
     <ClInclude Include="Commands\DamageCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\ScoreComponent.h">
+    <ClInclude Include="Components\PickupComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\PointsDisplayComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Commands\ScoreCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Steam\CSteamAchievements.h">
+    <ClInclude Include="Commands\PickUpCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -227,13 +224,10 @@
     <ClCompile Include="Components\HealthComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\ScoreComponent.cpp">
+    <ClCompile Include="Components\PickupComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\PointsDisplayComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Steam\CSteamAchievements.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

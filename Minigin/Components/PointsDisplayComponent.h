@@ -2,10 +2,9 @@
 #include "../Observers/Observer.h"
 #include "GameComponent.h"
 #include "TextComponent.h"
-#include "ScoreComponent.h"
+#include "PickupComponent.h"
 #include <unordered_map> // For using std::unordered_map
 #include <any> // For using std::any
-#include "../Steam/CSteamAchievements.h"
 
 namespace dae
 {
@@ -25,9 +24,9 @@ namespace dae
         {
             if (eventName == "PickedUpAnItem")
             {
-                auto iter = eventData.find("ScoreComponent");
+                auto iter = eventData.find("LatestPickup");
                 if (iter != eventData.end()) {
-                    SetScoreDisplay(std::any_cast<ScoreComponent*>(iter->second));
+                    SetScoreDisplay(std::any_cast<int>(iter->second));
                 }
 
                
@@ -35,28 +34,29 @@ namespace dae
             }
         }
 
-        void SetSteamAchievements(CSteamAchievements* steamAchievements)
-        {
-            m_pSteamAchievements = steamAchievements;
-        }
     private:
-        void SetScoreDisplay(ScoreComponent* scoreComponent) const
+        void SetScoreDisplay(int itemId) 
         {
+
+            if (itemId == 0)
+            {
+                m_Score += 50;
+            }
+            if (itemId == 1)
+            {
+                m_Score += 100;
+            }
+
+
             if (const auto textComponent = m_pTextComponent.lock())
             {
-                const std::string text = "#Score: " + std::to_string(scoreComponent->GetScore());
+                const std::string text = "#Score: " + std::to_string(m_Score);
                 textComponent->SetText(text, 16);
-            }
-            if (m_pSteamAchievements != nullptr)
-            {
-                if (scoreComponent->GetScore() >= 500)
-                {
-                    m_pSteamAchievements->SetAchievement("ACH_WIN_ONE_GAME");
-                }
             }
             
         }
         std::weak_ptr<TextComponent> m_pTextComponent;
-        CSteamAchievements* m_pSteamAchievements;
+
+        int m_Score = 0;
     };
 }

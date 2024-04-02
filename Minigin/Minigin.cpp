@@ -6,7 +6,6 @@
 #include <SDL_ttf.h>
 #include "Minigin.h"
 
-#include <steam_api_common.h>
 
 #include "InputManager.h"
 #include "SceneManager.h"
@@ -107,9 +106,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 		//Update GameTime
 		time.Update();
-
-
-		SteamAPI_RunCallbacks();
 
 		//Check for exit + process input
 		doContinue = input.ProcessInput();
