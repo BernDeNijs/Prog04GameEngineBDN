@@ -1,7 +1,8 @@
 #pragma once
-#include "../GameObject.h"
+#include "GameObject.h"
 #include "Command.h"
-#include "../Components/HealthComponent.h"
+
+#include "HealthComponent.h"
 class DamageCommand : public Command
 {
 public:

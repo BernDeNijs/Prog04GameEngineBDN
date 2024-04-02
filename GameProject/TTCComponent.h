@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include "GameComponent.h"
 #include "imgui_plot.h"
 #include <chrono>
@@ -50,20 +51,20 @@ public:
 
 namespace dae
 {
-	class TTCComponent :public GameComponent
-	{
+    class TTCComponent :public GameComponent
+    {
     public:
-		explicit TTCComponent(GameObject* owner) : GameComponent(owner)
+        explicit TTCComponent(GameObject* owner) : GameComponent(owner)
         {
 
         }
 
-		void RenderImGui() override 
-		{
+        void RenderImGui() override
+        {
             ImGui::Begin("Exercise 1");
 
             // Fillable field for typing a number
-            ImGui::InputInt("# Samples", &m_NumSamples);            
+            ImGui::InputInt("# Samples", &m_NumSamples);
             // Fillable field for typing a number
             ImGui::InputInt("# Tests", &m_NumTests);
 
@@ -73,8 +74,8 @@ namespace dae
             }
             if (m_IntIsCalculated) {
                 // Render the graph here
-                    ImGui::Plot("Int", m_IntConfig);
-            }     
+                ImGui::Plot("Int", m_IntConfig);
+            }
             ImGui::End();
 
             ImGui::Begin("Exercise 2");
@@ -84,7 +85,7 @@ namespace dae
             // Fillable field for typing a number
             ImGui::InputInt("# Tests", &m_NumTestsGameObject);
 
-          
+
             // Button to call CalculateGameObject3DGraph function
             if (ImGui::Button("Trash the cache with GameObject3D")) {
                 CalculateGameObject3DGraph();
@@ -107,7 +108,7 @@ namespace dae
                 ImGui::Plot("plot", m_3DAltConfig);
             }
             ImGui::End();
-		}
+        }
 
     private:
         int m_NumSamples{ 10'000'000 };
@@ -140,7 +141,7 @@ namespace dae
             {
                 std::cout << result << std::endl;
             }
-            
+
 
             //Set Graph
             const int numElements = static_cast<int> (calculationResultInt.size());
@@ -180,8 +181,8 @@ namespace dae
             {
                 std::cout << result << std::endl;
             }
-            
-  
+
+
             //Set Graph
             const int numElements = static_cast<int> (calculationResult3D.size());
             const auto maxElementIterator = std::max_element(calculationResult3D.begin(), calculationResult3D.end());
@@ -218,17 +219,17 @@ namespace dae
 
             //Set Graph
             const int numElements = static_cast<int> (calculationResult3DAlt.size());
-           
 
 
-            const auto maxElementIterator = std::max_element(calculationResult3DAlt.begin(),calculationResult3DAlt.end());
+
+            const auto maxElementIterator = std::max_element(calculationResult3DAlt.begin(), calculationResult3DAlt.end());
 
             float largestElement{ 0.f };
             // Check if the iterator is valid
             if (maxElementIterator != calculationResult3DAlt.end()) {
                 // Get the value of the largest element
                 largestElement = *maxElementIterator;
-            }          
+            }
             m_3DAltConfig.values.ys = calculationResult3DAlt.data();
             m_3DAltConfig.values.count = numElements;
             m_3DAltConfig.scale.min = 0.f;
@@ -242,7 +243,7 @@ namespace dae
 
             m_GameObject3DAltIsCalculated = true;
         }
-       
+
         template<typename T>
         std::vector<float> SpeedTestOperations(std::vector<T> testVector, const int nrOfTests)
         {
@@ -279,7 +280,7 @@ namespace dae
             }
             return results;
         }
-	};
+    };
 }
 
 

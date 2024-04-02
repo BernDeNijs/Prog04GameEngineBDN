@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
-#include "Components/GameComponent.h"
+#include "GameComponent.h"
 #include "ranges"
 
 

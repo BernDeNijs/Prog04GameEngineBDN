@@ -1,5 +1,5 @@
 #include "KeyboardControl.h"
-#include "Commands/Command.h"
+#include "Command.h"
 KeyboardControl::KeyboardControl()
 {
 	memset(m_PreviousState, 0, SDL_NUM_SCANCODES * sizeof(Uint8));

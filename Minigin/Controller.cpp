@@ -5,7 +5,7 @@
 #include <Xinput.h>
 #include <vector>
 
-#include "Commands/Command.h"
+#include "Command.h"
 
 
 class Controller::ControllerImpl final

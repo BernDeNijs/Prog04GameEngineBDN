@@ -1,7 +1,7 @@
 #pragma once
-#include "../GameObject.h"
+#include "GameObject.h"
 #include "Command.h"
-#include "../Components/PickupComponent.h"
+#include "PickUpComponent.h"
 class PickUpCommand : public Command
 {
 public:
@@ -9,7 +9,7 @@ public:
 
     void Execute() override {
         // Check if the GameObject has a MoveComponent
-        if (const auto scoreComponent = m_GameObject->GetComponent<dae::PickupComponent>().lock()) {
+        if (const auto scoreComponent = m_GameObject->GetComponent<dae::PickUpComponent>().lock()) {
             scoreComponent->PickUpItem(m_ItemId);
         }
     }
