@@ -4,7 +4,7 @@
 #include <SDL_syswm.h>
 #include <backends/imgui_impl_sdl2.h>
 
-bool bdnE::InputManager::ProcessInput()
+bool bdnE::InputManager::ProcessInput() const
 {
 	//ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
 	//XInputGetState(0, &m_CurrentState);

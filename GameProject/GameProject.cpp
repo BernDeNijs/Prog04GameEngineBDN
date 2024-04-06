@@ -43,9 +43,11 @@
 
 void load()
 {
+	//INPUT MANAGER//
+	auto& inputManager = bdnE::InputManager::GetInstance();
+
 	//BASIC SCENE//
 	auto& scene = bdnE::SceneManager::GetInstance().CreateScene("Programming 4 Assignment");
-
 	auto go = scene.CreateGameObject();
 	go->AddComponent<bdnG::RenderComponent>("background.tga");
 
@@ -89,7 +91,7 @@ void load()
 	controllableCharacter->AddComponent<bdnG::RenderComponent>("PacMan.png");
 	controllableCharacter->AddComponent<bdnG::MoveComponent>();
 
-	const bdnE::Controller* controller = bdnE::InputManager::AddController();
+	const bdnE::Controller* controller = inputManager.AddController();
 	controller->AddButtonBinding(bdnE::ControllerButton::DPadRight, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ 1,0,0 }));
 	controller->AddButtonBinding(bdnE::ControllerButton::DPadLeft, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ -1,0,0 }));
 	controller->AddButtonBinding(bdnE::ControllerButton::DPadUp, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ 0,-1,0 }));
@@ -99,7 +101,7 @@ void load()
 	controllableCharacter->AddComponent<bdnG::RenderComponent>("GhostRed.png");
 	controllableCharacter->AddComponent<bdnG::MoveComponent>(200.f);
 
-	auto keyboard = bdnE::InputManager::GetKeyboardController();
+	auto keyboard = inputManager.GetKeyboardController();
 	keyboard->AddButtonBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ 0,-1,0 }));
 	keyboard->AddButtonBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ 0,1,0 }));
 	keyboard->AddButtonBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ -1,0,0 }));
@@ -143,7 +145,7 @@ void load()
 
 
 	//--Add controls
-	const bdnE::Controller* controller = bdnE::InputManager::AddController();
+	const bdnE::Controller* controller = inputManager.AddController();
 	controller->AddButtonBinding(bdnE::ControllerButton::DPadRight, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 1,0,0 }));
 	controller->AddButtonBinding(bdnE::ControllerButton::DPadLeft, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ -1,0,0 }));
 	controller->AddButtonBinding(bdnE::ControllerButton::DPadUp, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 0,-1,0 }));
@@ -182,7 +184,7 @@ void load()
 	scoreComponent->AddObserver(pointDisplay.get());
 
 	//--Add controls
-	auto keyboard = bdnE::InputManager::GetKeyboardController();
+	auto keyboard = inputManager.GetKeyboardController();
 	keyboard->AddButtonBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 0,-1,0 }));
 	keyboard->AddButtonBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 0,1,0 }));
 	keyboard->AddButtonBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ -1,0,0 }));
