@@ -12,40 +12,7 @@
 #include <iostream>
 
 
-struct TestTransform
-{
-    float matrix[16] =
-    {
-        1,0,0,0,
-        0,1,0,0,
-        0,0,1,0,
-        0,0,0,1
-    };
-};
-class GameObject3D
-{
-public:
-    TestTransform transform;
-    int id{ 5 };
-    GameObject3D operator*=(int nr) {
-        GameObject3D result{};
-        id *= nr;
-        result.id = id;
-        return result;
-    }
-};
-class GameObject3DAlt
-{
-public:
-    TestTransform* transform{};
-    int id{ 5 };
-    GameObject3DAlt operator*=(int nr) {
-        GameObject3DAlt result{};
-        id *= nr;
-        result.id = id;
-        return result;
-    }
-};
+
 
 
 
@@ -59,7 +26,40 @@ namespace bdnG
 
 
     private:
-
+        struct TestTransform
+        {
+            float matrix[16] =
+            {
+                1,0,0,0,
+                0,1,0,0,
+                0,0,1,0,
+                0,0,0,1
+            };
+        };
+        class GameObject3D
+        {
+        public:
+            TestTransform transform;
+            int id{ 5 };
+            GameObject3D operator*=(int nr) {
+                GameObject3D result{};
+                id *= nr;
+                result.id = id;
+                return result;
+            }
+        };
+        class GameObject3DAlt
+        {
+        public:
+            TestTransform* transform{};
+            int id{ 5 };
+            GameObject3DAlt operator*=(int nr) {
+                GameObject3DAlt result{};
+                id *= nr;
+                result.id = id;
+                return result;
+            }
+        };
 
 
         void CalculateIntGraph();        

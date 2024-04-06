@@ -5,6 +5,7 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include "GameComponent.h"
+#include "Scene.h"
 
 namespace bdnE
 {
@@ -32,10 +33,14 @@ namespace bdnE
 
 	class GameObject final 
 	{
-	public:
-
+	private:
 		GameObject() = default;
 		GameObject(GameObject* parent, bool keepWorldPosition);
+
+		friend GameObject* Scene::CreateGameObject();
+		friend GameObject* Scene::CreateGameObject(GameObject* parent, bool keepWorldPosition);
+		
+	public:
 
 		virtual ~GameObject();
 		GameObject(const GameObject& other) = delete;

@@ -19,26 +19,20 @@
 
 //GameObject
 #include "GameObject.h"
-#include "DamageCommand.h"
-#include "PickUpCommand.h"
+
+//Components
+#include "RenderComponent.h"
+#include "FpsComponent.h"
+#include "MoveComponent.h"
 #include "HealthComponent.h"
 #include "PointsDisplayComponent.h"
 #include "RemainingLivesDisplayComponent.h"
 #include "PickupComponent.h"
-//Components
 
-#include "RenderComponent.h"
-#include "FpsComponent.h"
-#include "OrbitComponent.h"
-#include "TTCComponent.h"
-#include "MoveComponent.h"
-
+//Commands
+#include "DamageCommand.h"
+#include "PickUpCommand.h"
 #include "MoveCommands.h"
-
-//#define EXERCISE_SCENEGRAPH
-//#define EXERCISE_IMGUI
-//#define EXERCISE_COMMAND
-#define EXERCISE_OBSERVER
 
 
 void load()
@@ -51,7 +45,6 @@ void load()
 	auto go = scene.CreateGameObject();
 	go->AddComponent<bdnG::RenderComponent>("background.tga");
 
-
 	go = scene.CreateGameObject();
 	go->AddComponent<bdnG::RenderComponent>("logo.tga");
 	go->SetLocalPosition({ 216,180 });
@@ -61,63 +54,14 @@ void load()
 	to->AddComponent<bdnG::TextComponent>("Programming 4 Assignment", font);
 	to->SetLocalPosition({ 80, 20 });
 
-	const auto fpsObject = scene.CreateGameObject();
+	//auto test = bdnE::GameObject();
+	//auto test = std::make_unique<bdnE::GameObject>();
+
+	const auto fpsObject = scene.CreateGameObject(to,false);
 	fpsObject->AddComponent<bdnG::FpsComponent>();
 	//---
 
-#ifdef EXERCISE_SCENEGRAPH
-	const auto emptyObject = scene.CreateGameObject();
-	emptyObject->SetLocalPosition({ 300.f,400.f });
 
-	to = scene.CreateGameObject(to, false);
-	to->AddComponent<bdnG::RenderComponent>("PacMan.png");
-	to->AddComponent<bdnG::OrbitComponent>(20.f, 2.f);
-
-	to->SetParent(emptyObject, false); //SetParent Test02
-
-
-	to = scene.CreateGameObject(to, false);
-	to->AddComponent<bdnG::RenderComponent>("GhostRed.png");
-	to->AddComponent<bdnG::OrbitComponent>(20.f, -1.5f);
-#endif // Exercise_SceneGraph
-
-#ifdef EXERCISE_IMGUI
-	const auto trashTheCacheObject = scene.CreateGameObject();
-	trashTheCacheObject->AddComponent<bdnG::TTCComponent>();
-
-#endif // DEBUG
-#ifdef EXERCISE_COMMAND
-	auto controllableCharacter = scene.CreateGameObject();
-	controllableCharacter->AddComponent<bdnG::RenderComponent>("PacMan.png");
-	controllableCharacter->AddComponent<bdnG::MoveComponent>();
-
-	const bdnE::Controller* controller = inputManager.AddController();
-	controller->AddButtonBinding(bdnE::ControllerButton::DPadRight, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ 1,0,0 }));
-	controller->AddButtonBinding(bdnE::ControllerButton::DPadLeft, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ -1,0,0 }));
-	controller->AddButtonBinding(bdnE::ControllerButton::DPadUp, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ 0,-1,0 }));
-	controller->AddButtonBinding(bdnE::ControllerButton::DPadDown, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ 0,1,0 }));
-
-	controllableCharacter = scene.CreateGameObject();
-	controllableCharacter->AddComponent<bdnG::RenderComponent>("GhostRed.png");
-	controllableCharacter->AddComponent<bdnG::MoveComponent>(200.f);
-
-	auto keyboard = inputManager.GetKeyboardController();
-	keyboard->AddButtonBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ 0,-1,0 }));
-	keyboard->AddButtonBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ 0,1,0 }));
-	keyboard->AddButtonBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ -1,0,0 }));
-	keyboard->AddButtonBinding(SDL_SCANCODE_D, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(controllableCharacter, glm::vec3{ 1,0,0 }));
-
-
-	//Control explaination
-	auto textObject = scene.CreateGameObject();
-	textObject->AddComponent<bdnG::TextComponent>("Move pacman with the D-Pad", font);
-	textObject->SetLocalPosition({ 10,400 });
-	textObject = scene.CreateGameObject();
-	textObject->AddComponent<bdnG::TextComponent>("Move the ghost with WASD", font);
-	textObject->SetLocalPosition({ 10,450 });
-#endif // EXERCISE_COMMAND
-
-#ifdef EXERCISE_OBSERVER
 
 	//PLAYER ONE
 	//--Character
@@ -204,8 +148,6 @@ void load()
 	textObject->AddComponent<bdnG::TextComponent>("Move the ghost with WASD, Hurt ghost with C , Gain points with Z & X", 16);
 	textObject->SetLocalPosition({ 10,420 });
 	textObject = scene.CreateGameObject();
-
-#endif // EXERCISE_OBSERVER
 
 
 
