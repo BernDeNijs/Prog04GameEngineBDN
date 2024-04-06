@@ -1,4 +1,5 @@
 #include "FpsComponent.h"
+#include "GameObject.h"
 
 bdnG::FpsComponent::FpsComponent(bdnE::GameObject* owner) : GameComponent(owner)
 {
@@ -25,7 +26,7 @@ void bdnG::FpsComponent::Update()
 
 	if (m_Timer >= m_RefreshRate)
 	{
-		if (const auto sharedPtr = m_pTextComponent.lock()) {
+		if (const auto sharedPtr = m_pTextComponent) {
 			sharedPtr->SetText(std::format("{:.1f}", m_count / m_Timer));
 		}
 		m_count = 0;

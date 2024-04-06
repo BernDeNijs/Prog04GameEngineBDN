@@ -12,7 +12,7 @@ namespace bdnG
 
         void Execute() override {
             // Check if the GameObject has a MoveComponent
-            if (const auto healthComponent = m_GameObject->GetComponent<bdnG::HealthComponent>().lock()) {
+            if (const auto healthComponent = m_GameObject->GetComponent<bdnG::HealthComponent>()) {
                 healthComponent->Damage(m_Damage);
             }
         }

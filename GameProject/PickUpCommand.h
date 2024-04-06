@@ -11,7 +11,7 @@ namespace bdnG
 
         void Execute() override {
             // Check if the GameObject has a MoveComponent
-            if (const auto scoreComponent = m_GameObject->GetComponent<bdnG::PickUpComponent>().lock()) {
+            if (const auto scoreComponent = m_GameObject->GetComponent<bdnG::PickUpComponent>()) {
                 scoreComponent->PickUpItem(m_ItemId);
             }
         }

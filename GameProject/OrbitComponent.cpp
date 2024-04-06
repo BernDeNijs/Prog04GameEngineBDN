@@ -1,4 +1,5 @@
 #include "OrbitComponent.h"
+#include "GameObject.h"
 
 bdnG::OrbitComponent::OrbitComponent(bdnE::GameObject* owner) : GameComponent(owner)
 {

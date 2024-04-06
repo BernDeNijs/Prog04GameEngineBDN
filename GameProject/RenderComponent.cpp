@@ -1,4 +1,5 @@
 #include "RenderComponent.h"
+#include "GameObject.h"
 
 bdnG::RenderComponent::RenderComponent(bdnE::GameObject* owner) : GameComponent(owner)
 {

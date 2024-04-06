@@ -1,4 +1,5 @@
 #include "PointsDisplayComponent.h"
+#include "GameObject.h"
 
 bdnG::PointsDisplayComponent::PointsDisplayComponent(bdnE::GameObject* owner) : GameComponent(owner)
 {
@@ -34,7 +35,7 @@ void bdnG::PointsDisplayComponent::SetScoreDisplay(int itemId)
     }
 
 
-    if (const auto textComponent = m_pTextComponent.lock())
+    if (const auto textComponent = m_pTextComponent)
     {
         const std::string text = "#Score: " + std::to_string(m_Score);
         textComponent->SetText(text, 16);

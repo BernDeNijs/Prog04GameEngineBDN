@@ -30,7 +30,7 @@ namespace bdnG
 		std::shared_ptr<bdnE::Font> m_font{};
 		std::shared_ptr<bdnE::Texture2D> m_textTexture;
 		SDL_Color m_Color = { 255,255,255 };
-		std::weak_ptr<bdnG::RenderComponent> m_pRenderer;
+		bdnG::RenderComponent* m_pRenderer;
 
 	};
 }

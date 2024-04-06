@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
-
+#include "GameComponent.h"
 
 namespace bdnE
 {
@@ -30,7 +30,6 @@ namespace bdnE
 		}
 	};
 
-	class GameComponent;
 	class GameObject final 
 	{
 	public:
@@ -53,37 +52,41 @@ namespace bdnE
 
 		//COMPONENT FUNCTIONS
 		template<typename T, typename... Args>
-		std::shared_ptr<T> AddComponent(Args&&... args)
+		T* AddComponent(Args&&... args)
 		{
-			static_assert(std::is_base_of<GameComponent, T>::value, "Cannot add component that does not inherit from GameComponent");
-			auto component = std::make_shared<T>(this, args...);
-			m_pComponents.emplace(typeid(T),component);
-			return component;
+			static_assert(std::is_base_of_v<GameComponent, T>, "Cannot add component that does not inherit from GameComponent");
+			std::unique_ptr<T> component = std::make_unique<T>(this, args...);
+			T* ptr = component.get();
+			m_pComponents.emplace(typeid(T),std::move(component));
+			return ptr;
 		}
 
 		template<typename T>
 		void RemoveComponent()
 		{
-			static_assert(std::is_base_of<GameComponent, T>::value, "Cannot remove component that does not inherit from GameComponent");
+			static_assert(std::is_base_of_v<GameComponent, T>, "Cannot remove component that does not inherit from GameComponent");
 			m_pComponents.erase(typeid(T));
 		}
 
 		template<typename T>
-		std::weak_ptr<T> GetComponent()
+		T* GetComponent()
 		{
-			static_assert(std::is_base_of<GameComponent, T>::value, "Cannot get component that does not inherit from GameComponent");
-			if (const auto found = m_pComponents.find(typeid(T));
-				found != m_pComponents.end()) {
-				return std::static_pointer_cast<T>(found->second);
+			static_assert(std::is_base_of_v<GameComponent, T>, "Cannot get component that does not inherit from GameComponent");
+			if (const auto& found = m_pComponents.find(typeid(T));
+				found != m_pComponents.end())
+			{
+				std::unique_ptr<GameComponent>& ptr = m_pComponents.at(typeid(T));
+				GameComponent* rawPtr = ptr.get();
+				return static_cast<T*>(rawPtr);
 			}
-			return std::weak_ptr<T>();
+			return nullptr;
 		}
-
 		
 
-		template <typename T> bool HasComponent()const
+		template <typename T> 
+		bool HasComponent()const
 		{
-			static_assert(std::is_base_of<GameComponent, T>::value, "Cannot get component that does not inherit from GameComponent");
+			static_assert(std::is_base_of_v<GameComponent, T>, "Cannot get component that does not inherit from GameComponent");
 			const auto it = m_pComponents.find(typeid(T));
 			return (it != m_pComponents.end());
 		}
@@ -113,7 +116,8 @@ namespace bdnE
 
 	private:
 		//COMPONENTS
-		std::unordered_map<std::type_index, std::shared_ptr<GameComponent>> m_pComponents;
+		std::unordered_map<std::type_index, std::unique_ptr<GameComponent>> m_pComponents;
+		
 		bool m_MarkedForDeath{ false };
 
 		//SCENEGRAPH

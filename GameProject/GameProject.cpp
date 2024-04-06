@@ -133,7 +133,7 @@ void load()
 	text->SetText("Lives: 3", 16);
 	DisplayObject->SetLocalPosition({ 10,300 });
 	auto livesDisplay = DisplayObject->AddComponent<bdnG::RemainingLivesDisplayComponent>();
-	healthComponent->AddObserver(livesDisplay.get());
+	healthComponent->AddObserver(livesDisplay);
 
 	//--Score display
 	DisplayObject = scene.CreateGameObject();
@@ -141,7 +141,7 @@ void load()
 	text->SetText("#Score: 3", 16);
 	DisplayObject->SetLocalPosition({ 10,315 });
 	auto pointDisplay = DisplayObject->AddComponent<bdnG::PointsDisplayComponent>();
-	scoreComponent->AddObserver(pointDisplay.get());
+	scoreComponent->AddObserver(pointDisplay);
 
 
 	//--Add controls
@@ -173,7 +173,7 @@ void load()
 	text->SetText("Lives: 3", 16);
 	DisplayObject->SetLocalPosition({ 10,330 });
 	livesDisplay = DisplayObject->AddComponent<bdnG::RemainingLivesDisplayComponent>();
-	healthComponent->AddObserver(livesDisplay.get());
+	healthComponent->AddObserver(livesDisplay);
 
 	//--Score display
 	DisplayObject = scene.CreateGameObject();
@@ -181,7 +181,7 @@ void load()
 	text->SetText("#Score: 3", 16);
 	DisplayObject->SetLocalPosition({ 10,345 });
 	pointDisplay = DisplayObject->AddComponent<bdnG::PointsDisplayComponent>();
-	scoreComponent->AddObserver(pointDisplay.get());
+	scoreComponent->AddObserver(pointDisplay);
 
 	//--Add controls
 	auto keyboard = inputManager.GetKeyboardController();

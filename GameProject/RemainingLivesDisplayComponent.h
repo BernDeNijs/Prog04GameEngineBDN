@@ -18,6 +18,6 @@ namespace bdnG
     private:
         void SetLivesDisplay(HealthComponent* healthComponent) const;
 
-        std::weak_ptr<TextComponent> m_pTextComponent;
+        bdnG::TextComponent* m_pTextComponent;
     };
 }

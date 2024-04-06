@@ -1,4 +1,5 @@
 #include "RemainingLivesDisplayComponent.h"
+#include "GameObject.h"
 
 bdnG::RemainingLivesDisplayComponent::RemainingLivesDisplayComponent(bdnE::GameObject* owner) : GameComponent(owner)
 {
@@ -23,7 +24,7 @@ void bdnG::RemainingLivesDisplayComponent::OnNotify(const std::string& eventName
 
 void bdnG::RemainingLivesDisplayComponent::SetLivesDisplay(HealthComponent* healthComponent) const
 {
-    if (const auto textComponent = m_pTextComponent.lock())
+    if (const auto textComponent = m_pTextComponent)
     {
         const std::string text = "Lives: " + std::to_string(healthComponent->GetLives());
         textComponent->SetText(text, 16);

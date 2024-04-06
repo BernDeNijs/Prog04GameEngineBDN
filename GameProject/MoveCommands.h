@@ -11,7 +11,7 @@ namespace bdnG
 
         void Execute() override {
             // Check if the GameObject has a MoveComponent
-            if (const auto moveComponent = m_GameObject->GetComponent<bdnG::MoveComponent>().lock()) {
+            if (const auto moveComponent = m_GameObject->GetComponent<bdnG::MoveComponent>()) {
                 moveComponent->MoveInDirection(m_Direction);
             }
         }

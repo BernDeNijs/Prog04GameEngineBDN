@@ -19,7 +19,7 @@ namespace bdnG
     private:
         void SetScoreDisplay(int itemId);
 
-        std::weak_ptr<TextComponent> m_pTextComponent;
+        TextComponent* m_pTextComponent;
 
         int m_Score = 0;
     };

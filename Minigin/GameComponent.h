@@ -1,10 +1,11 @@
 #pragma once
-#include "GameObject.h"
+//#include "GameObject.h"
 #include "GameTime.h"
 #include "imgui.h"
 
 namespace bdnE
 {
+	class GameObject;
 	class GameComponent
 	{
 	public:

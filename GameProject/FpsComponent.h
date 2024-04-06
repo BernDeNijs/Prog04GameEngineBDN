@@ -15,6 +15,6 @@ namespace bdnG
 		float m_RefreshRate = 0.2f;
 		float m_Timer{ m_RefreshRate };
 		int m_count{ 0 };
-		std::weak_ptr<TextComponent> m_pTextComponent;
+		TextComponent* m_pTextComponent;
 	};
 }

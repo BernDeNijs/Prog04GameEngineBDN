@@ -1,4 +1,5 @@
 #include "TextComponent.h"
+#include "GameObject.h"
 
 bdnG::TextComponent::TextComponent(bdnE::GameObject* owner) : GameComponent(owner)
 {
@@ -47,7 +48,7 @@ void bdnG::TextComponent::Update()
 		if (GetOwner() != nullptr)
 		{
 
-			if (const auto sharedPtr = m_pRenderer.lock()) {
+			if (const auto sharedPtr = m_pRenderer) {
 				sharedPtr->SetTexture(m_textTexture);
 			}
 			m_needsUpdate = false;
@@ -68,7 +69,7 @@ void bdnG::TextComponent::SetText(const std::string& text, int fontSize)
 
 void bdnG::TextComponent::SetText(const std::string& text, const std::shared_ptr<bdnE::Font>& font)
 {
-	if (text == m_text && font == m_font) return;
+	if (text.c_str() == m_text.c_str() && font == m_font) return;
 	m_text = text;
 	m_font = font;
 	m_needsUpdate = true;

@@ -1,5 +1,7 @@
 #pragma once
+#include <glm/vec3.hpp>
 #include "GameComponent.h"
+
 namespace bdnG
 {
 	class MoveComponent : public bdnE::GameComponent

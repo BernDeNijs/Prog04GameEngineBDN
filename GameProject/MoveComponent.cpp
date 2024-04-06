@@ -1,4 +1,5 @@
 #include "MoveComponent.h"
+#include "GameObject.h"
 
 bdnG::MoveComponent::MoveComponent(bdnE::GameObject* owner)
 	: GameComponent(owner)
