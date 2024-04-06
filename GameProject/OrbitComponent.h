@@ -8,13 +8,13 @@ class Orbit_Component
 #include <numbers>
 #define TWO_PI 2.f * std::numbers::pi_v<float>
 
-namespace dae
+namespace bdnG
 {
-	class OrbitComponent : public dae::GameComponent
+	class OrbitComponent : public bdnE::GameComponent
 	{
 	public:
-		explicit OrbitComponent(GameObject* owner);
-		explicit OrbitComponent(GameObject* owner, float radius, float speed);
+		explicit OrbitComponent(bdnE::GameObject* owner);
+		explicit OrbitComponent(bdnE::GameObject* owner, float radius, float speed);
 		void Update() override;
 
 

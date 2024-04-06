@@ -2,13 +2,13 @@
 #include "GameComponent.h"
 #include "Subject.h"
 
-namespace dae
+namespace bdnG
 {
-	class HealthComponent :public GameComponent, public Subject
+	class HealthComponent :public bdnE::GameComponent, public bdnE::Subject
 	{
 	public:
 
-		explicit HealthComponent(GameObject* owner);
+		explicit HealthComponent(bdnE::GameObject* owner);
 		void Damage(int amount);
 		int GetLives() const { return m_Lives; }
 	private:

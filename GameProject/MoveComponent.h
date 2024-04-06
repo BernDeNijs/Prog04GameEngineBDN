@@ -1,12 +1,12 @@
 #pragma once
 #include "GameComponent.h"
-namespace dae
+namespace bdnG
 {
-	class MoveComponent : public dae::GameComponent
+	class MoveComponent : public bdnE::GameComponent
 	{
 	public:
-		explicit MoveComponent(GameObject* owner);
-		explicit MoveComponent(GameObject* owner, float speed);
+		explicit MoveComponent(bdnE::GameObject* owner);
+		explicit MoveComponent(bdnE::GameObject* owner, float speed);
 		void MoveInDirection(glm::vec3 direction) const;
 
 	private:

@@ -1,6 +1,6 @@
 #include "RemainingLivesDisplayComponent.h"
 
-dae::RemainingLivesDisplayComponent::RemainingLivesDisplayComponent(GameObject* owner) : GameComponent(owner)
+bdnG::RemainingLivesDisplayComponent::RemainingLivesDisplayComponent(bdnE::GameObject* owner) : GameComponent(owner)
 {
     if (owner->HasComponent<TextComponent>() == false)
     {
@@ -9,7 +9,7 @@ dae::RemainingLivesDisplayComponent::RemainingLivesDisplayComponent(GameObject* 
     m_pTextComponent = m_pOwner->GetComponent<TextComponent>();
 }
 
-void dae::RemainingLivesDisplayComponent::OnNotify(const std::string& eventName,
+void bdnG::RemainingLivesDisplayComponent::OnNotify(const std::string& eventName,
 	const std::unordered_map<std::string, std::any>& eventData)
 {
     if (eventName == "PlayerDied")
@@ -21,7 +21,7 @@ void dae::RemainingLivesDisplayComponent::OnNotify(const std::string& eventName,
     }
 }
 
-void dae::RemainingLivesDisplayComponent::SetLivesDisplay(HealthComponent* healthComponent) const
+void bdnG::RemainingLivesDisplayComponent::SetLivesDisplay(HealthComponent* healthComponent) const
 {
     if (const auto textComponent = m_pTextComponent.lock())
     {

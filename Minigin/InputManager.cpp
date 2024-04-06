@@ -4,7 +4,7 @@
 #include <SDL_syswm.h>
 #include <backends/imgui_impl_sdl2.h>
 
-bool dae::InputManager::ProcessInput()
+bool bdnE::InputManager::ProcessInput()
 {
 	//ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
 	//XInputGetState(0, &m_CurrentState);
@@ -34,7 +34,7 @@ bool dae::InputManager::ProcessInput()
 	return true;
 }
 
-Controller* dae::InputManager::AddController()
+bdnE::Controller* bdnE::InputManager::AddController()
 {
 	const int index{ static_cast<int>(m_pControllers.size()) };
 	m_pControllers.push_back(std::make_unique<Controller>(index));

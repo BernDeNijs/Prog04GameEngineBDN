@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Observer.h"
-namespace dae
+namespace bdnE
 {
 	class Subject
 	{

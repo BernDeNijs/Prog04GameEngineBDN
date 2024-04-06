@@ -6,44 +6,44 @@
 #include "ranges"
 
 
-dae::GameObject::GameObject(GameObject* parent, bool keepWorldPosition): GameObject()
+bdnE::GameObject::GameObject(GameObject* parent, bool keepWorldPosition): GameObject()
 {
 	SetParent(parent, keepWorldPosition);
 }
 
 
 
-dae::GameObject::~GameObject() = default;
+bdnE::GameObject::~GameObject() = default;
 
 
 
 //UPDATES
-void dae::GameObject::Update()
+void bdnE::GameObject::Update()
 {
 	for (const auto& component : m_pComponents| std::views::values) {
 		component->Update();
 	}
 }
-void dae::GameObject::LateUpdate()
+void bdnE::GameObject::LateUpdate()
 {
 	for (const auto& component : m_pComponents | std::views::values) {
 		component->LateUpdate();
 	}
 }
-void dae::GameObject::FixedUpdate()
+void bdnE::GameObject::FixedUpdate()
 {
 	for (const auto& component : m_pComponents | std::views::values) {
 		component->FixedUpdate();
 	}
 }
-void dae::GameObject::Render() const
+void bdnE::GameObject::Render() const
 {
 	for (const auto& component : m_pComponents | std::views::values) {
 		component->Render();
 	}
 }
 
-void dae::GameObject::RenderImgui() const
+void bdnE::GameObject::RenderImgui() const
 {
 	for (const auto& component : m_pComponents | std::views::values) {
 		component->RenderImGui();
@@ -52,7 +52,7 @@ void dae::GameObject::RenderImgui() const
 
 
 //TRANSFORM
-void dae::GameObject::SetTransformDirty()
+void bdnE::GameObject::SetTransformDirty()
 {
 	m_Transform.IsDirty = true;
 	for (const auto& child : m_pChildren)
@@ -61,12 +61,12 @@ void dae::GameObject::SetTransformDirty()
 	}
 }
 
-dae::Transform dae::GameObject::GetLocalTransform() const
+bdnE::Transform bdnE::GameObject::GetLocalTransform() const
 {
 	return m_Transform.LocalTransform;
 }
 
-dae::Transform dae::GameObject::GetWorldTransform()
+bdnE::Transform bdnE::GameObject::GetWorldTransform()
 {
 	if (m_Transform.IsDirty)
 	{
@@ -77,7 +77,7 @@ dae::Transform dae::GameObject::GetWorldTransform()
 
 
 
-void dae::GameObject::UpdateWorldTransform()
+void bdnE::GameObject::UpdateWorldTransform()
 {	
 	if (m_pParent != nullptr)
 	{
@@ -97,44 +97,44 @@ void dae::GameObject::UpdateWorldTransform()
 }
 
 
-void dae::GameObject::SetLocalTransform(const dae::Transform& transform)
+void bdnE::GameObject::SetLocalTransform(const bdnE::Transform& transform)
 {
 	m_Transform.LocalTransform = transform;
 	SetTransformDirty();
 }
 
-void dae::GameObject::SetLocalPosition(glm::vec3 position)
+void bdnE::GameObject::SetLocalPosition(glm::vec3 position)
 {
 	//m_LocalPosition = position;
 	m_Transform.LocalTransform.Position = position;
 	SetTransformDirty();
 }
 
-void dae::GameObject::SetLocalPosition(glm::vec2 position)
+void bdnE::GameObject::SetLocalPosition(glm::vec2 position)
 {
 	SetLocalPosition({ position.x,position.y,0 });
 }
 
-void dae::GameObject::SetLocalRotation(glm::vec3 rotation)
+void bdnE::GameObject::SetLocalRotation(glm::vec3 rotation)
 {
 	m_Transform.LocalTransform.Rotation = rotation;
 	SetTransformDirty();
 }
 
-void dae::GameObject::SetLocalScale(glm::vec3 scale)
+void bdnE::GameObject::SetLocalScale(glm::vec3 scale)
 {
 	m_Transform.LocalTransform.Scale = scale;
 	SetTransformDirty();
 }
 
-void dae::GameObject::SetLocalScale(float scale)
+void bdnE::GameObject::SetLocalScale(float scale)
 {
 	SetLocalScale({ scale,scale,scale });
 }
 
 
 //SCENEGRAPH
-void dae::GameObject::SetParent(dae::GameObject* parent, bool keepWorldPosition)
+void bdnE::GameObject::SetParent(bdnE::GameObject* parent, bool keepWorldPosition)
 {
 	//Check if new parent is valid
 	if (IsChild(parent) || parent == this)
@@ -186,7 +186,7 @@ void dae::GameObject::SetParent(dae::GameObject* parent, bool keepWorldPosition)
 	}
 }
 
-bool dae::GameObject::IsChild(dae::GameObject* potentialChild) const
+bool bdnE::GameObject::IsChild(bdnE::GameObject* potentialChild) const
 {
 	for (const auto& child : m_pChildren)
 	{

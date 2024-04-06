@@ -1,7 +1,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-void dae::SceneManager::Update() const
+void bdnE::SceneManager::Update() const
 {
 	for(auto& scene : m_Scenes)
 	{
@@ -9,7 +9,7 @@ void dae::SceneManager::Update() const
 	}
 }
 
-void dae::SceneManager::FixedUpdate() const
+void bdnE::SceneManager::FixedUpdate() const
 {
 	for(auto& scene : m_Scenes)
 	{
@@ -17,7 +17,7 @@ void dae::SceneManager::FixedUpdate() const
 	}
 }
 
-void dae::SceneManager::Render() const
+void bdnE::SceneManager::Render() const
 {
 	for (const auto& scene : m_Scenes)
 	{
@@ -25,7 +25,7 @@ void dae::SceneManager::Render() const
 	}
 }
 
-void dae::SceneManager::RenderImgui() const
+void bdnE::SceneManager::RenderImgui() const
 {
 	for (const auto& scene : m_Scenes)
 	{
@@ -33,7 +33,7 @@ void dae::SceneManager::RenderImgui() const
 	}
 }
 
-void dae::SceneManager::DeleteDeadGameObjects() const
+void bdnE::SceneManager::DeleteDeadGameObjects() const
 {
 	for (const auto& scene : m_Scenes)
 	{
@@ -41,7 +41,7 @@ void dae::SceneManager::DeleteDeadGameObjects() const
 	}
 }
 
-dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
+bdnE::Scene& bdnE::SceneManager::CreateScene(const std::string& name)
 {
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
 	m_Scenes.push_back(scene);

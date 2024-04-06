@@ -6,12 +6,12 @@
 #include <unordered_map> // For using std::unordered_map
 #include <any> // For using std::any
 
-namespace dae
+namespace bdnG
 {
-    class PointsDisplayComponent :public Observer, public GameComponent
+    class PointsDisplayComponent :public bdnE::Observer, public bdnE::GameComponent
     {
     public:
-        explicit PointsDisplayComponent(GameObject* owner);
+        explicit PointsDisplayComponent(bdnE::GameObject* owner);
 
         virtual void OnNotify(const std::string& eventName, const std::unordered_map<std::string, std::any>& eventData) override;
 

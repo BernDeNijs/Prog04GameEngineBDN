@@ -3,7 +3,7 @@
 
 #include <algorithm>
 
-using namespace dae;
+using namespace bdnE;
 
 unsigned int Scene::m_IdCounter = 0;
 

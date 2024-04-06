@@ -1,18 +1,14 @@
 #pragma once
 #include <memory>
-
-//GENERAL
-enum class KeyState
+namespace bdnE
 {
-	pressed,
-	pressedThisFrame,
-	releasedThisFrame
-};
+	enum class KeyState
+	{
+		pressed,
+		pressedThisFrame,
+		releasedThisFrame
+	};
 
-class Command;
-
-//CONTROLLER
-
-
-//KEYBOARD
+	class Command;
+}
 

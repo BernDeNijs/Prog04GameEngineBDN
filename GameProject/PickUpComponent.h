@@ -2,13 +2,13 @@
 #include "GameComponent.h"
 #include "Subject.h"
 
-namespace dae
+namespace bdnG
 {
-	class PickUpComponent :public GameComponent, public Subject
+	class PickUpComponent :public bdnE::GameComponent, public bdnE::Subject
 	{
 	public:
 
-		explicit PickUpComponent(GameObject* owner);
+		explicit PickUpComponent(bdnE::GameObject* owner);
 		void PickUpItem(int itemId);
 
 	private:

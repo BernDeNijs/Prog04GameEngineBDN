@@ -3,7 +3,7 @@
 #include "GameTime.h"
 #include "imgui.h"
 
-namespace dae
+namespace bdnE
 {
 	class GameComponent
 	{

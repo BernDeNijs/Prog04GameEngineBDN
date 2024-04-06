@@ -4,11 +4,10 @@
 #include <windows.h>
 #include <Xinput.h>
 #include <vector>
-
 #include "Command.h"
 
 
-class Controller::ControllerImpl final
+class bdnE::Controller::ControllerImpl final
 {
 public:
 	explicit ControllerImpl(int controllerIndex)
@@ -83,24 +82,24 @@ private:
 
 };
 
-Controller::Controller(int controllerIndex):m_pImpl{std::make_unique<ControllerImpl>(controllerIndex)}
+bdnE::Controller::Controller(int controllerIndex):m_pImpl{std::make_unique<ControllerImpl>(controllerIndex)}
 {
 }
 
-Controller::~Controller() = default;
+bdnE::Controller::~Controller() = default;
 
 
-void Controller::HandleInputs()
+void bdnE::Controller::HandleInputs()
 {
 	m_pImpl->HandleInputs();
 }
 
-void Controller::AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<Command> command) const
+void bdnE::Controller::AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<bdnE::Command> command) const
 {
 	m_pImpl->AddButtonBinding(button, keyState, std::move(command));
 }
 
-void Controller::AddButtonBinding(const ControllerBinding& keyBind) const
+void bdnE::Controller::AddButtonBinding(const ControllerBinding& keyBind) const
 {
 	m_pImpl->AddButtonBinding(keyBind);
 }

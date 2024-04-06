@@ -1,55 +1,58 @@
 #pragma once
 #include "Buttons.h"
 #include <memory>
-
-enum class ControllerButton
+namespace bdnE
 {
-	DPadUp = 0x0001,
-	DPadDown = 0x0002,
-	DPadLeft = 0x0004,
-	DPadRight = 0x0008,
 
-	Start = 0x0010,
-	Back = 0x0020,
+	enum class ControllerButton
+	{
+		DPadUp = 0x0001,
+		DPadDown = 0x0002,
+		DPadLeft = 0x0004,
+		DPadRight = 0x0008,
 
-	LeftThumbstick = 0x0040,
-	RightThumbstick = 0x0080,
+		Start = 0x0010,
+		Back = 0x0020,
 
-	LeftBumper = 0x0100,
-	RightBumper = 0x0200,
+		LeftThumbstick = 0x0040,
+		RightThumbstick = 0x0080,
 
-	ButtonA = 0x1000,
-	ButtonB = 0x2000,
-	ButtonX = 0x4000,
-	ButtonY = 0x8000
-};
+		LeftBumper = 0x0100,
+		RightBumper = 0x0200,
 
-struct ControllerBinding
-{
-	ControllerButton button{};
-	KeyState keyState{};
-	std::shared_ptr<Command> command{};
-};
+		ButtonA = 0x1000,
+		ButtonB = 0x2000,
+		ButtonX = 0x4000,
+		ButtonY = 0x8000
+	};
 
-class Controller
-{
-public:
-	
+	struct ControllerBinding
+	{
+		ControllerButton button{};
+		KeyState keyState{};
+		std::shared_ptr<Command> command{};
+	};
 
-	explicit Controller(int controllerIndex);
-	~Controller();
+	class Controller
+	{
+	public:
 
-	Controller(Controller&) = delete;
-	Controller(Controller&&) = delete;
-	Controller& operator=(Controller&) = delete;
-	Controller& operator=(Controller&&) = delete;
 
-	void HandleInputs();
-	void AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<Command> command) const;
-	void AddButtonBinding(const ControllerBinding& keyBind) const;
+		explicit Controller(int controllerIndex);
+		~Controller();
 
-private:
+		Controller(Controller&) = delete;
+		Controller(Controller&&) = delete;
+		Controller& operator=(Controller&) = delete;
+		Controller& operator=(Controller&&) = delete;
 
-	class ControllerImpl;
-	std::unique_ptr<ControllerImpl> m_pImpl;
-};
+		void HandleInputs();
+		void AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<bdnE::Command> command) const;
+		void AddButtonBinding(const ControllerBinding& keyBind) const;
+
+	private:
+
+		class ControllerImpl;
+		std::unique_ptr<ControllerImpl> m_pImpl;
+	};
+}

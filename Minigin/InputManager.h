@@ -6,7 +6,7 @@
 #include "Singleton.h"
 #include "KeyboardControl.h"
 
-namespace dae
+namespace bdnE
 {
 	class InputManager final : public Singleton<InputManager>
 	{

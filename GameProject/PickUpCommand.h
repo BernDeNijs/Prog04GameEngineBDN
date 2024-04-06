@@ -2,17 +2,21 @@
 #include "GameObject.h"
 #include "Command.h"
 #include "PickUpComponent.h"
-class PickUpCommand : public Command
+namespace bdnG
 {
-public:
-    PickUpCommand(dae::GameObject* gameObject, int itemId) : Command(gameObject), m_ItemId{ itemId } {}
+    class PickUpCommand : public bdnE::Command
+    {
+    public:
+        PickUpCommand(bdnE::GameObject* gameObject, int itemId) : Command(gameObject), m_ItemId{ itemId } {}
 
-    void Execute() override {
-        // Check if the GameObject has a MoveComponent
-        if (const auto scoreComponent = m_GameObject->GetComponent<dae::PickUpComponent>().lock()) {
-            scoreComponent->PickUpItem(m_ItemId);
+        void Execute() override {
+            // Check if the GameObject has a MoveComponent
+            if (const auto scoreComponent = m_GameObject->GetComponent<bdnG::PickUpComponent>().lock()) {
+                scoreComponent->PickUpItem(m_ItemId);
+            }
         }
-    }
-private:
-    int m_ItemId = -1;
-};
+    private:
+        int m_ItemId = -1;
+    };
+}
+

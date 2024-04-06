@@ -2,13 +2,13 @@
 #include "GameComponent.h"
 #include "TextComponent.h"
 
-namespace dae
+namespace bdnG
 {
-	class FpsComponent :public GameComponent
+	class FpsComponent :public bdnE::GameComponent
 	{
 	public:
 
-		explicit FpsComponent(GameObject* owner);
+		explicit FpsComponent(bdnE::GameObject* owner);
 		void Update() override;
 
 	private:

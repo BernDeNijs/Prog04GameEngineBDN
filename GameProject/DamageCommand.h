@@ -3,18 +3,22 @@
 #include "Command.h"
 
 #include "HealthComponent.h"
-class DamageCommand : public Command
+namespace bdnG
 {
-public:
-    DamageCommand(dae::GameObject* gameObject, int damage) : Command(gameObject), m_Damage{ damage } {}
+    class DamageCommand : public bdnE::Command
+    {
+    public:
+        DamageCommand(bdnE::GameObject* gameObject, int damage) : Command(gameObject), m_Damage{ damage } {}
 
-    void Execute() override {
-        // Check if the GameObject has a MoveComponent
-        if (const auto healthComponent = m_GameObject->GetComponent<dae::HealthComponent>().lock()) {
-            healthComponent->Damage(m_Damage);
+        void Execute() override {
+            // Check if the GameObject has a MoveComponent
+            if (const auto healthComponent = m_GameObject->GetComponent<bdnG::HealthComponent>().lock()) {
+                healthComponent->Damage(m_Damage);
+            }
         }
-    }
-private:
-    int m_Damage = 1;
-};
+    private:
+        int m_Damage = 1;
+    };
+}
+
 

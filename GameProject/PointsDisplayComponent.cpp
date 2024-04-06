@@ -1,6 +1,6 @@
 #include "PointsDisplayComponent.h"
 
-dae::PointsDisplayComponent::PointsDisplayComponent(GameObject* owner) : GameComponent(owner)
+bdnG::PointsDisplayComponent::PointsDisplayComponent(bdnE::GameObject* owner) : GameComponent(owner)
 {
     if (owner->HasComponent<TextComponent>() == false)
     {
@@ -9,7 +9,7 @@ dae::PointsDisplayComponent::PointsDisplayComponent(GameObject* owner) : GameCom
     m_pTextComponent = m_pOwner->GetComponent<TextComponent>();
 }
 
-void dae::PointsDisplayComponent::OnNotify(const std::string& eventName,
+void bdnG::PointsDisplayComponent::OnNotify(const std::string& eventName,
 	const std::unordered_map<std::string, std::any>& eventData)
 {
     if (eventName == "PickedUpAnItem")
@@ -18,13 +18,10 @@ void dae::PointsDisplayComponent::OnNotify(const std::string& eventName,
         if (iter != eventData.end()) {
             SetScoreDisplay(std::any_cast<int>(iter->second));
         }
-
-
-
     }
 }
 
-void dae::PointsDisplayComponent::SetScoreDisplay(int itemId)
+void bdnG::PointsDisplayComponent::SetScoreDisplay(int itemId)
 {
 
     if (itemId == 0)

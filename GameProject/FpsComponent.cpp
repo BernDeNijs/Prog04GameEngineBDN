@@ -1,6 +1,6 @@
 #include "FpsComponent.h"
 
-dae::FpsComponent::FpsComponent(GameObject* owner) : GameComponent(owner)
+bdnG::FpsComponent::FpsComponent(bdnE::GameObject* owner) : GameComponent(owner)
 {
 	if (owner->HasComponent<TextComponent>() == false)
 	{
@@ -10,9 +10,11 @@ dae::FpsComponent::FpsComponent(GameObject* owner) : GameComponent(owner)
 	m_pTextComponent = owner->GetComponent<TextComponent>();
 }
 
-void dae::FpsComponent::Update()
+void bdnG::FpsComponent::Update()
 {
-	const float deltaT = GameTime::GetDeltaTime();
+	auto& time = bdnE::GameTime::GetInstance();
+	const float deltaT = time.GetDeltaTime();
+	
 	if (deltaT <= 0.f)
 	{
 		return;

@@ -1,18 +1,19 @@
 #include "OrbitComponent.h"
 
-dae::OrbitComponent::OrbitComponent(GameObject* owner) : GameComponent(owner)
+bdnG::OrbitComponent::OrbitComponent(bdnE::GameObject* owner) : GameComponent(owner)
 {
 }
 
-dae::OrbitComponent::OrbitComponent(GameObject* owner, float radius, float speed) : OrbitComponent(owner)
+bdnG::OrbitComponent::OrbitComponent(bdnE::GameObject* owner, float radius, float speed) : OrbitComponent(owner)
 {
 	m_Radius = radius;
 	m_Speed = speed;
 }
 
-void dae::OrbitComponent::Update()
+void bdnG::OrbitComponent::Update()
 {
-	m_Angle += m_Speed * GameTime::GetDeltaTime();
+	auto& time = bdnE::GameTime::GetInstance();
+	m_Angle += m_Speed * time.GetDeltaTime();
 	if (m_Angle > TWO_PI)
 	{
 		m_Angle -= TWO_PI;

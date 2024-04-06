@@ -6,7 +6,7 @@
 #include <glm/vec3.hpp>
 
 
-namespace dae
+namespace bdnE
 {
 	struct Transform
 	{
@@ -94,8 +94,8 @@ namespace dae
 
 
 		//TRANSFORM
-		dae::Transform GetLocalTransform() const;
-		dae::Transform GetWorldTransform();
+		bdnE::Transform GetLocalTransform() const;
+		bdnE::Transform GetWorldTransform();
 
 		void SetLocalTransform(const Transform& transform);
 		void SetLocalPosition(glm::vec3 position);
@@ -108,7 +108,7 @@ namespace dae
 
 		//SCENEGRAPH
 		GameObject* GetParent() const { return m_pParent; }
-		void SetParent(dae::GameObject* parent, bool keepWorldPosition);
+		void SetParent(bdnE::GameObject* parent, bool keepWorldPosition);
 		std::vector<GameObject*> GetChildren() { return m_pChildren; }
 
 	private:
@@ -119,7 +119,7 @@ namespace dae
 		//SCENEGRAPH
 		GameObject* m_pParent{ nullptr};
 		std::vector<GameObject*> m_pChildren{};
-		bool IsChild(dae::GameObject* potentialChild) const;
+		bool IsChild(bdnE::GameObject* potentialChild) const;
 
 		//TRANSFORM
 		struct ObjectTransform

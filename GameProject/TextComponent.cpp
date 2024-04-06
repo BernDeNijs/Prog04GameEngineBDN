@@ -1,33 +1,33 @@
 #include "TextComponent.h"
 
-dae::TextComponent::TextComponent(GameObject* owner) : GameComponent(owner)
+bdnG::TextComponent::TextComponent(bdnE::GameObject* owner) : GameComponent(owner)
 {
-	m_font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+	m_font = bdnE::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 
-	if (owner->HasComponent<RenderComponent>() == false)
+	if (owner->HasComponent<bdnG::RenderComponent>() == false)
 	{
-		owner->AddComponent<RenderComponent>();
+		owner->AddComponent<bdnG::RenderComponent>();
 	}
 
-	m_pRenderer = owner->GetComponent<RenderComponent>();
+	m_pRenderer = owner->GetComponent<bdnG::RenderComponent>();
 }
 
-dae::TextComponent::TextComponent(GameObject* owner, const std::string& text) : TextComponent(owner) 
+bdnG::TextComponent::TextComponent(bdnE::GameObject* owner, const std::string& text) : TextComponent(owner) 
 { 
 	SetText(text); 
 }
 
-dae::TextComponent::TextComponent(GameObject* owner, const std::string& text, int fontSize) : TextComponent(owner)
+bdnG::TextComponent::TextComponent(bdnE::GameObject* owner, const std::string& text, int fontSize) : TextComponent(owner)
 {
 	SetText(text, fontSize);
 }
 
-dae::TextComponent::TextComponent(GameObject* owner, const std::string& text, const std::shared_ptr<dae::Font>& font) : TextComponent(owner) 
+bdnG::TextComponent::TextComponent(bdnE::GameObject* owner, const std::string& text, const std::shared_ptr<bdnE::Font>& font) : TextComponent(owner)
 { 
 	SetText(text, font); 
 }
 
-void dae::TextComponent::Update()
+void bdnG::TextComponent::Update()
 {
 	if (m_needsUpdate)
 	{
@@ -36,13 +36,13 @@ void dae::TextComponent::Update()
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
 		}
-		auto texture = SDL_CreateTextureFromSurface(dae::Renderer::GetInstance().GetSDLRenderer(), surf);
+		auto texture = SDL_CreateTextureFromSurface(bdnE::Renderer::GetInstance().GetSDLRenderer(), surf);
 		if (texture == nullptr)
 		{
 			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 		}
 		SDL_FreeSurface(surf);
-		m_textTexture = std::make_shared<dae::Texture2D>(texture);
+		m_textTexture = std::make_shared<bdnE::Texture2D>(texture);
 
 		if (GetOwner() != nullptr)
 		{
@@ -55,18 +55,18 @@ void dae::TextComponent::Update()
 	}
 }
 
-void dae::TextComponent::SetText(const std::string& text)
+void bdnG::TextComponent::SetText(const std::string& text)
 {
 	SetText(text, 36);
 }
 
-void dae::TextComponent::SetText(const std::string& text, int fontSize)
+void bdnG::TextComponent::SetText(const std::string& text, int fontSize)
 {
-	const auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", fontSize);
+	const auto font = bdnE::ResourceManager::GetInstance().LoadFont("Lingua.otf", fontSize);
 	SetText(text, font);
 }
 
-void dae::TextComponent::SetText(const std::string& text, const std::shared_ptr<dae::Font>& font)
+void bdnG::TextComponent::SetText(const std::string& text, const std::shared_ptr<bdnE::Font>& font)
 {
 	if (text == m_text && font == m_font) return;
 	m_text = text;

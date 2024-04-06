@@ -3,7 +3,7 @@
 #include <memory>
 #include "Singleton.h"
 
-namespace dae
+namespace bdnE
 {
 	class Texture2D;
 	class Font;
