@@ -6,7 +6,7 @@
 
 namespace bdnG
 {
-    class RenderComponent :public bdnE::GameComponent
+    class RenderComponent final :public bdnE::GameComponent
     {
     public:
         explicit RenderComponent(bdnE::GameObject* owner);

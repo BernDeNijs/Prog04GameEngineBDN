@@ -8,7 +8,7 @@
 
 namespace bdnG
 {
-    class RemainingLivesDisplayComponent :public bdnE::Observer, public bdnE::GameComponent
+    class RemainingLivesDisplayComponent final :public bdnE::Observer, public bdnE::GameComponent
     {
     public:
         explicit RemainingLivesDisplayComponent(bdnE::GameObject* owner);

@@ -10,7 +10,7 @@ class Orbit_Component
 
 namespace bdnG
 {
-	class OrbitComponent : public bdnE::GameComponent
+	class OrbitComponent final : public bdnE::GameComponent
 	{
 	public:
 		explicit OrbitComponent(bdnE::GameObject* owner);

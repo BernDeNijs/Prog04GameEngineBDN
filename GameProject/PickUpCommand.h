@@ -4,7 +4,7 @@
 #include "PickUpComponent.h"
 namespace bdnG
 {
-    class PickUpCommand : public bdnE::Command
+    class PickUpCommand final : public bdnE::Command
     {
     public:
         PickUpCommand(bdnE::GameObject* gameObject, int itemId) : Command(gameObject), m_ItemId{ itemId } {}

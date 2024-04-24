@@ -9,7 +9,7 @@
 #include <SDL_ttf.h>
 namespace bdnG
 {
-	class TextComponent : public bdnE::GameComponent
+	class TextComponent final : public bdnE::GameComponent
 	{
 	public:
 		explicit TextComponent(bdnE::GameObject* owner);

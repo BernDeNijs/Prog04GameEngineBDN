@@ -5,7 +5,7 @@
 
 namespace bdnG
 {
-    class MoveCommand : public bdnE::Command {
+    class MoveCommand final : public bdnE::Command {
     public:
         MoveCommand(bdnE::GameObject* gameObject, glm::vec3 direction) : Command(gameObject), m_Direction{ direction } {}
 

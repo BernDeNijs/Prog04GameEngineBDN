@@ -18,7 +18,7 @@
 
 namespace bdnG
 {
-    class TTCComponent :public bdnE::GameComponent
+    class TTCComponent final :public bdnE::GameComponent
     {
     public:
         explicit TTCComponent(bdnE::GameObject* owner);

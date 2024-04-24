@@ -33,7 +33,7 @@ namespace bdnE
 		std::shared_ptr<Command> command{};
 	};
 
-	class Controller
+	class Controller final
 	{
 	public:
 

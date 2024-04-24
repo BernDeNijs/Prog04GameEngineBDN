@@ -4,7 +4,7 @@
 
 namespace bdnG
 {
-	class PickUpComponent :public bdnE::GameComponent, public bdnE::Subject
+	class PickUpComponent final :public bdnE::GameComponent, public bdnE::Subject
 	{
 	public:
 

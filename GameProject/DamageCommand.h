@@ -5,7 +5,7 @@
 #include "HealthComponent.h"
 namespace bdnG
 {
-    class DamageCommand : public bdnE::Command
+    class DamageCommand final : public bdnE::Command
     {
     public:
         DamageCommand(bdnE::GameObject* gameObject, int damage) : Command(gameObject), m_Damage{ damage } {}

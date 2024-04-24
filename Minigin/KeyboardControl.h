@@ -13,7 +13,7 @@ namespace bdnE
 		std::shared_ptr<Command> command{};
 	};
 
-	class KeyboardControl
+	class KeyboardControl final
 	{
 	public:
 

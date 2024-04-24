@@ -4,7 +4,7 @@
 
 namespace bdnG
 {
-	class MoveComponent : public bdnE::GameComponent
+	class MoveComponent final : public bdnE::GameComponent
 	{
 	public:
 		explicit MoveComponent(bdnE::GameObject* owner);

@@ -57,7 +57,7 @@ void load()
 	//auto test = bdnE::GameObject();
 	//auto test = std::make_unique<bdnE::GameObject>();
 
-	const auto fpsObject = scene.CreateGameObject(to,false);
+	const auto fpsObject = scene.CreateGameObject();
 	fpsObject->AddComponent<bdnG::FpsComponent>();
 	//---
 

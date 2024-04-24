@@ -7,7 +7,7 @@
 
 namespace bdnE
 {
-    class GameTime : public bdnE::Singleton<GameTime>
+    class GameTime final : public bdnE::Singleton<GameTime>
     {
     public:
         void Update()

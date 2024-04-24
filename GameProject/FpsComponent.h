@@ -4,7 +4,7 @@
 
 namespace bdnG
 {
-	class FpsComponent :public bdnE::GameComponent
+	class FpsComponent final :public bdnE::GameComponent
 	{
 	public:
 

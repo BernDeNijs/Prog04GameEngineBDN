@@ -8,7 +8,7 @@
 
 namespace bdnG
 {
-    class PointsDisplayComponent :public bdnE::Observer, public bdnE::GameComponent
+    class PointsDisplayComponent final :public bdnE::Observer, public bdnE::GameComponent
     {
     public:
         explicit PointsDisplayComponent(bdnE::GameObject* owner);

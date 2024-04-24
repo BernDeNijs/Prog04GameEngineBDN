@@ -4,7 +4,7 @@
 
 namespace bdnG
 {
-	class HealthComponent :public bdnE::GameComponent, public bdnE::Subject
+	class HealthComponent final :public bdnE::GameComponent, public bdnE::Subject
 	{
 	public:
 
