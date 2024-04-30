@@ -197,6 +197,7 @@
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="TTCComponent.h" />
     <ClInclude Include="MoveComponent.h" />
+    <ClInclude Include="WakaCommand.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

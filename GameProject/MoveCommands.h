@@ -5,9 +5,9 @@
 
 namespace bdnG
 {
-    class MoveCommand final : public bdnE::Command {
+    class MoveCommand final : public bdnE::GameObjectCommand {
     public:
-        MoveCommand(bdnE::GameObject* gameObject, glm::vec3 direction) : Command(gameObject), m_Direction{ direction } {}
+        MoveCommand(bdnE::GameObject* gameObject, glm::vec3 direction) : GameObjectCommand(gameObject), m_Direction{ direction } {}
 
         void Execute() override {
             // Check if the GameObject has a MoveComponent

@@ -34,6 +34,11 @@
 #include "PickUpCommand.h"
 #include "MoveCommands.h"
 
+//Sound
+#include "SoundLocator.h"
+#include "SDLSoundService.h"
+#include "WakaCommand.h"
+
 
 void load()
 {
@@ -140,15 +145,24 @@ void load()
 
 
 
+
 	//CONTROLS EXPLAINATION
 	auto textObject = scene.CreateGameObject();
 	textObject->AddComponent<bdnG::TextComponent>("Move pacman with the D-Pad, Hurt pacman with A , Gain points with B & Y", 16);
 	textObject->SetLocalPosition({ 10,400 });
 	textObject = scene.CreateGameObject();
-	textObject->AddComponent<bdnG::TextComponent>("Move the ghost with WASD, Hurt ghost with C , Gain points with Z & X", 16);
+	textObject->AddComponent<bdnG::TextComponent>("Move the ghost with WASD, Hurt ghost with C , Gain points with Z & X, Waka with V", 16);
 	textObject->SetLocalPosition({ 10,420 });
 	textObject = scene.CreateGameObject();
 
+
+	//SOUND
+	bdnE::SoundLocator::register_sound_system(std::make_unique<bdnE::SDLSoundService>(2));
+	bdnE::SoundLocator::get_sound_system().LoadSound("theme.mp3", 0);
+	bdnE::SoundLocator::get_sound_system().PlaySound(0,0,100,-1);
+
+	keyboard->AddButtonBinding(SDL_SCANCODE_V, bdnE::KeyState::pressedThisFrame, std::make_shared<bdnG::WakaCommand>());
+	
 
 
 }

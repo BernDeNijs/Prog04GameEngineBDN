@@ -5,10 +5,10 @@
 #include "HealthComponent.h"
 namespace bdnG
 {
-    class DamageCommand final : public bdnE::Command
+    class DamageCommand final : public bdnE::GameObjectCommand
     {
     public:
-        DamageCommand(bdnE::GameObject* gameObject, int damage) : Command(gameObject), m_Damage{ damage } {}
+        DamageCommand(bdnE::GameObject* gameObject, int damage) : GameObjectCommand(gameObject), m_Damage{ damage } {}
 
         void Execute() override {
             // Check if the GameObject has a MoveComponent

@@ -223,12 +223,16 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="KeyboardControl.h" />
     <ClInclude Include="Minigin.h" />
+    <ClInclude Include="NullSoundService.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SoundLocator.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="SDLSoundService.h" />
+    <ClInclude Include="SoundService.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="GameTime.h" />
@@ -249,10 +253,13 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="KeyboardControl.cpp" />
     <ClCompile Include="Minigin.cpp" />
+    <ClCompile Include="NullSoundService.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SDLSoundService.cpp" />
+    <ClCompile Include="SoundService.cpp" />
     <ClCompile Include="Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>

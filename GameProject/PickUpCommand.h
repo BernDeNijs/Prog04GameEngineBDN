@@ -4,10 +4,10 @@
 #include "PickUpComponent.h"
 namespace bdnG
 {
-    class PickUpCommand final : public bdnE::Command
+    class PickUpCommand final : public bdnE::GameObjectCommand
     {
     public:
-        PickUpCommand(bdnE::GameObject* gameObject, int itemId) : Command(gameObject), m_ItemId{ itemId } {}
+        PickUpCommand(bdnE::GameObject* gameObject, int itemId) : GameObjectCommand(gameObject), m_ItemId{ itemId } {}
 
         void Execute() override {
             // Check if the GameObject has a MoveComponent

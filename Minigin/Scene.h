@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneManager.h"
 //#include "GameObject.h"
+
 namespace bdnE
 {
 	class GameObject;
@@ -32,7 +33,6 @@ namespace bdnE
 
 		static unsigned int m_IdCounter; 
 
-		std::vector<GameObject*> m_TestObject;
 	};
 
 }

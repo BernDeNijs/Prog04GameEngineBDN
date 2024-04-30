@@ -5,13 +5,24 @@ namespace bdnE
 {
     class Command {
     public:
-        Command(bdnE::GameObject* gameObject) : m_GameObject{ gameObject } {}
-        virtual ~Command() {}
+        Command() = default;
+        virtual ~Command() = default;
         virtual void Execute() = 0;
+
+    protected:
+
+    };
+
+    class GameObjectCommand : public Command
+    {
+    public:
+        GameObjectCommand(bdnE::GameObject* gameObject) :Command()
+        { m_GameObject= gameObject ; }
 
     protected:
         bdnE::GameObject* m_GameObject;
     };
+
 }
 
 
