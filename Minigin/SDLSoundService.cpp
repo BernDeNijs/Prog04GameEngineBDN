@@ -91,8 +91,6 @@ public:
 		std::cout << "loaded sound" << data.path << "at id: " << data.id << "\n";
 
 	}
-	
-
 	void AddSoundToQueue(int soundId , int channel , int volume , int nrOfLoops)
 	{
 		if (channel > m_NrOfChannels)
@@ -105,7 +103,6 @@ public:
 		m_SoundsToPlay[channel].push_back(newSound);
 
 	}
-
 	void SoundThread()
 	{
 		m_ChannelMutex.lock();
@@ -163,9 +160,6 @@ public:
 			//}
 		}
 	}
-
-
-
 	void PlaySound(const PlaySoundData& sound, int channel) const
 	{
 
