@@ -13,8 +13,8 @@
 
 struct SoundLoadData
 {
-	std::string path;
-	int id;
+	std::string path = " ";
+	int id = -1;
 	bool initialized = false;
 };
 
@@ -22,8 +22,8 @@ struct SoundLoadData
 struct PlaySoundData
 {
 	int soundId = -1;
-	int volume;
-	int nrOfLoops;
+	int volume = 100;
+	int nrOfLoops = 0;
 };
 
 //IMPL CLASS

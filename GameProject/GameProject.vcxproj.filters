@@ -48,6 +48,24 @@
     <ClCompile Include="MoveComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GhostStateScatter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostControllerComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerPelletComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostStateChase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostStateFrightened.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostStateDead.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DamageCommand.h">
@@ -90,6 +108,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WakaCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostStateScatter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostControllerComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerPelletComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostStateChase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostStateFrightened.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostStateDead.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

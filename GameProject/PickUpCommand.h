@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "Command.h"
 #include "PickUpComponent.h"
+#include "PowerPelletComponent.h"
+
 namespace bdnG
 {
     class PickUpCommand final : public bdnE::GameObjectCommand
@@ -11,6 +13,12 @@ namespace bdnG
 
         void Execute() override {
             // Check if the GameObject has a MoveComponent
+            if (m_ItemId == 2)
+            {
+                m_GameObject->GetComponent<PowerPelletComponent>()->PickUpPellet();
+                return;
+            }
+
             if (const auto scoreComponent = m_GameObject->GetComponent<bdnG::PickUpComponent>()) {
                 scoreComponent->PickUpItem(m_ItemId);
             }
@@ -18,5 +26,7 @@ namespace bdnG
     private:
         int m_ItemId = -1;
     };
+
+
 }
 

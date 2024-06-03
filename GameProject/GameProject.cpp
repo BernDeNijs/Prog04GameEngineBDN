@@ -35,6 +35,7 @@
 #include "MoveCommands.h"
 
 //Sound
+#include "GhostControllerComponent.h"
 #include "SoundLocator.h"
 #include "SDLSoundService.h"
 #include "WakaCommand.h"
@@ -75,6 +76,7 @@ void load()
 	playerCharacter->AddComponent<bdnG::MoveComponent>();
 	auto healthComponent = playerCharacter->AddComponent<bdnG::HealthComponent>();
 	auto scoreComponent = playerCharacter->AddComponent<bdnG::PickUpComponent>();
+	playerCharacter->AddComponent<bdnG::PowerPelletComponent>();
 
 	//--Lives display
 	auto DisplayObject = scene.CreateGameObject();
@@ -104,7 +106,16 @@ void load()
 	controller->AddButtonBinding(bdnE::ControllerButton::ButtonB, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 0));
 	controller->AddButtonBinding(bdnE::ControllerButton::ButtonY, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 1));
 
+	auto keyboard = inputManager.GetKeyboardController();
+	keyboard->AddButtonBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 0,-1,0 }));
+	keyboard->AddButtonBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 0,1,0 }));
+	keyboard->AddButtonBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ -1,0,0 }));
+	keyboard->AddButtonBinding(SDL_SCANCODE_D, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 1,0,0 }));
 
+	keyboard->AddButtonBinding(SDL_SCANCODE_C, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(playerCharacter, 1));
+	keyboard->AddButtonBinding(SDL_SCANCODE_Z, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 0));
+	keyboard->AddButtonBinding(SDL_SCANCODE_X, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 1));
+	keyboard->AddButtonBinding(SDL_SCANCODE_V, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 2));
 
 
 
@@ -115,6 +126,7 @@ void load()
 	enemyCharacter->AddComponent<bdnG::MoveComponent>(200.f);
 	healthComponent = enemyCharacter->AddComponent<bdnG::HealthComponent>();
 	scoreComponent = enemyCharacter->AddComponent<bdnG::PickUpComponent>();
+	enemyCharacter->AddComponent<bdnG::GhostControllerComponent>(playerCharacter);
 
 	//--Lives display
 	DisplayObject = scene.CreateGameObject();
@@ -133,15 +145,15 @@ void load()
 	scoreComponent->AddObserver(pointDisplay);
 
 	//--Add controls
-	auto keyboard = inputManager.GetKeyboardController();
-	keyboard->AddButtonBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 0,-1,0 }));
-	keyboard->AddButtonBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 0,1,0 }));
-	keyboard->AddButtonBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ -1,0,0 }));
-	keyboard->AddButtonBinding(SDL_SCANCODE_D, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 1,0,0 }));
-
-	keyboard->AddButtonBinding(SDL_SCANCODE_C, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(enemyCharacter, 1));
-	keyboard->AddButtonBinding(SDL_SCANCODE_Z, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(enemyCharacter, 0));
-	keyboard->AddButtonBinding(SDL_SCANCODE_X, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(enemyCharacter, 1));
+	//auto keyboard = inputManager.GetKeyboardController();
+	//keyboard->AddButtonBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 0,-1,0 }));
+	//keyboard->AddButtonBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 0,1,0 }));
+	//keyboard->AddButtonBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ -1,0,0 }));
+	//keyboard->AddButtonBinding(SDL_SCANCODE_D, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 1,0,0 }));
+	//
+	//keyboard->AddButtonBinding(SDL_SCANCODE_C, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(enemyCharacter, 1));
+	//keyboard->AddButtonBinding(SDL_SCANCODE_Z, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(enemyCharacter, 0));
+	//keyboard->AddButtonBinding(SDL_SCANCODE_X, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(enemyCharacter, 1));
 
 
 
@@ -151,7 +163,7 @@ void load()
 	textObject->AddComponent<bdnG::TextComponent>("Move pacman with the D-Pad, Hurt pacman with A , Gain points with B & Y", 16);
 	textObject->SetLocalPosition({ 10,400 });
 	textObject = scene.CreateGameObject();
-	textObject->AddComponent<bdnG::TextComponent>("Move the ghost with WASD, Hurt ghost with C , Gain points with Z & X, Waka with V", 16);
+	textObject->AddComponent<bdnG::TextComponent>("Move the pacman with WASD, Hurt ghost with C , Gain points with Z & X, Pick up pellet with V", 16);
 	textObject->SetLocalPosition({ 10,420 });
 	textObject = scene.CreateGameObject();
 
