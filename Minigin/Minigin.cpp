@@ -111,22 +111,17 @@ void bdnE::Minigin::Run(const std::function<void()>& load)
 		doContinue = input.ProcessInput();
 
 		//Update game
-		sceneManager.Update();
-
-		//Fixed update game
-		
+		sceneManager.Update();					//Basic update
 		lag += time.GetFixedTimeStep();
-		while (lag >= time.GetFixedTimeStep())
+		while (lag >= time.GetFixedTimeStep())	//Fixed update every xx- ms
 		{
 			sceneManager.FixedUpdate();
 			lag -= time.GetFixedTimeStep();
 		}
-
-		//Render
-		renderer.Render();
-
-		//DeleteDeadGameObjects
-		sceneManager.DeleteDeadGameObjects();
+		renderer.Render();							//Render after all updates are completed
+		sceneManager.DeleteDeadGameObjects();		//Don't delete Gameobjects until after everything has been updated & rendered, otherwise we can cause undefined behavior
+		sceneManager.UpdateCurrentActiveScene();	//Don't switch our current scene around for the same reason
+		sceneManager.DeleteDeadScenes();			//Don't delete our scenes for the same reason too
 
 		//Limit FPS
 		time.FPSDelay();

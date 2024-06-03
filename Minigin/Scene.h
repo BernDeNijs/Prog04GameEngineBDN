@@ -7,14 +7,14 @@ namespace bdnE
 	class GameObject;
 	class Scene final
 	{
-		friend Scene& SceneManager::CreateScene(const std::string& name);
+		friend bdnE::Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 
 		GameObject* CreateGameObject();
 		GameObject* CreateGameObject(GameObject* parent, bool keepWorldPosition);
 
 		void Update() const;
-		void FixedUpdate();
+		void FixedUpdate() const;
 		void Render() const;
 		void RenderImgui() const;
 		void DeleteDeadGameObjects();
@@ -25,6 +25,11 @@ namespace bdnE
 		Scene& operator=(const Scene& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
 
+		std::string GetSceneName() { return m_Name; }
+
+		void SetMarkedForDelete(bool condition) { m_MarkedForDelete = condition; }
+		bool GetMarkedForDelete() const { return m_MarkedForDelete; }
+
 	private: 
 		explicit Scene(const std::string& name);
 
@@ -33,6 +38,7 @@ namespace bdnE
 
 		static unsigned int m_IdCounter; 
 
+		bool m_MarkedForDelete = false;
 	};
 
 }

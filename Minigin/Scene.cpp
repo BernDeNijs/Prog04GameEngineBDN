@@ -43,7 +43,7 @@ void Scene::Update() const
 		object->LateUpdate();
 	}
 }
-void Scene::FixedUpdate()
+void Scene::FixedUpdate() const
 {
 	for(auto& object : m_Objects)
 	{

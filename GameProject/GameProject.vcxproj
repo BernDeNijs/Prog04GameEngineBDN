@@ -198,6 +198,7 @@
     <ClInclude Include="GhostStateFrightened.h" />
     <ClInclude Include="GhostStateScatter.h" />
     <ClInclude Include="MoveCommands.h" />
+    <ClInclude Include="NextSceneCommand.h" />
     <ClInclude Include="PickUpCommand.h" />
     <ClInclude Include="FpsComponent.h" />
     <ClInclude Include="HealthComponent.h" />

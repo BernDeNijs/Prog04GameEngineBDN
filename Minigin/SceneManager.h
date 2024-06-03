@@ -10,16 +10,28 @@ namespace bdnE
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
-		Scene& CreateScene(const std::string& name);
+		bdnE::Scene& CreateScene(const std::string& name);
+		void RemoveScene(const std::string& name);
+
+		void SetActiveScene(const std::string& name);
 
 		void Update() const;
 		void FixedUpdate() const;
 		void Render() const;
 		void RenderImgui() const;
 		void DeleteDeadGameObjects() const;
+		void DeleteDeadScenes();
+		void UpdateCurrentActiveScene();
+
+		bdnE::Scene& GetCurrentScene() const { return *m_ActiveScene; }
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
 		std::vector<std::shared_ptr<Scene>> m_Scenes;
+		Scene* m_ActiveScene = nullptr;
+		//SceneChanging
+		Scene* m_NextScene = nullptr;
+		bool m_ShouldChangeScene = false;
+		bool m_ShouldDeleteScenes = false;
 	};
 }
