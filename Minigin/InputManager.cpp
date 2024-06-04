@@ -30,13 +30,13 @@ bool bdnE::InputManager::ProcessInput() const
 	for (int i = 0; i < static_cast<int>(m_pControllers.size()); i++)
 	{
 		m_pControllers[i]->HandleInputs();
-		for (const auto& binding : m_ActionBindings[i])
-		{
-			if (binding.second != m_SceneName)
-			{
-				continue;
+
+		if (const auto it = m_ControllerBindings[i].find(m_SceneName);
+			it != m_ControllerBindings[i].end()) {
+			// If the scene name exists, iterate over the bindings
+			for (const auto& binding : it->second) {
+				m_pControllers[i]->CheckBinding(binding);
 			}
-			m_pControllers[i]->CheckBinding(binding.first);
 		}
 	}
 	for (const auto& pController : m_pControllers)
@@ -45,22 +45,40 @@ bool bdnE::InputManager::ProcessInput() const
 	}
 	//Handle keyboard events
 	m_Keyboard->HandleInputs();
-	for(const auto& binding : m_KeyBinds)
-	{
-		if (binding.second != m_SceneName)
-		{
-			continue;
+	
+	if (const auto it = m_KeyboardBindings.find(m_SceneName);
+		it != m_KeyboardBindings.end()) {
+		// If the scene name exists, iterate over the bindings
+		for (const auto& binding : it->second) {
+			m_Keyboard->CheckBinding(binding);
 		}
-		m_Keyboard->CheckBinding(binding.first);
 	}
 	return true;
+}
+
+void bdnE::InputManager::RemoveSceneInput(const std::string sceneName)
+{
+	////Remove keyboard controls linked to scene
+	auto keyboardIt = m_KeyboardBindings.find(sceneName);
+	if (keyboardIt != m_KeyboardBindings.end()) {
+		m_KeyboardBindings.erase(keyboardIt);
+	}
+
+	//Remove controller controls linked to scene
+	for (int i = 0; i < static_cast<int>(m_ControllerBindings.size()); i++)
+	{
+		auto controllerIt = m_ControllerBindings[i].find(sceneName);
+		if (controllerIt != m_ControllerBindings[i].end()) {
+			m_ControllerBindings[i].erase(controllerIt);
+		}
+	}
 }
 
 int bdnE::InputManager::AddController()
 {
 	const int index{ static_cast<int>(m_pControllers.size()) };
 	m_pControllers.push_back(std::make_unique<Controller>(index));
-	m_ActionBindings.push_back(std::vector<std::pair<ControllerBinding,std::string>>{});
+	m_ControllerBindings.push_back(std::map<std::string, std::vector<ControllerBinding>>{});
 	return index;
 }
 
@@ -72,7 +90,7 @@ void bdnE::InputManager::AddControllerBinding(ControllerButton button, KeyState 
 
 void bdnE::InputManager::AddControllerBinding(const ControllerBinding& keyBind, int controllerIdx, bdnE::Scene* scene) 
 {
-	m_ActionBindings[controllerIdx].emplace_back(keyBind,scene->GetSceneName());
+	m_ControllerBindings[controllerIdx][scene->GetSceneName()].emplace_back(keyBind);
 }
 
 void bdnE::InputManager::AddKeyboardBinding(SDL_Scancode button, KeyState keyState, std::shared_ptr<Command> command, Scene* scene)
@@ -82,5 +100,9 @@ void bdnE::InputManager::AddKeyboardBinding(SDL_Scancode button, KeyState keySta
 
 void bdnE::InputManager::AddKeyboardBinding(const KeyboardBinding& keyBind, Scene* scene)
 {
-	m_KeyBinds.emplace_back(keyBind, scene->GetSceneName());
+	const std::string& sceneName = scene->GetSceneName();
+	m_KeyboardBindings[sceneName].push_back(keyBind);
+
+	//m_KeyboardBindings.insert({ scene->GetSceneName(), keyBind });
+	//m_KeyboardBindings.emplace_back(keyBind, scene->GetSceneName());
 }

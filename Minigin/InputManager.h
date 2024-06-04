@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <map>
 
 #include "Controller.h"
 #include "Singleton.h"
@@ -16,7 +17,7 @@ namespace bdnE
 	public:
 		bool ProcessInput() const;
 		void SetActiveScene(const std::string& sceneName) { m_SceneName = sceneName; }
-		
+		void RemoveSceneInput(const std::string sceneName);
 
 		//Controller functions
 		int AddController();
@@ -33,11 +34,11 @@ namespace bdnE
 	private:
 		//Controller variables
 		std::vector<std::unique_ptr<Controller>> m_pControllers{};
-		std::vector<std::vector<std::pair<ControllerBinding,std::string>>> m_ActionBindings{};
+		std::vector<std::map<std::string, std::vector<ControllerBinding>>> m_ControllerBindings{};
 
 		//Keyboard variables
 		std::unique_ptr<KeyboardControl> m_Keyboard{ std::make_unique<KeyboardControl>() };
-		std::vector<std::pair<KeyboardBinding, std::string>> m_KeyBinds{};
+		std::map<std::string,std::vector<KeyboardBinding>> m_KeyboardBindings{};
 		std::string m_SceneName = "";
 	};
 

@@ -35,9 +35,16 @@ void bdnE::SceneManager::DeleteDeadScenes()
 	//make sure we're not deleting the scene we're now in
 	if (!m_ShouldDeleteScenes) return;
 
+	auto& inputManager = InputManager::GetInstance();
+
 	m_Scenes.erase(std::remove_if(m_Scenes.begin(), m_Scenes.end(),
 		[&](const std::shared_ptr<Scene>& scene) {
-			return scene->GetMarkedForDelete() && scene->GetSceneName() != m_ActiveScene->GetSceneName();
+			if (scene->GetMarkedForDelete() && scene->GetSceneName() != m_ActiveScene->GetSceneName())
+			{
+				inputManager.RemoveSceneInput(scene->GetSceneName());
+				return true;
+			}
+			return false;
 		}),
 		m_Scenes.end());
 	m_ShouldDeleteScenes = false;
