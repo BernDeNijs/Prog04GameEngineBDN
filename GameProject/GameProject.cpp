@@ -99,28 +99,28 @@ void load()
 
 
 		//--Add controls
-		const bdnE::Controller* controller = inputManager.AddController();
-		controller->AddButtonBinding(bdnE::ControllerButton::DPadRight, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 1,0,0 }));
-		controller->AddButtonBinding(bdnE::ControllerButton::DPadLeft, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ -1,0,0 }));
-		controller->AddButtonBinding(bdnE::ControllerButton::DPadUp, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 0,-1,0 }));
-		controller->AddButtonBinding(bdnE::ControllerButton::DPadDown, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 0,1,0 }));
+		const int controllerIdx = inputManager.AddController();
+		inputManager.AddButtonBinding(bdnE::ControllerButton::DPadRight, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 1,0,0 }), controllerIdx);
+		inputManager.AddButtonBinding(bdnE::ControllerButton::DPadLeft, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ -1,0,0 }), controllerIdx);
+		inputManager.AddButtonBinding(bdnE::ControllerButton::DPadUp, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 0,-1,0 }), controllerIdx);
+		inputManager.AddButtonBinding(bdnE::ControllerButton::DPadDown, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 0,1,0 }), controllerIdx);
 
-		controller->AddButtonBinding(bdnE::ControllerButton::ButtonA, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(playerCharacter, 1));
-		controller->AddButtonBinding(bdnE::ControllerButton::ButtonB, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 0));
-		controller->AddButtonBinding(bdnE::ControllerButton::ButtonY, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 1));
+		inputManager.AddButtonBinding(bdnE::ControllerButton::ButtonA, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(playerCharacter, 1), controllerIdx);
+		inputManager.AddButtonBinding(bdnE::ControllerButton::ButtonB, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 0), controllerIdx);
+		inputManager.AddButtonBinding(bdnE::ControllerButton::ButtonY, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 1), controllerIdx);
 
-		auto keyboard = inputManager.GetKeyboardController();
-		keyboard->AddButtonBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 0,-1,0 }));
-		keyboard->AddButtonBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 0,1,0 }));
-		keyboard->AddButtonBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ -1,0,0 }));
-		keyboard->AddButtonBinding(SDL_SCANCODE_D, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 1,0,0 }));
+		/*auto keyboard = inputManager.GetKeyboardController();*/
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 0,-1,0 }));
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 0,1,0 }));
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ -1,0,0 }));
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_D, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec3{ 1,0,0 }));
 
-		keyboard->AddButtonBinding(SDL_SCANCODE_C, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(playerCharacter, 1));
-		keyboard->AddButtonBinding(SDL_SCANCODE_Z, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 0));
-		keyboard->AddButtonBinding(SDL_SCANCODE_X, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 1));
-		keyboard->AddButtonBinding(SDL_SCANCODE_V, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 2));
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_C, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(playerCharacter, 1));
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_Z, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 0));
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_X, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 1));
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_V, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 2));
 
-		keyboard->AddButtonBinding(SDL_SCANCODE_F1, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::NextSceneCommand>());
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_F1, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::NextSceneCommand>());
 
 
 
@@ -178,7 +178,7 @@ void load()
 		bdnE::SoundLocator::get_sound_system().LoadSound("theme.mp3", 0);
 		bdnE::SoundLocator::get_sound_system().PlaySound(0, 0, 100, -1);
 
-		keyboard->AddButtonBinding(SDL_SCANCODE_V, bdnE::KeyState::pressedThisFrame, std::make_shared<bdnG::WakaCommand>());
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_V, bdnE::KeyState::pressedThisFrame, std::make_shared<bdnG::WakaCommand>());
 	}
 	//BASIC SCENE//
 	{

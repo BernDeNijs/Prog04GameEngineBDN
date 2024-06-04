@@ -46,9 +46,11 @@ namespace bdnE
 		Controller& operator=(Controller&) = delete;
 		Controller& operator=(Controller&&) = delete;
 
-		void HandleInputs();
-		void AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<bdnE::Command> command) const;
-		void AddButtonBinding(const ControllerBinding& keyBind) const;
+		void HandleInputs() const;
+		/*void AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<bdnE::Command> command) const;
+		void AddButtonBinding(const ControllerBinding& keyBind) const;*/
+
+		void CheckBinding(const ControllerBinding& binding) const;
 
 	private:
 

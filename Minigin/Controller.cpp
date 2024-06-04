@@ -30,43 +30,67 @@ public:
 		m_ButtonsPressedThisFrame = buttonChanges & m_CurrentState.Gamepad.wButtons;
 		m_ButtonsReleasedThisFrame = buttonChanges & (~m_CurrentState.Gamepad.wButtons);
 
-		//Go over all bindings & execute
-		for (const auto& bind : m_ActionBindings)
-		{
-			switch (bind.keyState)
-			{
-			case KeyState::pressed:
-				if ( static_cast<unsigned int>(bind.button) & m_CurrentState.Gamepad.wButtons)
-				{
-					bind.command->Execute();
-				}
-				break;
-			case KeyState::pressedThisFrame:
-				if (static_cast<unsigned int>(bind.button) & m_ButtonsPressedThisFrame)
-				{
-					bind.command->Execute();
-				}
-				break;
-			case KeyState::releasedThisFrame:
-				if (static_cast<unsigned int>(bind.button) & m_ButtonsReleasedThisFrame)
-				{
-					bind.command->Execute();
-				}
-				break;
-			default:
-				break;
-			}
-		}
+		////Go over all bindings & execute
+		//for (const auto& bind : m_ActionBindings)
+		//{
+		//	switch (bind.keyState)
+		//	{
+		//	case KeyState::pressed:
+		//		if ( static_cast<unsigned int>(bind.button) & m_CurrentState.Gamepad.wButtons)
+		//		{
+		//			bind.command->Execute();
+		//		}
+		//		break;
+		//	case KeyState::pressedThisFrame:
+		//		if (static_cast<unsigned int>(bind.button) & m_ButtonsPressedThisFrame)
+		//		{
+		//			bind.command->Execute();
+		//		}
+		//		break;
+		//	case KeyState::releasedThisFrame:
+		//		if (static_cast<unsigned int>(bind.button) & m_ButtonsReleasedThisFrame)
+		//		{
+		//			bind.command->Execute();
+		//		}
+		//		break;
+		//	default:
+		//		break;
+		//	}
+		//}
 	}
 
-	void AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<Command> command)
+	void CheckBinding(const ControllerBinding& binding) const
 	{
-		AddButtonBinding(ControllerBinding{ button,keyState,std::move( command) });
+		switch (binding.keyState)
+		{
+		case KeyState::pressed:
+			if ( static_cast<unsigned int>(binding.button) & m_CurrentState.Gamepad.wButtons)
+			{
+				binding.command->Execute();
+			}
+			break;
+		case KeyState::pressedThisFrame:
+			if (static_cast<unsigned int>(binding.button) & m_ButtonsPressedThisFrame)
+			{
+				binding.command->Execute();
+			}
+			break;
+		case KeyState::releasedThisFrame:
+			if (static_cast<unsigned int>(binding.button) & m_ButtonsReleasedThisFrame)
+			{
+				binding.command->Execute();
+			}
+			break;
+		}
 	}
-	void AddButtonBinding(const ControllerBinding& keyBind)
-	{
-		m_ActionBindings.emplace_back(keyBind);
-	}
+	//void AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<Command> command)
+	//{
+	//	AddButtonBinding(ControllerBinding{ button,keyState,std::move( command) });
+	//}
+	//void AddButtonBinding(const ControllerBinding& keyBind)
+	//{
+	//	m_ActionBindings.emplace_back(keyBind);
+	//}
 
 
 private:
@@ -78,7 +102,7 @@ private:
 	WORD m_ButtonsReleasedThisFrame{};
 
 	const int m_ControllerIndex;
-	std::vector<ControllerBinding> m_ActionBindings{};
+	//std::vector<ControllerBinding> m_ActionBindings{};
 
 };
 
@@ -89,17 +113,22 @@ bdnE::Controller::Controller(int controllerIndex):m_pImpl{std::make_unique<Contr
 bdnE::Controller::~Controller() = default;
 
 
-void bdnE::Controller::HandleInputs()
+void bdnE::Controller::HandleInputs() const
 {
 	m_pImpl->HandleInputs();
 }
 
-void bdnE::Controller::AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<bdnE::Command> command) const
+void bdnE::Controller::CheckBinding(const ControllerBinding& binding) const
 {
-	m_pImpl->AddButtonBinding(button, keyState, std::move(command));
+	m_pImpl->CheckBinding(binding);
 }
 
-void bdnE::Controller::AddButtonBinding(const ControllerBinding& keyBind) const
-{
-	m_pImpl->AddButtonBinding(keyBind);
-}
+//void bdnE::Controller::AddButtonBinding(ControllerButton button, KeyState keyState, std::shared_ptr<bdnE::Command> command) const
+//{
+//	m_pImpl->AddButtonBinding(button, keyState, std::move(command));
+//}
+//
+//void bdnE::Controller::AddButtonBinding(const ControllerBinding& keyBind) const
+//{
+//	m_pImpl->AddButtonBinding(keyBind);
+//}

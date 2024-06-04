@@ -24,6 +24,7 @@ struct PlaySoundData
 	int soundId = -1;
 	int volume = 100;
 	int nrOfLoops = 0;
+	int channel = 0;
 };
 
 //IMPL CLASS
@@ -45,11 +46,16 @@ public:
 			std::cout << "Audio device not initialized: " << Mix_GetError() << '\n';
 		}
 		//Create seperate thread for sound
-		for (int i = 0; i < m_NrOfChannels; i++)
-		{
-			m_SoundThreads.emplace_back ( std::jthread{ [&] { SoundThread(); } });
-			m_SoundsToPlay.push_back(std::deque<PlaySoundData>());
-		}
+		//--Single thread implementation
+		m_SoundThreads.emplace_back(std::jthread{ [&] { SoundThread(); } });
+		//m_SoundsToPlay.push_back(std::deque<PlaySoundData>());
+
+		////--Multiple thread implementation
+		//for (int i = 0; i < m_NrOfChannels; i++)
+		//{
+		//	m_SoundThreads.emplace_back ( std::jthread{ [&] { SoundThread(); } });
+		//	m_SoundsToPlay.push_back(std::deque<PlaySoundData>());
+		//}
 		//m_SoundsToPlay.resize(m_NrOfChannels);
 		m_LoadThread = std::jthread{ [&] { LoadThread(); } };
 		
@@ -99,8 +105,8 @@ public:
 			return;
 		}
 
-		const PlaySoundData newSound{ soundId, volume, nrOfLoops }; //create new sound
-		m_SoundsToPlay[channel].push_back(newSound);
+		const PlaySoundData newSound{ soundId, volume, nrOfLoops, channel }; //create new sound
+		m_SoundsToPlay.push_back(newSound);
 
 	}
 	void SoundThread()
@@ -116,12 +122,12 @@ public:
 			PlaySoundData sound;
 			//Start mutex
 			m_SoundQueueMutex.lock();
-			if ((!m_SoundsToPlay[threadChannel].empty()) 
+			if ((!m_SoundsToPlay.empty()) 
 				&& m_SoundsToLoad.empty())
 			{
-				sound = m_SoundsToPlay[threadChannel].front();
+				sound = m_SoundsToPlay.front();
 
-				m_SoundsToPlay[threadChannel].pop_front();
+				m_SoundsToPlay.pop_front();
 				
 				//end mutex			
 			}
@@ -130,7 +136,7 @@ public:
 			if (sound.soundId != -1)
 			{
 
-				PlaySound(sound, threadChannel);
+				PlaySound(sound);
 			}
 
 		}
@@ -160,7 +166,7 @@ public:
 			//}
 		}
 	}
-	void PlaySound(const PlaySoundData& sound, int channel) const
+	void PlaySound(const PlaySoundData& sound) const
 	{
 
 		if (const auto it = m_RegisteredSounds.find(sound.soundId);
@@ -172,10 +178,10 @@ public:
 
 		//Set new volume
 		const int volume = std::clamp(sound.volume, 0, MIX_MAX_VOLUME);
-		Mix_Volume(channel, volume); // -1 for all channels
+		Mix_Volume(sound.channel, volume); // -1 for all channels
 
 		//Play sound		
-		Mix_PlayChannel(channel, m_RegisteredSounds.at(sound.soundId), sound.nrOfLoops); //-1 for all channels
+		Mix_PlayChannel(sound.channel, m_RegisteredSounds.at(sound.soundId), sound.nrOfLoops); //-1 for all channels
 	}
 
 private:
@@ -185,7 +191,7 @@ private:
 	std::jthread m_LoadThread{};
 	std::deque<SoundLoadData> m_SoundsToLoad{};
 	std::unordered_map<int, Mix_Chunk*> m_RegisteredSounds{};
-	std::vector<std::deque<PlaySoundData>> m_SoundsToPlay{};
+	std::deque<PlaySoundData> m_SoundsToPlay{};
 
 	int m_CreatedChannels{ 0 };
 
