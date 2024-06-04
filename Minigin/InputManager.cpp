@@ -44,8 +44,7 @@ bool bdnE::InputManager::ProcessInput() const
 		pController->HandleInputs();
 	}
 	//Handle keyboard events
-	m_Keyboard->HandleInputs();
-	
+	m_Keyboard->HandleInputs();	
 	if (const auto it = m_KeyboardBindings.find(m_SceneName);
 		it != m_KeyboardBindings.end()) {
 		// If the scene name exists, iterate over the bindings

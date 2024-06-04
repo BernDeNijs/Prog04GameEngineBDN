@@ -18,7 +18,9 @@ bdnG::RenderComponent::RenderComponent(bdnE::GameObject* owner, const std::strin
 void bdnG::RenderComponent::Render() const
 {
     if (m_pTexture == nullptr) return;
-
-    glm::vec3 position = GetOwner()->GetWorldTransform().Position;
-    bdnE::Renderer::GetInstance().RenderTexture(*m_pTexture, position.x, position.y);
+    const auto transform = GetOwner()->GetWorldTransform();
+    const glm::vec3 position = transform.Position;
+    const auto scale = transform.Scale;
+    
+    bdnE::Renderer::GetInstance().RenderTexture(*m_pTexture, position.x, position.y, scale.x, scale.y);
 }

@@ -195,8 +195,16 @@ void load()
 		to->AddComponent<bdnG::TextComponent>("Programming 4 Assignment", font);
 		to->SetLocalPosition({ 80, 20 });
 	}
-	
+	{
+		const auto scene3 = bdnE::SceneManager::GetInstance().CreateScene("MapScene");
+		const auto background = scene3->CreateGameObject();
+		background->AddComponent<bdnG::RenderComponent>("Maze.png");
+		background->SetLocalScale(2.f);
+		//go->SetLocalPosition({ 0,248 });
 
+	}
+	
+	bdnE::SceneManager::GetInstance().SetActiveScene("MapScene");
 
 }
 
