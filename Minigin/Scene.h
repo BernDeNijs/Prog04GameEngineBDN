@@ -7,7 +7,7 @@ namespace bdnE
 	class GameObject;
 	class Scene final
 	{
-		friend bdnE::Scene& SceneManager::CreateScene(const std::string& name);
+		friend bdnE::Scene* SceneManager::CreateScene(const std::string& name);
 	public:
 
 		GameObject* CreateGameObject();

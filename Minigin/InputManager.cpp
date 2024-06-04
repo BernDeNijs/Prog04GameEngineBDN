@@ -3,6 +3,7 @@
 
 #include <SDL_syswm.h>
 #include <backends/imgui_impl_sdl2.h>
+#include "Scene.h"
 
 bool bdnE::InputManager::ProcessInput() const
 {
@@ -31,7 +32,11 @@ bool bdnE::InputManager::ProcessInput() const
 		m_pControllers[i]->HandleInputs();
 		for (const auto& binding : m_ActionBindings[i])
 		{
-			m_pControllers[i]->CheckBinding(binding);
+			if (binding.second != m_SceneName)
+			{
+				continue;
+			}
+			m_pControllers[i]->CheckBinding(binding.first);
 		}
 	}
 	for (const auto& pController : m_pControllers)
@@ -42,7 +47,11 @@ bool bdnE::InputManager::ProcessInput() const
 	m_Keyboard->HandleInputs();
 	for(const auto& binding : m_KeyBinds)
 	{
-		m_Keyboard->CheckBinding(binding);
+		if (binding.second != m_SceneName)
+		{
+			continue;
+		}
+		m_Keyboard->CheckBinding(binding.first);
 	}
 	return true;
 }
@@ -51,27 +60,27 @@ int bdnE::InputManager::AddController()
 {
 	const int index{ static_cast<int>(m_pControllers.size()) };
 	m_pControllers.push_back(std::make_unique<Controller>(index));
-	m_ActionBindings.push_back(std::vector<ControllerBinding>{});
+	m_ActionBindings.push_back(std::vector<std::pair<ControllerBinding,std::string>>{});
 	return index;
 }
 
-void bdnE::InputManager::AddButtonBinding(ControllerButton button, KeyState keyState,
-                                          std::shared_ptr<bdnE::Command> command, int controllerIdx) 
+void bdnE::InputManager::AddControllerBinding(ControllerButton button, KeyState keyState,
+                                              std::shared_ptr<bdnE::Command> command, int controllerIdx, bdnE::Scene* scene) 
 {
-	AddButtonBinding(ControllerBinding{ button ,keyState,std::move(command)}, controllerIdx);
+	AddControllerBinding(ControllerBinding{ button ,keyState,std::move(command)}, controllerIdx, scene);
 }
 
-void bdnE::InputManager::AddButtonBinding(const ControllerBinding& keyBind, int controllerIdx) 
+void bdnE::InputManager::AddControllerBinding(const ControllerBinding& keyBind, int controllerIdx, bdnE::Scene* scene) 
 {
-	m_ActionBindings[controllerIdx].emplace_back(keyBind);
+	m_ActionBindings[controllerIdx].emplace_back(keyBind,scene->GetSceneName());
 }
 
-void bdnE::InputManager::AddKeyboardBinding(SDL_Scancode button, KeyState keyState, std::shared_ptr<Command> command)
+void bdnE::InputManager::AddKeyboardBinding(SDL_Scancode button, KeyState keyState, std::shared_ptr<Command> command, Scene* scene)
 {
-	AddKeyboardBinding({ button,keyState,command });
+	AddKeyboardBinding({ button,keyState,command }, scene);
 }
 
-void bdnE::InputManager::AddKeyboardBinding(const KeyboardBinding& keyBind)
+void bdnE::InputManager::AddKeyboardBinding(const KeyboardBinding& keyBind, Scene* scene)
 {
-	m_KeyBinds.emplace_back(keyBind);
+	m_KeyBinds.emplace_back(keyBind, scene->GetSceneName());
 }

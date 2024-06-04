@@ -1,5 +1,5 @@
 #include "SceneManager.h"
-
+#include "InputManager.h"
 #include <iostream>
 
 #include "Scene.h"
@@ -59,20 +59,27 @@ void bdnE::SceneManager::UpdateCurrentActiveScene()
 		std::cout << "Warning! Tried to switch to scene marked for delete. SceneName: " << m_NextScene->GetSceneName() << "\n";
 		return;
 	}
+
 	m_ActiveScene = m_NextScene;
+	auto& inputManager = InputManager::GetInstance();
+	inputManager.SetActiveScene(m_ActiveScene->GetSceneName());
+	
+
 
 }
 
-bdnE::Scene& bdnE::SceneManager::CreateScene(const std::string& name)
+bdnE::Scene* bdnE::SceneManager::CreateScene(const std::string& name)
 {
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
 	if (static_cast<int>(m_Scenes.size()) == 0)
 	{
 		m_ActiveScene = scene.get();
+		auto& inputManager = InputManager::GetInstance();
+		inputManager.SetActiveScene(m_ActiveScene->GetSceneName());
 	}
 
 	m_Scenes.push_back(scene);
-	return *scene;
+	return scene.get();
 }
 
 void bdnE::SceneManager::RemoveScene(const std::string& name)

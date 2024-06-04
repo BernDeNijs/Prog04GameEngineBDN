@@ -10,7 +10,7 @@ namespace bdnE
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
-		bdnE::Scene& CreateScene(const std::string& name);
+		bdnE::Scene* CreateScene(const std::string& name);
 		void RemoveScene(const std::string& name);
 
 		void SetActiveScene(const std::string& name);
