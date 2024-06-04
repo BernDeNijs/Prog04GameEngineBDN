@@ -9,6 +9,7 @@ namespace bdnE
 	/**
 	 * Simple RAII wrapper for the SDL renderer
 	 */
+
 	class Renderer final : public Singleton<Renderer>
 	{
 		SDL_Renderer* m_renderer{};

@@ -9,12 +9,15 @@
 #include "ranges"
 
 
-bdnE::GameObject::GameObject(GameObject* parent, bool keepWorldPosition): GameObject()
+bdnE::GameObject::GameObject(Scene* scene, GameObject* parent, bool keepWorldPosition): GameObject(scene)
 {
 	SetParent(parent, keepWorldPosition);
 }
 
 
+bdnE::GameObject::GameObject(Scene* scene): m_Scene{scene}
+{
+}
 
 bdnE::GameObject::~GameObject() = default;
 
@@ -88,6 +91,7 @@ void bdnE::GameObject::UpdateWorldTransform()
 		m_Transform.WorldTransform.Position = parentTransform.Position + m_Transform.LocalTransform.Position;
 		m_Transform.WorldTransform.Rotation = parentTransform.Rotation + m_Transform.LocalTransform.Rotation;
 		m_Transform.WorldTransform.Scale = parentTransform.Scale + m_Transform.LocalTransform.Scale;
+		m_Transform.WorldTransform.RenderPos = parentTransform.RenderPos + m_Transform.LocalTransform.RenderPos;
 		
 	}
 	else
@@ -95,6 +99,7 @@ void bdnE::GameObject::UpdateWorldTransform()
 		m_Transform.WorldTransform.Position = m_Transform.LocalTransform.Position;
 		m_Transform.WorldTransform.Rotation = m_Transform.LocalTransform.Rotation;
 		m_Transform.WorldTransform.Scale = m_Transform.LocalTransform.Scale;
+		m_Transform.WorldTransform.RenderPos = m_Transform.LocalTransform.RenderPos;
 	}
 	m_Transform.IsDirty = false;
 }
@@ -104,6 +109,12 @@ void bdnE::GameObject::SetLocalTransform(const bdnE::Transform& transform)
 {
 	m_Transform.LocalTransform = transform;
 	SetTransformDirty();
+}
+
+void bdnE::GameObject::SetLocalPosition(glm::vec3 position)
+{
+	m_Transform.LocalTransform.RenderPos = position.z;
+	SetLocalPosition({ position.x,position.y });	
 }
 
 

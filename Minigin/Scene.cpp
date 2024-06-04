@@ -2,6 +2,7 @@
 #include "GameObject.h"
 
 #include <algorithm>
+#include <map>
 
 using namespace bdnE;
 
@@ -13,7 +14,7 @@ Scene::~Scene() = default;
 
 GameObject* Scene::CreateGameObject()
 {
-	std::unique_ptr<GameObject> object{ new GameObject() };
+	std::unique_ptr<GameObject> object{ new GameObject(this) };
 	m_Objects.emplace_back(std::move(object));
 	return m_Objects.back().get();
 	//m_TestObject.emplace_back(new GameObject());
@@ -24,9 +25,9 @@ GameObject* Scene::CreateGameObject()
 
 GameObject* Scene::CreateGameObject(GameObject* parent, bool keepWorldPosition)
 {
-	std::unique_ptr<GameObject> object{ new GameObject() };
+	std::unique_ptr<GameObject> object{ new GameObject(this,parent,keepWorldPosition) };
 	m_Objects.emplace_back(std::move(object));
-	m_Objects.back()->SetParent(parent, keepWorldPosition);
+	//m_Objects.back()->SetParent(parent, keepWorldPosition);
 	return m_Objects.back().get();
 	//m_Objects.emplace_back(std::make_unique<GameObject>(parent, keepWorldPosition));
 	//return m_Objects.back().get();
@@ -53,10 +54,24 @@ void Scene::FixedUpdate() const
 
 void Scene::Render() const
 {
-	for (const auto& object : m_Objects)
+	std::map<float, std::vector<int>> renderOrder;
+	for (int i = 0; i < static_cast<int>(m_Objects.size()); i++)
+	{
+		auto renderPos = m_Objects[i]->GetWorldTransform().RenderPos;
+		renderOrder[renderPos].push_back(i);
+	}
+	for (const auto& order : renderOrder)
+	{
+		for (const auto& objectIds : order.second)
+		{
+			m_Objects[objectIds]->Render();
+		}
+	}
+
+	/*for (const auto& object : m_Objects)
 	{
 		object->Render();
-	}
+	}*/
 }
 
 void Scene::RenderImgui() const

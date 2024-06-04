@@ -14,12 +14,14 @@ namespace bdnE
 		glm::vec2 Position = { 0,0};
 		float Rotation = 0;
 		glm::vec2 Scale = { 1,1 };
+		float RenderPos = 0;
 
 		Transform operator+(const Transform& other) const {
 			Transform result;
 			result.Position = Position + other.Position;
 			result.Rotation = Rotation + other.Rotation;
 			result.Scale = Scale * other.Scale;
+			result.RenderPos = (RenderPos + other.RenderPos) * 0.5f;
 			return result;
 		}
 		Transform operator-(const Transform& other) const {
@@ -27,6 +29,7 @@ namespace bdnE
 			result.Position = Position - other.Position;
 			result.Rotation = Rotation - other.Rotation;
 			result.Scale = Scale / other.Scale;
+			result.RenderPos = (RenderPos + other.RenderPos) * 0.5f;
 			return result;
 		}
 	};
@@ -34,8 +37,8 @@ namespace bdnE
 	class GameObject final 
 	{
 	private:
-		GameObject() = default;
-		GameObject(GameObject* parent, bool keepWorldPosition);
+		explicit GameObject(Scene* scene);
+		GameObject(Scene* scene, GameObject* parent, bool keepWorldPosition);
 
 		friend GameObject* Scene::CreateGameObject();
 		friend GameObject* Scene::CreateGameObject(GameObject* parent, bool keepWorldPosition);
@@ -47,6 +50,8 @@ namespace bdnE
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
+
+		bool operator<(GameObject& other) const { return (m_Transform.WorldTransform.RenderPos < other.GetWorldTransform().RenderPos); }
 
 		//UPDATES
 		void Update();
@@ -107,6 +112,7 @@ namespace bdnE
 
 		void SetLocalTransform(const Transform& transform);
 
+		void SetLocalPosition(glm::vec3 position);
 		void SetLocalPosition(glm::vec2 position);
 		
 		void SetLocalRotation(float rotation);
@@ -140,6 +146,8 @@ namespace bdnE
 		ObjectTransform m_Transform = ObjectTransform();
 		void SetTransformDirty();
 		void UpdateWorldTransform();
+
+		Scene* m_Scene;
 	};
 
 

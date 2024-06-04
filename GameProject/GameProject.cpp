@@ -183,29 +183,17 @@ void load()
 	//BASIC SCENE//
 	{
 		auto scene2 = bdnE::SceneManager::GetInstance().CreateScene("NextScene");
-		auto go = scene2->CreateGameObject();
-		go->AddComponent<bdnG::RenderComponent>("background.tga");
-
-		go = scene2->CreateGameObject();
-		go->AddComponent<bdnG::RenderComponent>("logo.tga");
-		go->SetLocalPosition({ 216,180 });
-
-		auto font = bdnE::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-		auto to = scene2->CreateGameObject();
-		to->AddComponent<bdnG::TextComponent>("Programming 4 Assignment", font);
-		to->SetLocalPosition({ 80, 20 });
-	}
-	{
-		const auto scene3 = bdnE::SceneManager::GetInstance().CreateScene("MapScene");
-		const auto background = scene3->CreateGameObject();
+		const auto background = scene2->CreateGameObject();
 		background->AddComponent<bdnG::RenderComponent>("Maze.png");
+		background->SetLocalPosition({ 0,0,-1 });
 		background->SetLocalScale(2.f);
-		background->SetLocalRotation(90.f);
-		//go->SetLocalPosition({ 0,248 });
 
+		const auto foreground = scene2->CreateGameObject();
+		foreground->AddComponent<bdnG::RenderComponent>("Maze.png");
+		foreground->SetLocalPosition({ 0,0,2 });
+		foreground->SetLocalScale(1.f);
+		foreground->SetLocalRotation(90.f);
 	}
-	
-	bdnE::SceneManager::GetInstance().SetActiveScene("MapScene");
 
 }
 
