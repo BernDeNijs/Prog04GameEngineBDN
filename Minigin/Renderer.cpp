@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include "Renderer.h"
 
+#include "GameObject.h"
 #include "imgui.h"
 #include "SceneManager.h"
 #include "Texture2D.h"
@@ -78,15 +79,26 @@ void bdnE::Renderer::RenderTexture(const Texture2D& texture, const float x, cons
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 
-void bdnE::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height) const
+void bdnE::Renderer::RenderTexture(const Texture2D& texture, const Transform& transform) const
 {
 	SDL_Rect dst{};
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
+	dst.x = static_cast<int>(transform.Position.x);
+	dst.y = static_cast<int>(transform.Position.y);
 	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
-	dst.w *= static_cast<int>(width);
-	dst.h *= static_cast<int>(height);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	dst.w *= static_cast<int>(transform.Scale.x);
+	dst.h *= static_cast<int>(transform.Scale.y);
+
+	const auto rot = static_cast<double>(transform.Rotation);
+	const auto center = std::make_unique<SDL_Point>( static_cast<int>(static_cast<float>(dst.w) * 0.5f),static_cast<int>(static_cast<float>(dst.h) * 0.5f) );
+
+	SDL_RendererFlip flip = SDL_RendererFlip::SDL_FLIP_NONE;
+	if (dst.w < 0)
+	{
+		dst.w *= -1;
+		flip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
+	}
+
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, center.get(), flip);
 }
 
 SDL_Renderer* bdnE::Renderer::GetSDLRenderer() const { return m_renderer; }

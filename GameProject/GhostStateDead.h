@@ -1,5 +1,5 @@
 #pragma once
-#include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 
 #include "GhostState.h"
 namespace bdnG {
@@ -13,7 +13,7 @@ namespace bdnG {
 		GhostState* Update(bdnE::GameObject* owner, bdnE::GameObject* pacman) override;
 		void Render(RenderComponent* renderer) override;
 	private:
-		glm::vec3 m_HousePos{ 200.f,200.f,0 };
+		glm::vec2 m_HousePos{ 200.f,200.f};
 		float m_ChaseSpeed = 10.f;
 	};
 }

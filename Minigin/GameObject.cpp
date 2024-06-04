@@ -1,5 +1,8 @@
 #include <string>
 #include "GameObject.h"
+
+#include "Command.h"
+#include "Command.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "GameComponent.h"
@@ -103,25 +106,20 @@ void bdnE::GameObject::SetLocalTransform(const bdnE::Transform& transform)
 	SetTransformDirty();
 }
 
-void bdnE::GameObject::SetLocalPosition(glm::vec3 position)
+
+void bdnE::GameObject::SetLocalPosition(glm::vec2 position)
 {
-	//m_LocalPosition = position;
 	m_Transform.LocalTransform.Position = position;
 	SetTransformDirty();
 }
 
-void bdnE::GameObject::SetLocalPosition(glm::vec2 position)
-{
-	SetLocalPosition({ position.x,position.y,0 });
-}
-
-void bdnE::GameObject::SetLocalRotation(glm::vec3 rotation)
+void bdnE::GameObject::SetLocalRotation(float rotation)
 {
 	m_Transform.LocalTransform.Rotation = rotation;
 	SetTransformDirty();
 }
 
-void bdnE::GameObject::SetLocalScale(glm::vec3 scale)
+void bdnE::GameObject::SetLocalScale(glm::vec2 scale)
 {
 	m_Transform.LocalTransform.Scale = scale;
 	SetTransformDirty();
@@ -129,7 +127,7 @@ void bdnE::GameObject::SetLocalScale(glm::vec3 scale)
 
 void bdnE::GameObject::SetLocalScale(float scale)
 {
-	SetLocalScale({ scale,scale,scale });
+	SetLocalScale({ scale,scale });
 }
 
 

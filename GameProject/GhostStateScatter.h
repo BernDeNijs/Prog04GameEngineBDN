@@ -1,5 +1,5 @@
 #pragma once
-#include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 
 #include "GhostState.h"
 namespace bdnG {
@@ -14,7 +14,7 @@ namespace bdnG {
 		void Render(RenderComponent* renderer) override;
 	private:
 		float m_ChaseSpeed = 10.f;
-		glm::vec3 m_ScatterTarget = { 50,50,0 };
+		glm::vec2 m_ScatterTarget = { 50,50 };
 		PowerPelletComponent* m_PelletComp =  nullptr ;
 
 		float m_Timer = 0;

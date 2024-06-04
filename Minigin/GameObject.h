@@ -11,9 +11,9 @@ namespace bdnE
 {
 	struct Transform
 	{
-		glm::vec3 Position = { 0,0,0 };
-		glm::vec3 Rotation = { 0,0,0 };
-		glm::vec3 Scale = { 0,0,0 };
+		glm::vec2 Position = { 0,0};
+		float Rotation = 0;
+		glm::vec2 Scale = { 1,1 };
 
 		Transform operator+(const Transform& other) const {
 			Transform result;
@@ -106,12 +106,12 @@ namespace bdnE
 		bdnE::Transform GetWorldTransform();
 
 		void SetLocalTransform(const Transform& transform);
-		void SetLocalPosition(glm::vec3 position);
+
 		void SetLocalPosition(glm::vec2 position);
 		
-		void SetLocalRotation(glm::vec3 rotation);
+		void SetLocalRotation(float rotation);
 
-		void SetLocalScale(glm::vec3 scale);
+		void SetLocalScale(glm::vec2 scale);
 		void SetLocalScale(float scale);
 
 		//SCENEGRAPH

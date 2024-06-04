@@ -4,6 +4,7 @@
 
 namespace bdnE
 {
+	struct Transform;
 	class Texture2D;
 	/**
 	 * Simple RAII wrapper for the SDL renderer
@@ -19,7 +20,7 @@ namespace bdnE
 		void Destroy();
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;
-		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
+		void RenderTexture(const Texture2D& texture, const Transform& transform) const;
 
 		SDL_Renderer* GetSDLRenderer() const;
 
