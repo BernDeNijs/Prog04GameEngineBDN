@@ -178,6 +178,7 @@
     <ClCompile Include="GhostStateDead.cpp" />
     <ClCompile Include="GhostStateFrightened.cpp" />
     <ClCompile Include="GhostStateScatter.cpp" />
+    <ClCompile Include="Components\GridComponent.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="OrbitComponent.cpp" />
     <ClCompile Include="PickUpComponent.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="GhostStateDead.h" />
     <ClInclude Include="GhostStateFrightened.h" />
     <ClInclude Include="GhostStateScatter.h" />
+    <ClInclude Include="Components\GridComponent.h" />
     <ClInclude Include="MoveCommands.h" />
     <ClInclude Include="NextSceneCommand.h" />
     <ClInclude Include="PickUpCommand.h" />

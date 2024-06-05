@@ -81,15 +81,30 @@ void bdnE::Renderer::RenderTexture(const Texture2D& texture, const float x, cons
 
 void bdnE::Renderer::RenderTexture(const Texture2D& texture, const Transform& transform) const
 {
+	RenderTexture(texture, transform, nullptr);
+}
+
+void bdnE::Renderer::RenderTexture(const Texture2D& texture, const Transform& transform, const SDL_Rect* srcRect) const
+{
 	SDL_Rect dst{};
 	dst.x = static_cast<int>(transform.Position.x);
 	dst.y = static_cast<int>(transform.Position.y);
-	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
+
+
+	if (srcRect == nullptr)
+	{
+		SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
+	}
+	else
+	{
+		dst.w = srcRect->w;
+		dst.h = srcRect->h;
+	}
 	dst.w *= static_cast<int>(transform.Scale.x);
 	dst.h *= static_cast<int>(transform.Scale.y);
 
 	const auto rot = static_cast<double>(transform.Rotation);
-	const auto center = std::make_unique<SDL_Point>( static_cast<int>(static_cast<float>(dst.w) * 0.5f),static_cast<int>(static_cast<float>(dst.h) * 0.5f) );
+	const auto center = SDL_Point(static_cast<int>(static_cast<float>(dst.w) * 0.5f), static_cast<int>(static_cast<float>(dst.h) * 0.5f));
 
 	SDL_RendererFlip flip = SDL_RendererFlip::SDL_FLIP_NONE;
 	if (dst.w < 0)
@@ -98,7 +113,7 @@ void bdnE::Renderer::RenderTexture(const Texture2D& texture, const Transform& tr
 		flip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
 	}
 
-	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, center.get(), flip);
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), srcRect, &dst, rot, &center, flip);
 }
 
 SDL_Renderer* bdnE::Renderer::GetSDLRenderer() const { return m_renderer; }

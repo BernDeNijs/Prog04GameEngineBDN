@@ -5,6 +5,8 @@
 #include "Renderer.h"
 #include "Texture2D.h"
 #include "Font.h"
+#include <fstream>
+#include <sstream>
 
 void bdnE::ResourceManager::Init(const std::string& dataPath)
 {
@@ -31,3 +33,20 @@ std::shared_ptr<bdnE::Font> bdnE::ResourceManager::LoadFont(const std::string& f
 {
 	return std::make_shared<Font>(m_dataPath + file, size);
 }
+
+
+
+std::string bdnE::ResourceManager::LoadText(const std::string& file) const
+{
+	const auto fullPath = m_dataPath + file;
+	const std::ifstream inputFile(fullPath);
+	if (!inputFile.is_open())
+	{
+		throw std::runtime_error(std::string("Failed to load text file: ") + fullPath);
+	}
+
+	std::stringstream buffer;
+	buffer << inputFile.rdbuf();
+	return buffer.str();
+}
+

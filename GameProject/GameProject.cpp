@@ -21,6 +21,8 @@
 #include "GameObject.h"
 
 //Components
+#include "Components/GridComponent.h"
+
 #include "RenderComponent.h"
 #include "FpsComponent.h"
 #include "MoveComponent.h"
@@ -184,15 +186,10 @@ void load()
 	{
 		auto scene2 = bdnE::SceneManager::GetInstance().CreateScene("NextScene");
 		const auto background = scene2->CreateGameObject();
-		background->AddComponent<bdnG::RenderComponent>("Maze.png");
-		background->SetLocalPosition({ 0,0,-1 });
+		background->AddComponent<bdnG::GridComponent>("Level01.txt","GridTiles.png");
 		background->SetLocalScale(2.f);
+		background->SetLocalPosition({ 10,10,-1 });
 
-		const auto foreground = scene2->CreateGameObject();
-		foreground->AddComponent<bdnG::RenderComponent>("Maze.png");
-		foreground->SetLocalPosition({ 0,0,2 });
-		foreground->SetLocalScale(1.f);
-		foreground->SetLocalRotation(90.f);
 	}
 
 }

@@ -22,6 +22,7 @@ namespace bdnE
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;
 		void RenderTexture(const Texture2D& texture, const Transform& transform) const;
+		void RenderTexture(const Texture2D& texture, const Transform& transform, const SDL_Rect* srcRect) const;
 
 		SDL_Renderer* GetSDLRenderer() const;
 
