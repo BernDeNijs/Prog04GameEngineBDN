@@ -184,6 +184,7 @@
     <ClCompile Include="Components\PacmanMovementComponent.cpp" />
     <ClCompile Include="Components\PacmanRenderComponent.cpp" />
     <ClCompile Include="PickUpComponent.cpp" />
+    <ClCompile Include="Components\PickupSpawner.cpp" />
     <ClCompile Include="PointsDisplayComponent.cpp" />
     <ClCompile Include="PowerPelletComponent.cpp" />
     <ClCompile Include="RemainingLivesDisplayComponent.cpp" />
@@ -205,11 +206,13 @@
     <ClInclude Include="NextSceneCommand.h" />
     <ClInclude Include="Components\PacmanMovementComponent.h" />
     <ClInclude Include="Components\PacmanRenderComponent.h" />
+    <ClInclude Include="Commands\PacmanMoveCommand.h" />
     <ClInclude Include="PickUpCommand.h" />
     <ClInclude Include="FpsComponent.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="OrbitComponent.h" />
     <ClInclude Include="PickUpComponent.h" />
+    <ClInclude Include="Components\PickupSpawner.h" />
     <ClInclude Include="PointsDisplayComponent.h" />
     <ClInclude Include="PowerPelletComponent.h" />
     <ClInclude Include="RemainingLivesDisplayComponent.h" />

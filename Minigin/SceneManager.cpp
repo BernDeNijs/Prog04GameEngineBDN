@@ -7,26 +7,46 @@
 void bdnE::SceneManager::Update() const
 {
 	m_ActiveScene->Update();
+	if (m_GlobalScene != nullptr)
+	{
+		m_GlobalScene->Update();
+	}
 }
 
 void bdnE::SceneManager::FixedUpdate() const
 {
 	m_ActiveScene->FixedUpdate();
+	if (m_GlobalScene != nullptr)
+	{
+		m_GlobalScene->FixedUpdate();
+	}
 }
 
 void bdnE::SceneManager::Render() const
 {
 	m_ActiveScene->Render();
+	if (m_GlobalScene != nullptr)
+	{
+		m_GlobalScene->Render();
+	}
 }
 
 void bdnE::SceneManager::RenderImgui() const
 {
 	m_ActiveScene->RenderImgui();
+	if (m_GlobalScene != nullptr)
+	{
+		m_GlobalScene->RenderImgui();
+	}
 }
 
 void bdnE::SceneManager::DeleteDeadGameObjects() const
 {
 	m_ActiveScene->DeleteDeadGameObjects();
+	if (m_GlobalScene != nullptr)
+	{
+		m_GlobalScene->DeleteDeadGameObjects();
+	}
 }
 
 void bdnE::SceneManager::DeleteDeadScenes() 
@@ -89,8 +109,18 @@ bdnE::Scene* bdnE::SceneManager::CreateScene(const std::string& name)
 	return scene.get();
 }
 
+bdnE::Scene* bdnE::SceneManager::GetGlobalScene()
+{
+	if (m_GlobalScene == nullptr)
+	{
+		m_GlobalScene = CreateScene("GlobalScene");
+	}
+	return m_GlobalScene;
+}
+
 void bdnE::SceneManager::RemoveScene(const std::string& name)
 {
+	if (name == "GlobalScene") return;
 	for (int i = 0; i < static_cast<int>(m_Scenes.size()); i++)
 	{
 		if (m_Scenes[i]->GetSceneName() == name)
@@ -104,6 +134,7 @@ void bdnE::SceneManager::RemoveScene(const std::string& name)
 
 void bdnE::SceneManager::SetActiveScene(const std::string& name)
 {
+	if (name == "GlobalScene") return;
 	for (int i = 0; i < static_cast<int>(m_Scenes.size()); i++)
 	{
 		if (m_Scenes[i]->GetSceneName() == name)

@@ -58,7 +58,9 @@ namespace bdnG
 		explicit GridComponent(bdnE::GameObject* owner, const std::string& sourceFile, const std::string& texturePath);
 
 		glm::vec2 GetPointPos(int row, int column) const;
+		glm::vec2 GetPointPos(std::pair<int, int>) const;
 		glm::vec2 GetPointPosWorld(int row, int column) const;
+		glm::vec2 GetPointPosWorld(std::pair<int, int>) const;
 		std::pair<int, int> GetClosestPointIdx(glm::vec2 position) const;
 		std::pair<int, int> GetClosestPointIdxWorld(glm::vec2 position) const;
 		std::vector<std::vector<GridCell>>* GetGrid() const { return m_Grid.get(); }

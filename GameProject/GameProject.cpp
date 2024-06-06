@@ -42,6 +42,7 @@
 #include "SoundLocator.h"
 #include "SDLSoundService.h"
 #include "WakaCommand.h"
+#include "Commands/PacmanMoveCommand.h"
 #include "Components/PacmanMovementComponent.h"
 #include "Components/PacmanRenderComponent.h"
 
@@ -186,15 +187,28 @@ void load()
 	}
 	//BASIC SCENE//
 	{
-		auto scene2 = bdnE::SceneManager::GetInstance().CreateScene("NextScene");
-		const auto background = scene2->CreateGameObject();
+		const auto level01 = bdnE::SceneManager::GetInstance().CreateScene("Level01");
+		const auto background = level01->CreateGameObject();
 		auto gameMap = background->AddComponent<bdnG::GridComponent>("Level01.txt","GridTiles.png");
 		background->SetLocalScale(2.f);
 		background->SetLocalPosition({ 10,10,-1 });
 
-		auto playerCharacter = scene2->CreateGameObject();
-		playerCharacter->AddComponent<bdnG::PacmanRenderComponent>("PacMan.png");
-		playerCharacter->AddComponent<bdnG::PacmanMovementComponent>(gameMap);
+		auto pacMan = level01->CreateGameObject();
+		pacMan->AddComponent<bdnG::PacmanRenderComponent>("PacMan.png");
+		pacMan->AddComponent<bdnG::PacmanMovementComponent>(gameMap);
+		pacMan->SetLocalScale(2.f);
+
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::PacmanMoveCommand>(pacMan, bdnG::MoveDirections::up), level01);
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::PacmanMoveCommand>(pacMan, bdnG::MoveDirections::down), level01);
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::PacmanMoveCommand>(pacMan, bdnG::MoveDirections::left ), level01);
+		inputManager.AddKeyboardBinding(SDL_SCANCODE_D, bdnE::KeyState::pressed, std::make_shared<bdnG::PacmanMoveCommand>(pacMan, bdnG::MoveDirections::right), level01);
+	}
+
+	{
+		//GLOBAL STUFF//
+		//auto global = bdnE::SceneManager::GetInstance().GetGlobalScene();
+		//auto pacMan = global->CreateGameObject();
+		//pacMan->AddComponent<bdnG::PacmanRenderComponent>("PacMan.png");
 	}
 
 }

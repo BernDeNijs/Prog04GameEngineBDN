@@ -495,6 +495,11 @@ glm::vec2 bdnG::GridComponent::GetPointPos(int row, int column) const
     return { x, y };
 }
 
+glm::vec2 bdnG::GridComponent::GetPointPos(std::pair<int, int> idx) const
+{
+    return GetPointPos(idx.first, idx.second);
+}
+
 glm::vec2 bdnG::GridComponent::GetPointPosWorld(int row, int column) const
 {
     auto xy = GetPointPos(row, column);
@@ -509,6 +514,11 @@ glm::vec2 bdnG::GridComponent::GetPointPosWorld(int row, int column) const
 
 
     return xy;
+}
+
+glm::vec2 bdnG::GridComponent::GetPointPosWorld(std::pair<int, int> idx) const
+{
+    return GetPointPosWorld(idx.first, idx.second);
 }
 
 std::pair<int, int> bdnG::GridComponent::GetClosestPointIdx(glm::vec2 position) const
@@ -528,11 +538,13 @@ std::pair<int, int> bdnG::GridComponent::GetClosestPointIdxWorld(glm::vec2 posit
 
     //take into account world pos
     const auto transform = m_pOwner->GetWorldTransform();
+    xy.x /= transform.Scale.x;
+    xy.y /= transform.Scale.y;
+
     xy.x -= transform.Position.x;
     xy.y -= transform.Position.y;
 
-    xy.x /= transform.Scale.x;
-    xy.y /= transform.Scale.y;
+
 
 
     

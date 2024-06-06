@@ -11,6 +11,8 @@ namespace bdnE
 	{
 	public:
 		bdnE::Scene* CreateScene(const std::string& name);
+		bdnE::Scene* GetGlobalScene();
+
 		void RemoveScene(const std::string& name);
 
 		void SetActiveScene(const std::string& name);
@@ -29,6 +31,7 @@ namespace bdnE
 		SceneManager() = default;
 		std::vector<std::shared_ptr<Scene>> m_Scenes;
 		Scene* m_ActiveScene = nullptr;
+		Scene* m_GlobalScene = nullptr;
 		//SceneChanging
 		Scene* m_NextScene = nullptr;
 		bool m_ShouldChangeScene = false;

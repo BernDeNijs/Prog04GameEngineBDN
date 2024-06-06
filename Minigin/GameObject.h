@@ -125,6 +125,8 @@ namespace bdnE
 		void SetParent(bdnE::GameObject* parent, bool keepWorldPosition);
 		std::vector<GameObject*> GetChildren() { return m_pChildren; }
 
+		Scene* GetScene() { return m_Scene; }
+
 	private:
 		//COMPONENTS
 		std::unordered_map<std::type_index, std::unique_ptr<GameComponent>> m_pComponents;

@@ -5,17 +5,32 @@
 
 namespace bdnG
 {
+	enum class MoveDirections
+	{
+		up,
+		down,
+		left,
+		right,
+		none
+	};
 	class PacmanMovementComponent final : public bdnE::GameComponent
 	{
 	public:
 		explicit PacmanMovementComponent(bdnE::GameObject* owner, GridComponent* mapObject, float speed = 100.f);
-		void MoveInDirection(glm::vec2 direction) const;
-		void SpawnPacmanOnSpawnPoint();
+		void Update() override;
 
+		void SpawnPacmanOnSpawnPoint();
+		void SetMoveDirection(MoveDirections direction);
 	private:
 		float m_Speed{ 100.f };
 		GridComponent* m_pGridComponent = nullptr;
 		
+		MoveDirections m_CurrentMoveDirection = MoveDirections::none;
+		MoveDirections m_DesiredMoveDirection = MoveDirections::none;
+		GridCell* m_CurrentTarget = nullptr;
+
+		GridCell* FindNewTarget();
+		void MoveToTarget(float moveDistance);
 	};
 
 }

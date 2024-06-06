@@ -10,7 +10,7 @@ namespace bdnG
 
         void Execute() override {
             auto& instance = bdnE::SceneManager::GetInstance();
-            instance.SetActiveScene("NextScene");
+            instance.SetActiveScene("Level01");
             auto& currentScene = instance.GetCurrentScene();
             auto const name = currentScene.GetSceneName();
             instance.RemoveScene(name);
