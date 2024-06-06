@@ -9,47 +9,51 @@
 
 namespace bdnG
 {
+	enum class CellType
+	{
+		empty,
+		ghostHouse,
+		ghostHouseEntrance,
+		pinkySpawn,
+		inkySpawn,
+		clydeSpawn,
+		border,
+		doubleBorder,
+		passable,
+		pickup,
+		bonus,
+		powerPellet,
+		warp,
+		blinkySpawn,
+		pacmanSpawn
+	};
+	enum class ConnectionType
+	{
+		none,
+		connected,
+		ghostOnly,
+	};
+
+	struct GridCell;
+	struct GridConnection
+	{
+		ConnectionType connectionType = ConnectionType::none;
+		GridCell* connectedPoint = nullptr;
+	};
+
+	struct GridCell
+	{
+		std::pair<int, int> gridIdx = { 0,0 };
+		GridConnection pathUp = GridConnection();
+		GridConnection pathDown = GridConnection();
+		GridConnection pathLeft = GridConnection();
+		GridConnection pathRight = GridConnection();
+
+		CellType cellType = CellType::empty;
+		int textureId = 0; //16*3 ; 48 total; maxId = 47
+	};
 	class GridComponent final : public bdnE::GameComponent
 	{
-
-		enum class CellType
-		{
-			empty,
-			border,
-			doubleBorder,
-			passable,
-			pickup,
-			bonus,
-			powerPellet,
-			ghostHouse,
-			ghostHouseEntrance,
-			warp,
-			blinkySpawn,
-			pinkySpawn,
-			inkySpawn,
-			clydeSpawn,
-			pacmanSpawn
-		};
-		enum class ConnectionType
-		{
-			none,
-			connected,
-			ghostOnly,
-		};
-
-		struct GridPoint
-		{
-			glm::vec2 center = glm::vec2{ 0,0 };
-
-			ConnectionType pathUp = ConnectionType::none;
-			ConnectionType pathDown = ConnectionType::none;
-			ConnectionType pathLeft = ConnectionType::none;
-			ConnectionType pathRight = ConnectionType::none;
-
-			CellType cellType = CellType::empty;
-			int textureId = 0; //16*3 ; 48 total; maxId = 47
-		};
-
 	public:
 		explicit GridComponent(bdnE::GameObject* owner, const std::string& sourceFile, const std::string& texturePath);
 
@@ -57,11 +61,12 @@ namespace bdnG
 		glm::vec2 GetPointPosWorld(int row, int column) const;
 		std::pair<int, int> GetClosestPointIdx(glm::vec2 position) const;
 		std::pair<int, int> GetClosestPointIdxWorld(glm::vec2 position) const;
+		std::vector<std::vector<GridCell>>* GetGrid() const { return m_Grid.get(); }
 
 		void Render() const override;
 	private:
 		std::shared_ptr<bdnE::Texture2D> m_pTexture;
-		std::vector<std::vector<GridPoint>> m_Grid = std::vector<std::vector<GridPoint>>{};
+		std::unique_ptr<std::vector<std::vector<GridCell>>> m_Grid = std::make_unique<std::vector<std::vector<GridCell>>>();
 		void GenerateGrid(const std::string& sourceFile);
 		void GenerateGridConnections();
 		ConnectionType CheckNeighborConnection(CellType current, CellType neighbor) const;

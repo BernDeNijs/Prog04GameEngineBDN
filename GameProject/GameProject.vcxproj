@@ -181,6 +181,8 @@
     <ClCompile Include="Components\GridComponent.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="OrbitComponent.cpp" />
+    <ClCompile Include="Components\PacmanMovementComponent.cpp" />
+    <ClCompile Include="Components\PacmanRenderComponent.cpp" />
     <ClCompile Include="PickUpComponent.cpp" />
     <ClCompile Include="PointsDisplayComponent.cpp" />
     <ClCompile Include="PowerPelletComponent.cpp" />
@@ -201,6 +203,8 @@
     <ClInclude Include="Components\GridComponent.h" />
     <ClInclude Include="MoveCommands.h" />
     <ClInclude Include="NextSceneCommand.h" />
+    <ClInclude Include="Components\PacmanMovementComponent.h" />
+    <ClInclude Include="Components\PacmanRenderComponent.h" />
     <ClInclude Include="PickUpCommand.h" />
     <ClInclude Include="FpsComponent.h" />
     <ClInclude Include="HealthComponent.h" />

@@ -15,6 +15,7 @@ bdnG::GridComponent::GridComponent(bdnE::GameObject* owner, const std::string& s
 void bdnG::GridComponent::GenerateGrid(const std::string& sourceFile)
 {
     const std::string levelDataString = bdnE::ResourceManager::GetInstance().LoadText(sourceFile);
+    std::vector<std::vector<GridCell>>& grid = *m_Grid;
 
     std::istringstream levelStream(levelDataString);
     std::string line;
@@ -27,11 +28,11 @@ void bdnG::GridComponent::GenerateGrid(const std::string& sourceFile)
             continue;
         }
 
-        std::vector<GridPoint> row;
+        std::vector<GridCell> row;
         int colNumber = 0; // Add a column counter
         for (char& ch : line)
         {
-            GridPoint point;
+            GridCell point;
             switch (ch)
             {
             case '.':
@@ -85,13 +86,13 @@ void bdnG::GridComponent::GenerateGrid(const std::string& sourceFile)
             }
 
             // Set the center point of the current cell
-            point.center = glm::vec2(colNumber * m_CellSize.x + m_CellSize.x / 2.0f,
-                rowNumber * m_CellSize.y + m_CellSize.y / 2.0f);
-
+            /*point.center = glm::vec2(colNumber * m_CellSize.x + m_CellSize.x / 2.0f,
+                rowNumber * m_CellSize.y + m_CellSize.y / 2.0f);*/
+            point.gridIdx = { rowNumber,colNumber };
             row.push_back(point);
             ++colNumber;
         }
-        m_Grid.push_back(row);
+        grid.push_back(row);
         ++rowNumber;
     }
 }
@@ -100,48 +101,50 @@ void bdnG::GridComponent::GenerateGrid(const std::string& sourceFile)
 
 void bdnG::GridComponent::GenerateGridConnections()
 {
+    std::vector<std::vector<GridCell>>& grid = *m_Grid;
     // Loop over each row in the grid
-    for (size_t row = 0; row < m_Grid.size(); ++row)
+    for (size_t row = 0; row < grid.size(); ++row)
     {
         // Loop over each column in the grid
-        for (size_t col = 0; col < m_Grid[row].size(); ++col)
+        for (size_t col = 0; col < grid[row].size(); ++col)
         {
             // Get the current grid point
-            GridPoint& point = m_Grid[row][col];
+            GridCell& point = grid[row][col];
 
             // Check the up neighbor
             if (row > 0)
             {
-                GridPoint& upNeighbor = m_Grid[row - 1][col];
-                point.pathUp = CheckNeighborConnection(point.cellType,upNeighbor.cellType);
+                GridCell& upNeighbor = grid[row - 1][col];
+                point.pathUp = GridConnection{ CheckNeighborConnection(point.cellType,upNeighbor.cellType),&upNeighbor };
                 
             }
 
             // Check the down neighbor
-            if (row < m_Grid.size() - 1)
+            if (row < grid.size() - 1)
             {
-                GridPoint& downNeighbor = m_Grid[row + 1][col];
-                point.pathUp = CheckNeighborConnection(point.cellType, downNeighbor.cellType);
+                GridCell& downNeighbor = grid[row + 1][col];
+                point.pathDown = GridConnection{ CheckNeighborConnection(point.cellType,downNeighbor.cellType),&downNeighbor };
+
             }
 
             // Check the left neighbor
             if (col > 0)
             {
-                GridPoint& leftNeighbor = m_Grid[row][col - 1];
-                point.pathUp = CheckNeighborConnection(point.cellType, leftNeighbor.cellType);
+                GridCell& leftNeighbor = grid[row][col - 1];
+                point.pathLeft = GridConnection{ CheckNeighborConnection(point.cellType,leftNeighbor.cellType),&leftNeighbor };
             }
 
             // Check the right neighbor
-            if (col < m_Grid[row].size() - 1)
+            if (col < grid[row].size() - 1)
             {
-                GridPoint& rightNeighbor = m_Grid[row][col + 1];
-                point.pathUp = CheckNeighborConnection(point.cellType, rightNeighbor.cellType);
+                GridCell& rightNeighbor = grid[row][col + 1];
+                point.pathRight = GridConnection{ CheckNeighborConnection(point.cellType,rightNeighbor.cellType),&rightNeighbor };
             }
         }
     }
 }
 
-bdnG::GridComponent::ConnectionType bdnG::GridComponent::CheckNeighborConnection(CellType current, CellType neighbor) const
+bdnG::ConnectionType bdnG::GridComponent::CheckNeighborConnection(CellType current, CellType neighbor) const
 {
     if (current == CellType::empty || current == CellType::border || current == CellType::doubleBorder
         || neighbor == CellType::empty || neighbor == CellType::border || neighbor == CellType::doubleBorder)
@@ -161,37 +164,50 @@ void bdnG::GridComponent::SetTextureIds()
 {
     enum class textureIds
     {
-        upRightCornerDouble = 22,
-        upLeftCornerDouble = 23,
-        leftDoubleLine = 2,
-        rightDoubleLine = 3,
-        downRightCornerDouble = 26,
-        downLeftCornerDouble = 27,
-        downDouble = 10,
-        upDouble = 12,
-        up = 14,
-        down = 20,
-        left = 24,
-        right = 25,
         empty = 44,
         pickup = 45,
         biggerPickup = 46,
         powerPellet = 47,
-        upRightCorner = 22,
-        upLeftCorner = 23,
-        downRightCorner = 26,
-        downLeftCorner = 27,
-    };
 
+        up = 14,
+        upDouble = 12,
+        down = 20,
+        downDouble = 10,
+        left = 24,
+        leftDoubleLine = 2,
+        right = 25,
+        rightDoubleLine = 3,
+
+        upRightCorner = 41,
+        upRightCornerDouble = 41,
+        upLeftCorner = 40,
+        upLeftCornerDouble = 40,
+        downRightCorner = 39,      
+        downRightCornerDouble = 39,
+        downLeftCorner = 38,
+        downLeftCornerDouble = 38,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    };
+    std::vector<std::vector<GridCell>>& grid = *m_Grid;
 
     // Loop over each row in the grid
-    for (size_t row = 0; row < m_Grid.size(); ++row)
+    for (size_t row = 0; row < grid.size(); ++row)
     {
         // Loop over each column in the grid
-        for (size_t col = 0; col < m_Grid[row].size(); ++col)
+        for (size_t col = 0; col < grid[row].size(); ++col)
         {
             // Get the current grid point
-            GridPoint& point = m_Grid[row][col];
+            GridCell& point = grid[row][col];
 
 
 
@@ -234,24 +250,18 @@ void bdnG::GridComponent::SetTextureIds()
                 // Check the up neighbor
                 if (row > 0)
                 {
-                    GridPoint& upNeighbor = m_Grid[row - 1][col];
-                    if ((upNeighbor.cellType != CellType::empty) &&
-                        (upNeighbor.cellType != CellType::border) &&
-                        (upNeighbor.cellType != CellType::doubleBorder)
-                        )
+                    GridCell& upNeighbor = grid[row - 1][col];
+                    if (static_cast<int>(upNeighbor.cellType) > static_cast<int>(CellType::doubleBorder)) //if not impassable
                     {
                         upNeighborPassable = true;
                     }
                 }
 
                 // Check the down neighbor
-                if (row < m_Grid.size() - 1)
+                if (row < grid.size() - 1)
                 {
-                    GridPoint& downNeighbor = m_Grid[row + 1][col];
-                    if (downNeighbor.cellType != CellType::empty &&
-                        (downNeighbor.cellType != CellType::border) &&
-                        (downNeighbor.cellType != CellType::doubleBorder)
-                        )
+                    GridCell& downNeighbor = grid[row + 1][col];
+                    if (static_cast<int>(downNeighbor.cellType) > static_cast<int>(CellType::doubleBorder)) //if not impassable
                     {
                         downNeighborPassable = true;
                     }
@@ -261,24 +271,18 @@ void bdnG::GridComponent::SetTextureIds()
                 // Check the left neighbor
                 if (col > 0)
                 {
-                    GridPoint& leftNeighbor = m_Grid[row][col - 1];
-                    if (leftNeighbor.cellType != CellType::empty &&
-                        (leftNeighbor.cellType != CellType::border) &&
-                        (leftNeighbor.cellType != CellType::doubleBorder)
-                        )
+                    GridCell& leftNeighbor = grid[row][col - 1];
+                    if (static_cast<int>(leftNeighbor.cellType) > static_cast<int>(CellType::doubleBorder)) //if not impassable
                     {
                         leftNeighborPassable = true;
                     }
                 }
 
                 // Check the right neighbor
-                if (col < m_Grid[row].size() - 1)
+                if (col < grid[row].size() - 1)
                 {
-                    GridPoint& rightNeighbor = m_Grid[row][col + 1];
-                    if (rightNeighbor.cellType != CellType::empty &&
-                        (rightNeighbor.cellType != CellType::border) &&
-                        (rightNeighbor.cellType != CellType::doubleBorder)
-                        )
+                    GridCell& rightNeighbor = grid[row][col + 1];
+                    if (static_cast<int>(rightNeighbor.cellType) > static_cast<int>(CellType::doubleBorder)) //if not impassable
                     {
                         rightNeighborPassable = true;
                     }
@@ -288,37 +292,15 @@ void bdnG::GridComponent::SetTextureIds()
                 {
                     if (point.cellType == CellType::border)
                     {
-                        point.textureId = static_cast<int>(textureIds::upRightCorner);
-                    }
-                    else
-                    {
-                        point.textureId = static_cast<int>(textureIds::upRightCornerDouble);
-                    }
-                    
-                }
-                else if (rightNeighborPassable && downNeighborPassable)
-                {
-                    if (point.cellType == CellType::border)
-                    {
-                        point.textureId = static_cast<int>(textureIds::downRightCorner);
-                    }
-                    else
-                    {
-                        point.textureId = static_cast<int>(textureIds::downRightCornerDouble);
-                    }
-                }
-                else if (downNeighborPassable && leftNeighborPassable)
-                {
-                    if (point.cellType == CellType::border)
-                    {
                         point.textureId = static_cast<int>(textureIds::downLeftCorner);
                     }
                     else
                     {
                         point.textureId = static_cast<int>(textureIds::downLeftCornerDouble);
                     }
+                    
                 }
-                else if (leftNeighborPassable && upNeighborPassable)
+                else if (rightNeighborPassable && downNeighborPassable)
                 {
                     if (point.cellType == CellType::border)
                     {
@@ -327,6 +309,28 @@ void bdnG::GridComponent::SetTextureIds()
                     else
                     {
                         point.textureId = static_cast<int>(textureIds::upLeftCornerDouble);
+                    }
+                }
+                else if (downNeighborPassable && leftNeighborPassable)
+                {
+                    if (point.cellType == CellType::border)
+                    {
+                        point.textureId = static_cast<int>(textureIds::upRightCorner);
+                    }
+                    else
+                    {
+                        point.textureId = static_cast<int>(textureIds::upRightCornerDouble);
+                    }
+                }
+                else if (leftNeighborPassable && upNeighborPassable)
+                {
+                    if (point.cellType == CellType::border)
+                    {
+                        point.textureId = static_cast<int>(textureIds::downRightCorner);
+                    }
+                    else
+                    {
+                        point.textureId = static_cast<int>(textureIds::downRightCornerDouble);
                     }
                 }
                 else if (upNeighborPassable)
@@ -374,6 +378,70 @@ void bdnG::GridComponent::SetTextureIds()
                         point.textureId = static_cast<int>(textureIds::rightDoubleLine);
                     }
                 }
+                else
+                {
+                    //Check inner corners
+                    if (row > 0 && col > 0) //top left checkable
+                    {
+                        GridCell& upLeftNeighbor = grid[row - 1][col-1];
+                        if (static_cast<int>(upLeftNeighbor.cellType) > static_cast<int>(CellType::doubleBorder)) //if not impassable
+                        {
+                            if (point.cellType == CellType::border)
+                            {
+                                point.textureId = static_cast<int>(textureIds::upLeftCorner);
+                            }
+                            else
+                            {
+                                point.textureId = static_cast<int>(textureIds::upLeftCornerDouble);
+                            }
+                        }
+                    }
+                    if (row < grid.size() - 1 && col < grid[row].size() - 1) //bottom right
+                    {
+                        GridCell& downRightNeighbor = grid[row + 1][col + 1];
+                        if (static_cast<int>(downRightNeighbor.cellType) > static_cast<int>(CellType::doubleBorder)) //if not impassable
+                        {
+                            if (point.cellType == CellType::border)
+                            {
+                                point.textureId = static_cast<int>(textureIds::downRightCorner);
+                            }
+                            else
+                            {
+                                point.textureId = static_cast<int>(textureIds::downRightCornerDouble);
+                            }
+                        }
+                    }
+                    if (row > 0 && col < grid[row].size() - 1) //top right checkable
+                    {
+                        GridCell& upRightNeighbor = grid[row - 1][col + 1];
+                        if (static_cast<int>(upRightNeighbor.cellType) > static_cast<int>(CellType::doubleBorder)) //if not impassable
+                        {
+                            if (point.cellType == CellType::border)
+                            {
+                                point.textureId = static_cast<int>(textureIds::upRightCorner);
+                            }
+                            else
+                            {
+                                point.textureId = static_cast<int>(textureIds::upRightCornerDouble);
+                            }
+                        }
+                    }
+                    if (row < grid.size() - 1 && col > 0) //bottom left
+                    {
+                        GridCell& downLeftNeighbor = grid[row + 1][col - 1];
+                        if (static_cast<int>(downLeftNeighbor.cellType) > static_cast<int>(CellType::doubleBorder)) //if not impassable
+                        {
+                            if (point.cellType == CellType::border)
+                            {
+                                point.textureId = static_cast<int>(textureIds::downLeftCorner);
+                            }
+                            else
+                            {
+                                point.textureId = static_cast<int>(textureIds::downLeftCornerDouble);
+                            }
+                        }
+                    }
+                }
             }            
         
         }
@@ -390,15 +458,15 @@ void bdnG::GridComponent::Render() const
     srcRect.y = 0;
     srcRect.w = static_cast<int>(m_CellSize.x);
     srcRect.h = static_cast<int>(m_CellSize.y);
+    const std::vector<std::vector<GridCell>>& grid = *m_Grid;
 
-
-    for (size_t row = 0; row < m_Grid.size(); ++row)
+    for (size_t row = 0; row < grid.size(); ++row)
     {
         // Loop over each column in the grid
-        for (size_t col = 0; col < m_Grid[row].size(); ++col)
+        for (size_t col = 0; col < grid[row].size(); ++col)
         {
             // Get the current grid point
-            const GridPoint point = m_Grid[row][col];
+            const GridCell point = grid[row][col];
             
             pointTransform.Position = m_pOwner->GetWorldTransform().Position + (GetPointPos(static_cast<int>(row), static_cast<int>(col)) * m_pOwner->GetWorldTransform().Scale);
 
@@ -436,6 +504,9 @@ glm::vec2 bdnG::GridComponent::GetPointPosWorld(int row, int column) const
     xy.x += transform.Position.x;
     xy.y += transform.Position.y;
 
+    xy.x *= transform.Scale.x;
+    xy.y *= transform.Scale.y;
+
 
     return xy;
 }
@@ -453,16 +524,17 @@ std::pair<int, int> bdnG::GridComponent::GetClosestPointIdx(glm::vec2 position) 
 
 std::pair<int, int> bdnG::GridComponent::GetClosestPointIdxWorld(glm::vec2 position) const
 {
-    float xPos = position.x;
-    float yPos = position.y;
+    auto xy = position;
 
     //take into account world pos
     const auto transform = m_pOwner->GetWorldTransform();
-    xPos -= transform.Position.x;
-    yPos -= transform.Position.y;
+    xy.x -= transform.Position.x;
+    xy.y -= transform.Position.y;
+
+    xy.x /= transform.Scale.x;
+    xy.y /= transform.Scale.y;
 
 
-    int column = static_cast<int>(round(xPos / m_CellSize.x));
-    int row = static_cast<int>(round(yPos / m_CellSize.y));
-    return std::make_pair(row, column);
+    
+    return GetClosestPointIdx(xy);
 }

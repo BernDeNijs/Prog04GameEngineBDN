@@ -42,6 +42,7 @@
 #include "SoundLocator.h"
 #include "SDLSoundService.h"
 #include "WakaCommand.h"
+#include "Components/PacmanMovementComponent.h"
 
 
 void load()
@@ -186,10 +187,13 @@ void load()
 	{
 		auto scene2 = bdnE::SceneManager::GetInstance().CreateScene("NextScene");
 		const auto background = scene2->CreateGameObject();
-		background->AddComponent<bdnG::GridComponent>("Level01.txt","GridTiles.png");
+		auto gameMap = background->AddComponent<bdnG::GridComponent>("Level01.txt","GridTiles.png");
 		background->SetLocalScale(2.f);
 		background->SetLocalPosition({ 10,10,-1 });
 
+		auto playerCharacter = scene2->CreateGameObject();
+		playerCharacter->AddComponent<bdnG::RenderComponent>("PacMan.png");
+		playerCharacter->AddComponent<bdnG::PacmanMovementComponent>(gameMap);
 	}
 
 }
