@@ -70,21 +70,19 @@ void bdnE::Renderer::Destroy()
 	}
 }
 
-void bdnE::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y) const
+void bdnE::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, bool centered) const
 {
-	SDL_Rect dst{};
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
-	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	Transform newTransform = Transform();
+	newTransform.Position = { x,y };
+	RenderTexture(texture, newTransform, centered);
 }
 
-void bdnE::Renderer::RenderTexture(const Texture2D& texture, const Transform& transform) const
+void bdnE::Renderer::RenderTexture(const Texture2D& texture, const Transform& transform, bool centered) const
 {
-	RenderTexture(texture, transform, nullptr);
+	RenderTexture(texture, transform, nullptr, centered);
 }
 
-void bdnE::Renderer::RenderTexture(const Texture2D& texture, const Transform& transform, const SDL_Rect* srcRect) const
+void bdnE::Renderer::RenderTexture(const Texture2D& texture, const Transform& transform, const SDL_Rect* srcRect, bool centered) const
 {
 	SDL_Rect dst{};
 	dst.x = static_cast<int>(transform.Position.x);
@@ -111,6 +109,12 @@ void bdnE::Renderer::RenderTexture(const Texture2D& texture, const Transform& tr
 	{
 		dst.w *= -1;
 		flip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
+	}
+
+	if (centered)
+	{
+		dst.x -= center.x;
+		dst.y -= center.y;
 	}
 
 	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), srcRect, &dst, rot, &center, flip);
