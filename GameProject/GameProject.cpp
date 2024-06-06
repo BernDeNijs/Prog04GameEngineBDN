@@ -43,6 +43,7 @@
 #include "SDLSoundService.h"
 #include "WakaCommand.h"
 #include "Components/PacmanMovementComponent.h"
+#include "Components/PacmanRenderComponent.h"
 
 
 void load()
@@ -192,7 +193,7 @@ void load()
 		background->SetLocalPosition({ 10,10,-1 });
 
 		auto playerCharacter = scene2->CreateGameObject();
-		playerCharacter->AddComponent<bdnG::RenderComponent>("PacMan.png");
+		playerCharacter->AddComponent<bdnG::PacmanRenderComponent>("PacMan.png");
 		playerCharacter->AddComponent<bdnG::PacmanMovementComponent>(gameMap);
 	}
 
