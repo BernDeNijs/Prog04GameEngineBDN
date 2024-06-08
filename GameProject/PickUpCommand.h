@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Command.h"
-#include "PickUpComponent.h"
+#include "Components/PickUp.h"
 #include "PowerPelletComponent.h"
 
 namespace bdnG
@@ -19,7 +19,7 @@ namespace bdnG
                 return;
             }
 
-            if (const auto scoreComponent = m_GameObject->GetComponent<bdnG::PickUpComponent>()) {
+            if (const auto scoreComponent = m_GameObject->GetComponent<bdnG::PickUp>()) {
                 scoreComponent->PickUpItem(m_ItemId);
             }
         }

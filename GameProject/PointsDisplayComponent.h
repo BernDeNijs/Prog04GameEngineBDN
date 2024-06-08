@@ -2,7 +2,7 @@
 #include "Observer.h"
 #include "GameComponent.h"
 #include "TextComponent.h"
-#include "PickupComponent.h"
+#include "Components/PickUp.h"
 #include <unordered_map> // For using std::unordered_map
 #include <any> // For using std::any
 

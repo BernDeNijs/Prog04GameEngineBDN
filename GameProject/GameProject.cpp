@@ -21,7 +21,7 @@
 #include "GameObject.h"
 
 //Components
-#include "Components/GridComponent.h"
+#include "Components/Grid.h"
 
 #include "RenderComponent.h"
 #include "FpsComponent.h"
@@ -29,7 +29,7 @@
 #include "HealthComponent.h"
 #include "PointsDisplayComponent.h"
 #include "RemainingLivesDisplayComponent.h"
-#include "PickupComponent.h"
+#include "Components/PickUp.h"
 
 //Commands
 #include "DamageCommand.h"
@@ -43,165 +43,170 @@
 #include "SDLSoundService.h"
 #include "WakaCommand.h"
 #include "Commands/PacmanMoveCommand.h"
-#include "Components/PacmanMovementComponent.h"
-#include "Components/PacmanRenderComponent.h"
+#include "Components/CircleCollider.h"
+#include "Components/PacmanController.h"
+#include "Components/PacmanMovement.h"
+#include "Components/PacmanRender.h"
+#include "Components/PickupSpawner.h"
 
 
 void load()
 {
 	//INPUT MANAGER//
-	auto& inputManager = bdnE::InputManager::GetInstance();
+	//auto& inputManager = bdnE::InputManager::GetInstance();
 
 	//BASIC SCENE//
 	{
-		auto scene = bdnE::SceneManager::GetInstance().CreateScene("Programming 4 Assignment");
-		auto go = scene->CreateGameObject();
-		go->AddComponent<bdnG::RenderComponent>("background.tga");
+		//auto scene = bdnE::SceneManager::GetInstance().CreateScene("Programming 4 Assignment");
+		//auto go = scene->CreateGameObject();
+		//go->AddComponent<bdnG::RenderComponent>("background.tga");
 
 
-		go = scene->CreateGameObject();
-		go->AddComponent<bdnG::RenderComponent>("logo.tga");
-		go->SetLocalPosition({ 216,180 });
+		//go = scene->CreateGameObject();
+		//go->AddComponent<bdnG::RenderComponent>("logo.tga");
+		//go->SetLocalPosition({ 216,180 });
 
-		auto font = bdnE::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-		auto to = scene->CreateGameObject();
-		to->AddComponent<bdnG::TextComponent>("Programming 4 Assignment", font);
-		to->SetLocalPosition({ 80, 20 });
+		//auto font = bdnE::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+		//auto to = scene->CreateGameObject();
+		//to->AddComponent<bdnG::TextComponent>("Programming 4 Assignment", font);
+		//to->SetLocalPosition({ 80, 20 });
 
-		//auto test = bdnE::GameObject();
-		//auto test = std::make_unique<bdnE::GameObject>();
+		////auto test = bdnE::GameObject();
+		////auto test = std::make_unique<bdnE::GameObject>();
 
-		const auto fpsObject = scene->CreateGameObject();
-		fpsObject->AddComponent<bdnG::FpsComponent>();
-		//---
-
-
-
-		//PLAYER ONE
-		//--Character
-		auto playerCharacter = scene->CreateGameObject();
-		playerCharacter->AddComponent<bdnG::RenderComponent>("PacMan.png");
-		playerCharacter->AddComponent<bdnG::MoveComponent>();
-		auto healthComponent = playerCharacter->AddComponent<bdnG::HealthComponent>();
-		auto scoreComponent = playerCharacter->AddComponent<bdnG::PickUpComponent>();
-		playerCharacter->AddComponent<bdnG::PowerPelletComponent>();
-
-		//--Lives display
-		auto DisplayObject = scene->CreateGameObject();
-		auto text = DisplayObject->AddComponent<bdnG::TextComponent>();
-		text->SetText("Lives: 3", 16);
-		DisplayObject->SetLocalPosition({ 10,300 });
-		auto livesDisplay = DisplayObject->AddComponent<bdnG::RemainingLivesDisplayComponent>();
-		healthComponent->AddObserver(livesDisplay);
-
-		//--Score display
-		DisplayObject = scene->CreateGameObject();
-		text = DisplayObject->AddComponent<bdnG::TextComponent>();
-		text->SetText("#Score: 3", 16);
-		DisplayObject->SetLocalPosition({ 10,315 });
-		auto pointDisplay = DisplayObject->AddComponent<bdnG::PointsDisplayComponent>();
-		scoreComponent->AddObserver(pointDisplay);
-
-
-		//--Add controls
-		const int controllerIdx = inputManager.AddController();
-		inputManager.AddControllerBinding(bdnE::ControllerButton::DPadRight, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ 1,0 }), controllerIdx, scene);
-		inputManager.AddControllerBinding(bdnE::ControllerButton::DPadLeft, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ -1,0 }), controllerIdx, scene);
-		inputManager.AddControllerBinding(bdnE::ControllerButton::DPadUp, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ 0,-1 }), controllerIdx, scene);
-		inputManager.AddControllerBinding(bdnE::ControllerButton::DPadDown, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ 0,1 }), controllerIdx, scene);
-
-		inputManager.AddControllerBinding(bdnE::ControllerButton::ButtonA, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(playerCharacter, 1), controllerIdx, scene);
-		inputManager.AddControllerBinding(bdnE::ControllerButton::ButtonB, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 0), controllerIdx, scene);
-		inputManager.AddControllerBinding(bdnE::ControllerButton::ButtonY, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 1), controllerIdx, scene);
-
-		/*auto keyboard = inputManager.GetKeyboardController();*/
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ 0,-1 }), scene);
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ 0,1}), scene);
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ -1,0 }), scene);
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_D, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ 1,0 }), scene);
-
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_C, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(playerCharacter, 1), scene);
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_Z, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 0), scene);
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_X, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 1), scene);
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_V, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 2), scene);
-
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_F1, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::NextSceneCommand>(), scene);
+		//const auto fpsObject = scene->CreateGameObject();
+		//fpsObject->AddComponent<bdnG::FpsComponent>();
+		////---
 
 
 
-		//ENEMY CHARACTER
-		//--Character
-		auto enemyCharacter = scene->CreateGameObject();
-		enemyCharacter->AddComponent<bdnG::RenderComponent>("GhostRed.png");
-		enemyCharacter->AddComponent<bdnG::MoveComponent>(200.f);
-		healthComponent = enemyCharacter->AddComponent<bdnG::HealthComponent>();
-		scoreComponent = enemyCharacter->AddComponent<bdnG::PickUpComponent>();
-		enemyCharacter->AddComponent<bdnG::GhostControllerComponent>(playerCharacter);
+		////PLAYER ONE
+		////--Character
+		//auto playerCharacter = scene->CreateGameObject();
+		//playerCharacter->AddComponent<bdnG::RenderComponent>("PacMan.png");
+		//playerCharacter->AddComponent<bdnG::MoveComponent>();
+		//auto healthComponent = playerCharacter->AddComponent<bdnG::HealthComponent>();
+		//auto scoreComponent = playerCharacter->AddComponent<bdnG::PickUp>();
+		//playerCharacter->AddComponent<bdnG::PowerPelletComponent>();
 
-		//--Lives display
-		DisplayObject = scene->CreateGameObject();
-		text = DisplayObject->AddComponent<bdnG::TextComponent>();
-		text->SetText("Lives: 3", 16);
-		DisplayObject->SetLocalPosition({ 10,330 });
-		livesDisplay = DisplayObject->AddComponent<bdnG::RemainingLivesDisplayComponent>();
-		healthComponent->AddObserver(livesDisplay);
+		////--Lives display
+		//auto DisplayObject = scene->CreateGameObject();
+		//auto text = DisplayObject->AddComponent<bdnG::TextComponent>();
+		//text->SetText("Lives: 3", 16);
+		//DisplayObject->SetLocalPosition({ 10,300 });
+		//auto livesDisplay = DisplayObject->AddComponent<bdnG::RemainingLivesDisplayComponent>();
+		//healthComponent->AddObserver(livesDisplay);
 
-		//--Score display
-		DisplayObject = scene->CreateGameObject();
-		text = DisplayObject->AddComponent<bdnG::TextComponent>();
-		text->SetText("#Score: 3", 16);
-		DisplayObject->SetLocalPosition({ 10,345 });
-		pointDisplay = DisplayObject->AddComponent<bdnG::PointsDisplayComponent>();
-		scoreComponent->AddObserver(pointDisplay);
-
-		//--Add controls
-		//auto keyboard = inputManager.GetKeyboardController();
-		//keyboard->AddButtonBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 0,-1,0 }));
-		//keyboard->AddButtonBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 0,1,0 }));
-		//keyboard->AddButtonBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ -1,0,0 }));
-		//keyboard->AddButtonBinding(SDL_SCANCODE_D, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 1,0,0 }));
-		//
-		//keyboard->AddButtonBinding(SDL_SCANCODE_C, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(enemyCharacter, 1));
-		//keyboard->AddButtonBinding(SDL_SCANCODE_Z, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(enemyCharacter, 0));
-		//keyboard->AddButtonBinding(SDL_SCANCODE_X, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(enemyCharacter, 1));
+		////--Score display
+		//DisplayObject = scene->CreateGameObject();
+		//text = DisplayObject->AddComponent<bdnG::TextComponent>();
+		//text->SetText("#Score: 3", 16);
+		//DisplayObject->SetLocalPosition({ 10,315 });
+		//auto pointDisplay = DisplayObject->AddComponent<bdnG::PointsDisplayComponent>();
+		//scoreComponent->AddObserver(pointDisplay);
 
 
+		////--Add controls
+		//const int controllerIdx = inputManager.AddController();
+		//inputManager.AddControllerBinding(bdnE::ControllerButton::DPadRight, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ 1,0 }), controllerIdx, scene);
+		//inputManager.AddControllerBinding(bdnE::ControllerButton::DPadLeft, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ -1,0 }), controllerIdx, scene);
+		//inputManager.AddControllerBinding(bdnE::ControllerButton::DPadUp, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ 0,-1 }), controllerIdx, scene);
+		//inputManager.AddControllerBinding(bdnE::ControllerButton::DPadDown, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ 0,1 }), controllerIdx, scene);
+
+		//inputManager.AddControllerBinding(bdnE::ControllerButton::ButtonA, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(playerCharacter, 1), controllerIdx, scene);
+		//inputManager.AddControllerBinding(bdnE::ControllerButton::ButtonB, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 0), controllerIdx, scene);
+		//inputManager.AddControllerBinding(bdnE::ControllerButton::ButtonY, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 1), controllerIdx, scene);
+
+		///*auto keyboard = inputManager.GetKeyboardController();*/
+		//inputManager.AddKeyboardBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ 0,-1 }), scene);
+		//inputManager.AddKeyboardBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ 0,1}), scene);
+		//inputManager.AddKeyboardBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ -1,0 }), scene);
+		//inputManager.AddKeyboardBinding(SDL_SCANCODE_D, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(playerCharacter, glm::vec2{ 1,0 }), scene);
+
+		//inputManager.AddKeyboardBinding(SDL_SCANCODE_C, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(playerCharacter, 1), scene);
+		//inputManager.AddKeyboardBinding(SDL_SCANCODE_Z, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 0), scene);
+		//inputManager.AddKeyboardBinding(SDL_SCANCODE_X, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 1), scene);
+		//inputManager.AddKeyboardBinding(SDL_SCANCODE_V, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(playerCharacter, 2), scene);
+
+		//inputManager.AddKeyboardBinding(SDL_SCANCODE_F1, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::NextSceneCommand>(), scene);
 
 
-		//CONTROLS EXPLAINATION
-		auto textObject = scene->CreateGameObject();
-		textObject->AddComponent<bdnG::TextComponent>("Move pacman with the D-Pad, Hurt pacman with A , Gain points with B & Y", 16);
-		textObject->SetLocalPosition({ 10,400 });
-		textObject = scene->CreateGameObject();
-		textObject->AddComponent<bdnG::TextComponent>("Move the pacman with WASD, Hurt ghost with C , Gain points with Z & X, Pick up pellet with V", 16);
-		textObject->SetLocalPosition({ 10,420 });
-		textObject = scene->CreateGameObject();
+
+		////ENEMY CHARACTER
+		////--Character
+		//auto enemyCharacter = scene->CreateGameObject();
+		//enemyCharacter->AddComponent<bdnG::RenderComponent>("GhostRed.png");
+		//enemyCharacter->AddComponent<bdnG::MoveComponent>(200.f);
+		//healthComponent = enemyCharacter->AddComponent<bdnG::HealthComponent>();
+		//scoreComponent = enemyCharacter->AddComponent<bdnG::PickUp>();
+		//enemyCharacter->AddComponent<bdnG::GhostControllerComponent>(playerCharacter);
+
+		////--Lives display
+		//DisplayObject = scene->CreateGameObject();
+		//text = DisplayObject->AddComponent<bdnG::TextComponent>();
+		//text->SetText("Lives: 3", 16);
+		//DisplayObject->SetLocalPosition({ 10,330 });
+		//livesDisplay = DisplayObject->AddComponent<bdnG::RemainingLivesDisplayComponent>();
+		//healthComponent->AddObserver(livesDisplay);
+
+		////--Score display
+		//DisplayObject = scene->CreateGameObject();
+		//text = DisplayObject->AddComponent<bdnG::TextComponent>();
+		//text->SetText("#Score: 3", 16);
+		//DisplayObject->SetLocalPosition({ 10,345 });
+		//pointDisplay = DisplayObject->AddComponent<bdnG::PointsDisplayComponent>();
+		//scoreComponent->AddObserver(pointDisplay);
+
+		////--Add controls
+		////auto keyboard = inputManager.GetKeyboardController();
+		////keyboard->AddButtonBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 0,-1,0 }));
+		////keyboard->AddButtonBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 0,1,0 }));
+		////keyboard->AddButtonBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ -1,0,0 }));
+		////keyboard->AddButtonBinding(SDL_SCANCODE_D, bdnE::KeyState::pressed, std::make_shared<bdnG::MoveCommand>(enemyCharacter, glm::vec3{ 1,0,0 }));
+		////
+		////keyboard->AddButtonBinding(SDL_SCANCODE_C, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::DamageCommand>(enemyCharacter, 1));
+		////keyboard->AddButtonBinding(SDL_SCANCODE_Z, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(enemyCharacter, 0));
+		////keyboard->AddButtonBinding(SDL_SCANCODE_X, bdnE::KeyState::releasedThisFrame, std::make_shared<bdnG::PickUpCommand>(enemyCharacter, 1));
 
 
-		//SOUND
-		bdnE::SoundLocator::register_sound_system(std::make_unique<bdnE::SDLSoundService>(2));
-		bdnE::SoundLocator::get_sound_system().LoadSound("theme.mp3", 0);
-		bdnE::SoundLocator::get_sound_system().PlaySound(0, 0, 100, -1);
 
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_V, bdnE::KeyState::pressedThisFrame, std::make_shared<bdnG::WakaCommand>(),scene);
+
+		////CONTROLS EXPLAINATION
+		//auto textObject = scene->CreateGameObject();
+		//textObject->AddComponent<bdnG::TextComponent>("Move pacman with the D-Pad, Hurt pacman with A , Gain points with B & Y", 16);
+		//textObject->SetLocalPosition({ 10,400 });
+		//textObject = scene->CreateGameObject();
+		//textObject->AddComponent<bdnG::TextComponent>("Move the pacman with WASD, Hurt ghost with C , Gain points with Z & X, Pick up pellet with V", 16);
+		//textObject->SetLocalPosition({ 10,420 });
+		//textObject = scene->CreateGameObject();
+
+
+		////SOUND
+		//bdnE::SoundLocator::register_sound_system(std::make_unique<bdnE::SDLSoundService>(2));
+		//bdnE::SoundLocator::get_sound_system().LoadSound("theme.mp3", 0);
+		//bdnE::SoundLocator::get_sound_system().PlaySound(0, 0, 100, -1);
+
+		//inputManager.AddKeyboardBinding(SDL_SCANCODE_V, bdnE::KeyState::pressedThisFrame, std::make_shared<bdnG::WakaCommand>(),scene);
 	}
 	//BASIC SCENE//
 	{
 		const auto level01 = bdnE::SceneManager::GetInstance().CreateScene("Level01");
 		const auto background = level01->CreateGameObject();
-		auto gameMap = background->AddComponent<bdnG::GridComponent>("Level01.txt","GridTiles.png");
+		auto gameMap = background->AddComponent<bdnG::Grid>("Level01.txt","GridTiles.png");
 		background->SetLocalScale(2.f);
-		background->SetLocalPosition({ 10,10,-1 });
+		background->SetLocalPosition({ 0,0,-1 });
+		background->SetLocalPosition({ 0,50,-1 });
 
-		auto pacMan = level01->CreateGameObject();
-		pacMan->AddComponent<bdnG::PacmanRenderComponent>("PacMan.png");
-		pacMan->AddComponent<bdnG::PacmanMovementComponent>(gameMap);
+		const auto pacMan = level01->CreateGameObject();
+		pacMan->AddComponent<bdnG::PacmanRender>("PacMan.png");
+		pacMan->AddComponent<bdnG::CircleCollider>(5.f, "Pacman");
+		pacMan->AddComponent<bdnG::PacmanMovement>(gameMap);
 		pacMan->SetLocalScale(2.f);
+		pacMan->AddComponent<bdnG::PacmanController>(0);
 
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_W, bdnE::KeyState::pressed, std::make_shared<bdnG::PacmanMoveCommand>(pacMan, bdnG::MoveDirections::up), level01);
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_S, bdnE::KeyState::pressed, std::make_shared<bdnG::PacmanMoveCommand>(pacMan, bdnG::MoveDirections::down), level01);
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_A, bdnE::KeyState::pressed, std::make_shared<bdnG::PacmanMoveCommand>(pacMan, bdnG::MoveDirections::left ), level01);
-		inputManager.AddKeyboardBinding(SDL_SCANCODE_D, bdnE::KeyState::pressed, std::make_shared<bdnG::PacmanMoveCommand>(pacMan, bdnG::MoveDirections::right), level01);
+		const auto pickupSpawner = level01->CreateGameObject();
+		pickupSpawner->AddComponent<bdnG::PickupSpawner>(gameMap);
+
 	}
 
 	{

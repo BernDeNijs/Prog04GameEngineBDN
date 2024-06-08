@@ -27,7 +27,7 @@
     <ClCompile Include="OrbitComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PickUpComponent.cpp">
+    <ClCompile Include="Components\PickUp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PointsDisplayComponent.cpp">
@@ -66,16 +66,22 @@
     <ClCompile Include="GhostStateDead.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\GridComponent.cpp">
+    <ClCompile Include="Components\Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\PacmanMovementComponent.cpp">
+    <ClCompile Include="Components\PacmanMovement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\PacmanRenderComponent.cpp">
+    <ClCompile Include="Components\PacmanRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\PickupSpawner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\CircleCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\PacmanController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,7 +104,7 @@
     <ClInclude Include="OrbitComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PickUpComponent.h">
+    <ClInclude Include="Components\PickUp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PointsDisplayComponent.h">
@@ -146,19 +152,25 @@
     <ClInclude Include="NextSceneCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\GridComponent.h">
+    <ClInclude Include="Components\Grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\PacmanMovementComponent.h">
+    <ClInclude Include="Components\PacmanMovement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\PacmanRenderComponent.h">
+    <ClInclude Include="Components\PacmanRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Commands\PacmanMoveCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\PickupSpawner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\CircleCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\PacmanController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

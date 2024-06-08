@@ -171,6 +171,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Components\CircleCollider.cpp" />
     <ClCompile Include="FpsComponent.cpp" />
     <ClCompile Include="GameProject.cpp" />
     <ClCompile Include="GhostControllerComponent.cpp" />
@@ -178,13 +179,14 @@
     <ClCompile Include="GhostStateDead.cpp" />
     <ClCompile Include="GhostStateFrightened.cpp" />
     <ClCompile Include="GhostStateScatter.cpp" />
-    <ClCompile Include="Components\GridComponent.cpp" />
+    <ClCompile Include="Components\Grid.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="OrbitComponent.cpp" />
-    <ClCompile Include="Components\PacmanMovementComponent.cpp" />
-    <ClCompile Include="Components\PacmanRenderComponent.cpp" />
-    <ClCompile Include="PickUpComponent.cpp" />
+    <ClCompile Include="Components\PacmanMovement.cpp" />
+    <ClCompile Include="Components\PacmanRender.cpp" />
+    <ClCompile Include="Components\PickUp.cpp" />
     <ClCompile Include="Components\PickupSpawner.cpp" />
+    <ClCompile Include="Components\PacmanController.cpp" />
     <ClCompile Include="PointsDisplayComponent.cpp" />
     <ClCompile Include="PowerPelletComponent.cpp" />
     <ClCompile Include="RemainingLivesDisplayComponent.cpp" />
@@ -194,6 +196,7 @@
     <ClCompile Include="MoveComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\CircleCollider.h" />
     <ClInclude Include="DamageCommand.h" />
     <ClInclude Include="GhostControllerComponent.h" />
     <ClInclude Include="GhostState.h" />
@@ -201,17 +204,18 @@
     <ClInclude Include="GhostStateDead.h" />
     <ClInclude Include="GhostStateFrightened.h" />
     <ClInclude Include="GhostStateScatter.h" />
-    <ClInclude Include="Components\GridComponent.h" />
+    <ClInclude Include="Components\Grid.h" />
     <ClInclude Include="MoveCommands.h" />
     <ClInclude Include="NextSceneCommand.h" />
-    <ClInclude Include="Components\PacmanMovementComponent.h" />
-    <ClInclude Include="Components\PacmanRenderComponent.h" />
+    <ClInclude Include="Components\PacmanMovement.h" />
+    <ClInclude Include="Components\PacmanRender.h" />
     <ClInclude Include="Commands\PacmanMoveCommand.h" />
+    <ClInclude Include="Components\PacmanController.h" />
     <ClInclude Include="PickUpCommand.h" />
     <ClInclude Include="FpsComponent.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="OrbitComponent.h" />
-    <ClInclude Include="PickUpComponent.h" />
+    <ClInclude Include="Components\PickUp.h" />
     <ClInclude Include="Components\PickupSpawner.h" />
     <ClInclude Include="PointsDisplayComponent.h" />
     <ClInclude Include="PowerPelletComponent.h" />

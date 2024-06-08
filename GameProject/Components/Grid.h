@@ -52,10 +52,10 @@ namespace bdnG
 		CellType cellType = CellType::empty;
 		int textureId = 0; //16*3 ; 48 total; maxId = 47
 	};
-	class GridComponent final : public bdnE::GameComponent
+	class Grid final : public bdnE::GameComponent
 	{
 	public:
-		explicit GridComponent(bdnE::GameObject* owner, const std::string& sourceFile, const std::string& texturePath);
+		explicit Grid(bdnE::GameObject* owner, const std::string& sourceFile, const std::string& texturePath);
 
 		glm::vec2 GetPointPos(int row, int column) const;
 		glm::vec2 GetPointPos(std::pair<int, int>) const;

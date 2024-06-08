@@ -1,8 +1,8 @@
-#include "PacmanMovementComponent.h"
+#include "PacmanMovement.h"
 
 #include <glm/detail/func_geometric.inl>
 
-bdnG::PacmanMovementComponent::PacmanMovementComponent(bdnE::GameObject* owner, GridComponent* mapObject,
+bdnG::PacmanMovement::PacmanMovement(bdnE::GameObject* owner, Grid* mapObject,
                                                        float speed): GameComponent(owner)
 {
 	m_Speed = speed;
@@ -10,7 +10,7 @@ bdnG::PacmanMovementComponent::PacmanMovementComponent(bdnE::GameObject* owner, 
 	SpawnPacmanOnSpawnPoint();
 }
 
-void bdnG::PacmanMovementComponent::Update()
+void bdnG::PacmanMovement::Update()
 {
 	//check if we reached target
 	auto& time = bdnE::GameTime::GetInstance();
@@ -19,7 +19,7 @@ void bdnG::PacmanMovementComponent::Update()
 
 }
 
-void bdnG::PacmanMovementComponent::SpawnPacmanOnSpawnPoint()
+void bdnG::PacmanMovement::SpawnPacmanOnSpawnPoint()
 {
 	if (m_pGridComponent == nullptr) return;
 	glm::vec2 spawnPosition = { 0,0 };
@@ -42,7 +42,7 @@ void bdnG::PacmanMovementComponent::SpawnPacmanOnSpawnPoint()
 	m_pOwner->SetLocalPosition(spawnPosition);
 }
 
-void bdnG::PacmanMovementComponent::SetMoveDirection(MoveDirections direction)
+void bdnG::PacmanMovement::SetMoveDirection(MoveDirections direction)
 {
 	m_DesiredMoveDirection = direction;
 }
@@ -50,7 +50,7 @@ void bdnG::PacmanMovementComponent::SetMoveDirection(MoveDirections direction)
 
 
 
-void bdnG::PacmanMovementComponent::MoveToTarget(float moveDistance)
+void bdnG::PacmanMovement::MoveToTarget(float moveDistance)
 {
 	if (m_CurrentTarget == nullptr) 
 	{
@@ -84,7 +84,7 @@ void bdnG::PacmanMovementComponent::MoveToTarget(float moveDistance)
 	
 }
 
-bdnG::GridCell* bdnG::PacmanMovementComponent::FindNewTarget()
+bdnG::GridCell* bdnG::PacmanMovement::FindNewTarget()
 {
 	//If we don't have a move direction return
 	if (m_DesiredMoveDirection == MoveDirections::none) return nullptr;

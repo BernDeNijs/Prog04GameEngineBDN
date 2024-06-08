@@ -84,6 +84,10 @@ int bdnE::InputManager::AddController()
 void bdnE::InputManager::AddControllerBinding(ControllerButton button, KeyState keyState,
                                               std::shared_ptr<bdnE::Command> command, int controllerIdx, bdnE::Scene* scene) 
 {
+	while (static_cast<int>(m_pControllers.size()) <= controllerIdx)
+	{
+		AddController();
+	}
 	AddControllerBinding(ControllerBinding{ button ,keyState,std::move(command)}, controllerIdx, scene);
 }
 

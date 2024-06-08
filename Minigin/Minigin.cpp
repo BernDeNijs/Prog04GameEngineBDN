@@ -57,8 +57,8 @@ bdnE::Minigin::Minigin(const std::string &dataPath)
 		"Programming_4_assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		640,
-		480,
+		450,
+		600,
 		SDL_WINDOW_OPENGL
 	);
 	if (g_window == nullptr) 

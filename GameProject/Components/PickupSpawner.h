@@ -1,15 +1,19 @@
 #pragma once
 #include "GameComponent.h"
-#include "GridComponent.h"
+#include "Grid.h"
 
 namespace bdnG
 {
 	class PickupSpawner final : public bdnE::GameComponent
 	{
 	public:
-		explicit PickupSpawner(bdnE::GameObject* owner, bdnG::GridComponent* mapObject);
+		explicit PickupSpawner(bdnE::GameObject* owner, bdnG::Grid* mapObject);
+		void Update()override;
 	private:
-		void SpawnPickups(bdnG::GridComponent* mapObject);
+		void SpawnPickups(bdnG::Grid* mapObject);
+		void SpawnBonus();
+
+		bdnG::Grid* m_Grid = nullptr;
 	};
 }
 

@@ -6,12 +6,12 @@
 
 namespace bdnG
 {
-    class PacmanRenderComponent final :public bdnE::GameComponent
+    class PacmanRender final :public bdnE::GameComponent
     {
     public:
-        explicit PacmanRenderComponent(bdnE::GameObject* owner);
-        explicit PacmanRenderComponent(bdnE::GameObject* owner, const std::shared_ptr<bdnE::Texture2D>& texture);
-        explicit PacmanRenderComponent(bdnE::GameObject* owner, const std::string& texture);
+        explicit PacmanRender(bdnE::GameObject* owner);
+        explicit PacmanRender(bdnE::GameObject* owner, const std::shared_ptr<bdnE::Texture2D>& texture);
+        explicit PacmanRender(bdnE::GameObject* owner, const std::string& texture);
 
         void Render() const override;
 

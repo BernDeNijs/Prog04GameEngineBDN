@@ -1,5 +1,5 @@
 #pragma once
-#include "../Components/PacmanMovementComponent.h"
+#include "../Components/PacmanMovement.h"
 #include "GameObject.h"
 #include "Command.h"
 namespace bdnG
@@ -9,7 +9,7 @@ namespace bdnG
     public:
         PacmanMoveCommand(bdnE::GameObject* gameObject, MoveDirections direction) : m_Direction{ direction } 
         {            
-            m_MoveComponent = gameObject->GetComponent<PacmanMovementComponent>();
+            m_MoveComponent = gameObject->GetComponent<PacmanMovement>();
         }
 
         void Execute() override {
@@ -20,6 +20,6 @@ namespace bdnG
         }
     private:
         MoveDirections m_Direction = MoveDirections::none;
-        PacmanMovementComponent* m_MoveComponent = nullptr;
+        PacmanMovement* m_MoveComponent = nullptr;
     };
 }

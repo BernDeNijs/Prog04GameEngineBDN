@@ -1,8 +1,8 @@
-#include "GridComponent.h"
+#include "Grid.h"
 
 
-bdnG::GridComponent::GridComponent(bdnE::GameObject* owner, const std::string& sourceFile,
-	const std::string& texturePath) : GameComponent(owner)
+bdnG::Grid::Grid(bdnE::GameObject* owner, const std::string& sourceFile,
+                 const std::string& texturePath) : GameComponent(owner)
 {
 	m_pTexture = bdnE::ResourceManager::GetInstance().LoadTexture(texturePath);
 	GenerateGrid(sourceFile);
@@ -12,7 +12,7 @@ bdnG::GridComponent::GridComponent(bdnE::GameObject* owner, const std::string& s
 
 
 
-void bdnG::GridComponent::GenerateGrid(const std::string& sourceFile)
+void bdnG::Grid::GenerateGrid(const std::string& sourceFile)
 {
     const std::string levelDataString = bdnE::ResourceManager::GetInstance().LoadText(sourceFile);
     std::vector<std::vector<GridCell>>& grid = *m_Grid;
@@ -99,7 +99,7 @@ void bdnG::GridComponent::GenerateGrid(const std::string& sourceFile)
 
 
 
-void bdnG::GridComponent::GenerateGridConnections()
+void bdnG::Grid::GenerateGridConnections()
 {
     std::vector<std::vector<GridCell>>& grid = *m_Grid;
     // Loop over each row in the grid
@@ -144,7 +144,7 @@ void bdnG::GridComponent::GenerateGridConnections()
     }
 }
 
-bdnG::ConnectionType bdnG::GridComponent::CheckNeighborConnection(CellType current, CellType neighbor) const
+bdnG::ConnectionType bdnG::Grid::CheckNeighborConnection(CellType current, CellType neighbor) const
 {
     if (current == CellType::empty || current == CellType::border || current == CellType::doubleBorder
         || neighbor == CellType::empty || neighbor == CellType::border || neighbor == CellType::doubleBorder)
@@ -160,7 +160,7 @@ bdnG::ConnectionType bdnG::GridComponent::CheckNeighborConnection(CellType curre
 }
 
 
-void bdnG::GridComponent::SetTextureIds()
+void bdnG::Grid::SetTextureIds()
 {
     enum class textureIds
     {
@@ -169,6 +169,7 @@ void bdnG::GridComponent::SetTextureIds()
         biggerPickup = 46,
         powerPellet = 47,
 
+        ghostHouseDoor = 43,
         up = 14,
         upDouble = 12,
         down = 20,
@@ -226,12 +227,13 @@ void bdnG::GridComponent::SetTextureIds()
                 point.textureId = static_cast<int>(textureIds::empty);
                 break;
             case CellType::pickup:
-                point.textureId = static_cast<int>(textureIds::pickup);
+                point.textureId = static_cast<int>(textureIds::empty);
+                break;
             case CellType::ghostHouseEntrance:
-                point.textureId = static_cast<int>(textureIds::biggerPickup);
+                point.textureId = static_cast<int>(textureIds::ghostHouseDoor);
                 break;
             case CellType::powerPellet:
-                point.textureId = static_cast<int>(textureIds::powerPellet);
+                point.textureId = static_cast<int>(textureIds::empty);
                 break;
             default:
                 break;
@@ -449,7 +451,7 @@ void bdnG::GridComponent::SetTextureIds()
 }
 
 
-void bdnG::GridComponent::Render() const
+void bdnG::Grid::Render() const
 {
     auto& renderer = bdnE::Renderer::GetInstance();
     bdnE::Transform pointTransform = m_pOwner->GetWorldTransform();
@@ -485,7 +487,7 @@ void bdnG::GridComponent::Render() const
 
 }
 
-glm::vec2 bdnG::GridComponent::GetPointPos(int row, int column) const
+glm::vec2 bdnG::Grid::GetPointPos(int row, int column) const
 {
     
 
@@ -495,33 +497,36 @@ glm::vec2 bdnG::GridComponent::GetPointPos(int row, int column) const
     return { x, y };
 }
 
-glm::vec2 bdnG::GridComponent::GetPointPos(std::pair<int, int> idx) const
+glm::vec2 bdnG::Grid::GetPointPos(std::pair<int, int> idx) const
 {
     return GetPointPos(idx.first, idx.second);
 }
 
-glm::vec2 bdnG::GridComponent::GetPointPosWorld(int row, int column) const
+glm::vec2 bdnG::Grid::GetPointPosWorld(int row, int column) const
 {
     auto xy = GetPointPos(row, column);
 
     //take into account world pos
     const auto transform = m_pOwner->GetWorldTransform();
-    xy.x += transform.Position.x;
-    xy.y += transform.Position.y;
+
+    xy.x += m_CellSize.x * 0.5f;
+    xy.y += m_CellSize.y * 0.5f;
 
     xy.x *= transform.Scale.x;
     xy.y *= transform.Scale.y;
 
+    xy.x += transform.Position.x;
+    xy.y += transform.Position.y;
 
     return xy;
 }
 
-glm::vec2 bdnG::GridComponent::GetPointPosWorld(std::pair<int, int> idx) const
+glm::vec2 bdnG::Grid::GetPointPosWorld(std::pair<int, int> idx) const
 {
     return GetPointPosWorld(idx.first, idx.second);
 }
 
-std::pair<int, int> bdnG::GridComponent::GetClosestPointIdx(glm::vec2 position) const
+std::pair<int, int> bdnG::Grid::GetClosestPointIdx(glm::vec2 position) const
 {
     
     float xPos = position.x;
@@ -532,21 +537,22 @@ std::pair<int, int> bdnG::GridComponent::GetClosestPointIdx(glm::vec2 position) 
     return std::make_pair(row, column);
 }
 
-std::pair<int, int> bdnG::GridComponent::GetClosestPointIdxWorld(glm::vec2 position) const
+std::pair<int, int> bdnG::Grid::GetClosestPointIdxWorld(glm::vec2 position) const
 {
     auto xy = position;
 
     //take into account world pos
     const auto transform = m_pOwner->GetWorldTransform();
-    xy.x /= transform.Scale.x;
-    xy.y /= transform.Scale.y;
+
 
     xy.x -= transform.Position.x;
     xy.y -= transform.Position.y;
 
+    xy.x -= m_CellSize.x ;
+    xy.y -= m_CellSize.y ;
 
-
-
+    xy.x /= transform.Scale.x;
+    xy.y /= transform.Scale.y;
     
     return GetClosestPointIdx(xy);
 }
