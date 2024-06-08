@@ -1,5 +1,6 @@
 #include "PacmanController.h"
 
+#include "GhostController.h"
 #include "InputManager.h"
 #include "../Components/PacmanMovement.h"
 #include "../Commands/PacmanMoveCommand.h"
@@ -52,7 +53,12 @@ void bdnG::PacmanController::BindControllerControls()
 	inputManager.AddControllerBinding(bdnE::ControllerButton::DPadRight, bdnE::KeyState::pressed, std::make_shared<bdnG::PacmanMoveCommand>(m_pOwner, bdnG::MoveDirections::right),0, m_pOwner->GetScene());
 }
 
-void bdnG::PacmanController::CollidedWithPlayer(CircleCollider* /*other*/)
+void bdnG::PacmanController::CollidedWithPlayer(CircleCollider* other)
 {
+	auto controller = other->GetOwner()->GetComponent<GhostController>();
+	if (controller == nullptr) return;
+	m_EventData["GhostState"] = controller->GetState();
 	Notify("PlayerHitByGhost");
+
+
 }

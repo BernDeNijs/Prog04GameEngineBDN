@@ -10,6 +10,10 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "TextRender.h"
+#include "../GhostStates/GhostStateChase.h"
+#include "../GhostStates/GhostStateDead.h"
+#include "../GhostStates/GhostStateFrightened.h"
+#include "../GhostStates/GhostStateScatter.h"
 
 bdnG::SceneChanger::SceneChanger(bdnE::GameObject* owner) : GameComponent(owner)
 {
@@ -34,7 +38,7 @@ bdnG::SceneChanger::SceneChanger(bdnE::GameObject* owner) : GameComponent(owner)
 }
 
 void bdnG::SceneChanger::OnNotify(const std::string& eventName,
-	const std::unordered_map<std::string, std::any>& /*eventData*/)
+	const std::unordered_map<std::string, std::any>& eventData)
 {	if (eventName == "ItemPickedUp")
 	{
 		m_NrOfPickups--;
@@ -44,9 +48,25 @@ void bdnG::SceneChanger::OnNotify(const std::string& eventName,
 			LoadEndLevel();
 		}		
 	}
+
 	if (eventName == "PlayerHitByGhost")
 	{
-		LoadEndLevel();
+		auto iter = eventData.find("GhostState");
+		if (iter != eventData.end()) {
+			
+			const auto ghostState = std::any_cast<GhostState*>(iter->second);
+			
+			if (dynamic_cast<GhostStateChase*>(ghostState) != nullptr) {
+				LoadEndLevel();
+				//std::cout << "Ghost is in Chase state.\n";
+			}
+			else if (dynamic_cast<GhostStateScatter*>(ghostState) != nullptr) {
+				LoadEndLevel();
+				//std::cout << "Ghost is in Scatter state.\n";
+			}
+
+
+		}
 	}
 }
 

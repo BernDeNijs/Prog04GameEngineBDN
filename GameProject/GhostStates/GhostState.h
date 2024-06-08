@@ -1,6 +1,8 @@
 #pragma once
+#include "Observer.h"
 #include "../Components/GhostRenderer.h"
 #include "../Components/PacmanMovement.h"
+#include "../Components/PickUp.h"
 
 namespace bdnE
 {
@@ -9,7 +11,7 @@ namespace bdnE
 
 namespace bdnG {
 
-	class GhostState
+	class GhostState : public bdnE::Observer
 	{
 	public:
 		GhostState() = default;
@@ -19,8 +21,8 @@ namespace bdnG {
 		GhostState& operator=(const GhostState&) = delete;
 		GhostState& operator=(GhostState&&) = delete;
 
-		virtual void Enter(bdnE::GameObject* pacman) = 0;
-		virtual void Exit() = 0;
+		virtual void Enter(bdnE::GameObject* pacman , std::vector< PickUp*>) = 0;
+		virtual void Exit(std::vector< PickUp*>) = 0;
 		virtual GhostState* Update(bdnE::GameObject* owner, bdnE::GameObject* pacman, bdnG::PacmanMovement* moveComponent) = 0;
 		virtual void Render(GhostRenderer* renderer) = 0;
 	};

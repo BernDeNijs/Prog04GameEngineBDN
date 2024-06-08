@@ -6,19 +6,35 @@
 #include "GhostStateChase.h"
 #include "GhostStateFrightened.h"
 
+#include "../Components/PickUp.h"
 
-void bdnG::GhostStateScatter::Enter(bdnE::GameObject* /*pacman*/)
+
+void bdnG::GhostStateScatter::Enter(bdnE::GameObject* /*pacman*/, std::vector< PickUp*> pickups)
 {
 	m_Timer = m_MaxTimer;
 	std::cout << "Entered SCATTER\n";
+
+	for (const auto& pickup : pickups)
+	{
+		pickup->AddObserver(this);
+	}
 }
 
-void bdnG::GhostStateScatter::Exit()
+void bdnG::GhostStateScatter::Exit(std::vector< PickUp*> pickups)
 {
+	for (const auto& pickup : pickups)
+	{
+		pickup->RemoveObserver(this);
+	}
 }
 
 bdnG::GhostState* bdnG::GhostStateScatter::Update(bdnE::GameObject* owner, bdnE::GameObject*, bdnG::PacmanMovement* moveComponent)
 {
+
+	if (m_PelletActivated)
+	{
+		return new GhostStateFrightened();
+	}
 
 	//Check if it's time to switch to chase
 	auto& time = bdnE::GameTime::GetInstance();
@@ -75,4 +91,10 @@ bdnG::GhostState* bdnG::GhostStateScatter::Update(bdnE::GameObject* owner, bdnE:
 void bdnG::GhostStateScatter::Render(GhostRenderer* renderer)
 {
 	renderer->SetTexture("GhostRed.png");
+}
+
+void bdnG::GhostStateScatter::OnNotify(const std::string& /*eventName*/,
+	const std::unordered_map<std::string, std::any>& /*eventData*/)
+{
+	m_PelletActivated = true;
 }

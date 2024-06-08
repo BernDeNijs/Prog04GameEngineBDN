@@ -8,6 +8,11 @@
 #include "ResourceManager.h"
 #include "TextRender.h"
 
+#include "../GhostStates/GhostStateChase.h"
+#include "../GhostStates/GhostStateDead.h"
+#include "../GhostStates/GhostStateFrightened.h"
+#include "../GhostStates/GhostStateScatter.h"
+
 bdnG::ScoreDisplay::ScoreDisplay(bdnE::GameObject* owner): GameComponent(owner)
 {
 	std::vector<bdnE::GameObject*> sceneObjects = m_pOwner->GetScene()->GetAllObjectsInScene();
@@ -15,10 +20,20 @@ bdnG::ScoreDisplay::ScoreDisplay(bdnE::GameObject* owner): GameComponent(owner)
 
 	for (const auto& object : sceneObjects)
 	{
+		const auto pacmanController = object->GetComponent<PacmanController>();
+		if (pacmanController != nullptr)
+		{
+			pacmanController->AddObserver(this);
+		}
+
+
 		const auto pickupComponent = object->GetComponent<PickUp>();
 		if (pickupComponent == nullptr) continue;
 		pickupComponent->AddObserver(this);
 		m_NrOfPickups++;
+
+		
+
 	}
 	m_pTextRenderer = m_pOwner->AddComponent<TextRender>();
 	AddScore(0, 0);
@@ -59,6 +74,22 @@ void bdnG::ScoreDisplay::OnNotify(const std::string& eventName,
 			AddScore(300, collidingObject->GetComponent<PacmanController>()->GetId());
 		}
 	}
+
+	if (eventName == "PlayerHitByGhost")
+	{
+		auto iter = eventData.find("GhostState");
+		if (iter != eventData.end()) {
+
+			const auto ghostState = std::any_cast<GhostState*>(iter->second);
+
+			if (dynamic_cast<GhostStateFrightened*>(ghostState) != nullptr) {
+				AddScore(200, 0);
+				//std::cout << "Ghost is in Chase state.\n";
+			}
+
+		}
+	}
+
 }
 
 void bdnG::ScoreDisplay::Render() const

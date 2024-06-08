@@ -3,6 +3,7 @@
 #include "../GhostStates/GhostState.h"
 #include "../GhostStates/GhostStateScatter.h"
 #include "../Components/PacmanMovement.h"
+#include "../Components/PickUp.h"
 
 bdnG::GhostController::GhostController(bdnE::GameObject* owner, bdnE::GameObject* target) : GameComponent(owner)
 {
@@ -18,7 +19,23 @@ bdnG::GhostController::GhostController(bdnE::GameObject* owner, bdnE::GameObject
 	}
 	m_pTarget = target;
 
-	m_CurrentState->Enter(m_pTarget);
+
+	//Find power pellets
+	std::vector<bdnE::GameObject*> sceneObjects = m_pOwner->GetScene()->GetAllObjectsInScene();
+
+
+	for (const auto& object : sceneObjects)
+	{
+		const auto pickupComponent = object->GetComponent<PickUp>();
+		if (pickupComponent == nullptr) continue;
+		if (pickupComponent->GetType() == ItemType::powerPellet)
+		{
+			m_PowerPellets.push_back(pickupComponent);
+		}
+	}
+
+
+	m_CurrentState->Enter(m_pTarget, m_PowerPellets);
 
 }
 
@@ -30,11 +47,11 @@ void bdnG::GhostController::Update()
 	{
 		//We changed states
 		//--trigger the exit of the current state
-		m_CurrentState->Exit();
+		m_CurrentState->Exit(m_PowerPellets);
 		//Set our new state
 		m_CurrentState = std::move(std::unique_ptr<GhostState>(state));
 		//Trigger the enter of our new state
-		m_CurrentState->Enter(m_pTarget);
+		m_CurrentState->Enter(m_pTarget, m_PowerPellets);
 	}
 }
 

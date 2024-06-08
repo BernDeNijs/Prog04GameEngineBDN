@@ -16,7 +16,11 @@ namespace bdnE
 		}
 		void RemoveObserver(Observer* observer)
 		{
-			m_pObservers.erase(std::remove(m_pObservers.begin(), m_pObservers.end(), observer));
+			auto it = std::remove(m_pObservers.begin(), m_pObservers.end(), observer);
+			if (it != m_pObservers.end())
+			{
+				m_pObservers.erase(it, m_pObservers.end());
+			}
 		}
 
 		void Notify(const std::string& eventName)

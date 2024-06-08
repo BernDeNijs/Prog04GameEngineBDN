@@ -5,13 +5,14 @@
 
 #include "GameObject.h"
 #include "GhostStateScatter.h"
+#include "../Components/PickUp.h"
 
-void bdnG::GhostStateDead::Enter(bdnE::GameObject*)
+void bdnG::GhostStateDead::Enter(bdnE::GameObject*, std::vector< PickUp*>)
 {
 	std::cout << "Entered DEAD\n";
 }
 
-void bdnG::GhostStateDead::Exit()
+void bdnG::GhostStateDead::Exit(std::vector< PickUp*>)
 {
 }
 
@@ -41,4 +42,9 @@ void bdnG::GhostStateDead::Render(GhostRenderer* renderer)
 	//For now go invisible we'll need to change our render anyway to use the spritesheet instead of seperate sprites anyway
 	renderer->SetTexture("GhostDed.png");
 
+}
+
+void bdnG::GhostStateDead::OnNotify(const std::string& /*eventName*/,
+	const std::unordered_map<std::string, std::any>& /*eventData*/)
+{
 }
