@@ -173,55 +173,28 @@
   <ItemGroup>
     <ClCompile Include="Components\CircleCollider.cpp" />
     <ClCompile Include="GameProject.cpp" />
-    <ClCompile Include="GhostControllerComponent.cpp" />
-    <ClCompile Include="GhostStateChase.cpp" />
-    <ClCompile Include="GhostStateDead.cpp" />
-    <ClCompile Include="GhostStateFrightened.cpp" />
-    <ClCompile Include="GhostStateScatter.cpp" />
     <ClCompile Include="Components\Grid.cpp" />
-    <ClCompile Include="HealthComponent.cpp" />
-    <ClCompile Include="OrbitComponent.cpp" />
     <ClCompile Include="Components\PacmanMovement.cpp" />
     <ClCompile Include="Components\PacmanRender.cpp" />
     <ClCompile Include="Components\PickUp.cpp" />
     <ClCompile Include="Components\PickupSpawner.cpp" />
     <ClCompile Include="Components\PacmanController.cpp" />
-    <ClCompile Include="PowerPelletComponent.cpp" />
-    <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Components\ScoreDisplay.cpp" />
     <ClCompile Include="Components\SceneChanger.cpp" />
     <ClCompile Include="Components\TextRender.cpp" />
-    <ClCompile Include="TTCComponent.cpp" />
-    <ClCompile Include="MoveComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\CircleCollider.h" />
-    <ClInclude Include="GhostControllerComponent.h" />
-    <ClInclude Include="GhostState.h" />
-    <ClInclude Include="GhostStateChase.h" />
-    <ClInclude Include="GhostStateDead.h" />
-    <ClInclude Include="GhostStateFrightened.h" />
-    <ClInclude Include="GhostStateScatter.h" />
     <ClInclude Include="Components\Grid.h" />
-    <ClInclude Include="MoveCommands.h" />
-    <ClInclude Include="NextSceneCommand.h" />
     <ClInclude Include="Components\PacmanMovement.h" />
     <ClInclude Include="Components\PacmanRender.h" />
     <ClInclude Include="Commands\PacmanMoveCommand.h" />
     <ClInclude Include="Components\PacmanController.h" />
-    <ClInclude Include="PickUpCommand.h" />
-    <ClInclude Include="HealthComponent.h" />
-    <ClInclude Include="OrbitComponent.h" />
     <ClInclude Include="Components\PickUp.h" />
     <ClInclude Include="Components\PickupSpawner.h" />
-    <ClInclude Include="PowerPelletComponent.h" />
-    <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Components\ScoreDisplay.h" />
     <ClInclude Include="Components\SceneChanger.h" />
     <ClInclude Include="Components\TextRender.h" />
-    <ClInclude Include="TTCComponent.h" />
-    <ClInclude Include="MoveComponent.h" />
-    <ClInclude Include="WakaCommand.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
