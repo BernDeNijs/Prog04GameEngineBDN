@@ -15,7 +15,6 @@
 #include "SceneManager.h"
 #include "ResourceManager.h"
 #include "Scene.h"
-#include "InputManager.h"
 
 //GameObject
 #include "GameObject.h"
@@ -23,18 +22,10 @@
 //Components
 #include "Components/Grid.h"
 
-#include "RenderComponent.h"
-#include "FpsComponent.h"
-#include "MoveComponent.h"
-#include "HealthComponent.h"
-#include "PointsDisplayComponent.h"
-#include "RemainingLivesDisplayComponent.h"
-#include "Components/PickUp.h"
+
 
 //Commands
-#include "DamageCommand.h"
-#include "PickUpCommand.h"
-#include "MoveCommands.h"
+
 
 //Sound
 #include "GhostControllerComponent.h"

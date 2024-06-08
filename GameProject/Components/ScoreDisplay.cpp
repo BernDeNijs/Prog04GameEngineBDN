@@ -28,16 +28,21 @@ void bdnG::ScoreDisplay::OnNotify(const std::string& eventName,
 	if (eventName == "ItemPickedUp")
 	{
 		auto iter = eventData.find("itemType");
-		bdnG::ItemType itemType;
+		bdnG::ItemType itemType = ItemType::pellet;
 		if (iter != eventData.end()) {
 			itemType = std::any_cast<bdnG::ItemType>(iter->second);
 		}
 
+		
+
 		iter = eventData.find("collidingObject");
-		bdnE::GameObject* collidingObject;
+		bdnE::GameObject* collidingObject = nullptr;
 		if (iter != eventData.end()) {
 			collidingObject = std::any_cast<bdnE::GameObject*>(iter->second);
 		}
+
+		if (collidingObject == nullptr)return;
+
 		if (itemType == ItemType::pellet)
 		{
 			AddScore(10, collidingObject->GetComponent<PacmanController>()->GetId());
