@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "../Components/PacmanMovement.h"
 #include "../Commands/PacmanMoveCommand.h"
+#include "../Components/CircleCollider.h"
 
 bdnG::PacmanController::PacmanController(bdnE::GameObject* owner, int id):GameComponent(owner), m_Id{id}
 {
@@ -13,6 +14,23 @@ bdnG::PacmanController::PacmanController(bdnE::GameObject* owner, int id):GameCo
 	else
 	{
 		BindControllerControls();
+	}
+
+	auto collider = m_pOwner->AddComponent<CircleCollider>(5.f, "Pacman");
+	collider->AddCollisionLayer("Ghost");
+	collider->AddObserver(this);
+
+}
+
+void bdnG::PacmanController::OnNotify(const std::string& eventName,
+	const std::unordered_map<std::string, std::any>& eventData)
+{
+	if (eventName == "CollisionStay")
+	{
+		auto iter = eventData.find("other");
+		if (iter != eventData.end()) {
+			CollidedWithPlayer(std::any_cast<CircleCollider*>(iter->second));
+		}
 	}
 }
 
@@ -32,4 +50,9 @@ void bdnG::PacmanController::BindControllerControls()
 	inputManager.AddControllerBinding(bdnE::ControllerButton::DPadDown, bdnE::KeyState::pressed, std::make_shared<bdnG::PacmanMoveCommand>(m_pOwner, bdnG::MoveDirections::down),0, m_pOwner->GetScene());
 	inputManager.AddControllerBinding(bdnE::ControllerButton::DPadLeft, bdnE::KeyState::pressed, std::make_shared<bdnG::PacmanMoveCommand>(m_pOwner, bdnG::MoveDirections::left),0, m_pOwner->GetScene());
 	inputManager.AddControllerBinding(bdnE::ControllerButton::DPadRight, bdnE::KeyState::pressed, std::make_shared<bdnG::PacmanMoveCommand>(m_pOwner, bdnG::MoveDirections::right),0, m_pOwner->GetScene());
+}
+
+void bdnG::PacmanController::CollidedWithPlayer(CircleCollider* /*other*/)
+{
+	Notify("PlayerHitByGhost");
 }

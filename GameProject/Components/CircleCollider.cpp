@@ -15,6 +15,7 @@ bdnG::CircleCollider::CircleCollider(bdnE::GameObject* owner, float radius, cons
 {
 	m_CollisionObjects[layer].push_back(this);
 	m_Radius = radius;
+	m_Layer = layer;
 
 	m_EventData["Collider"] = this;
 }

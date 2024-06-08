@@ -1,10 +1,3 @@
-#pragma once
-#include "Font.h"
-#include "PickUp.h"
-
-class ScoreDisplay
-{
-};
 
 #pragma once
 #include "Observer.h"

@@ -16,6 +16,8 @@ namespace bdnG
 		void AddCollisionLayer(const std::string& layer);
 		void RemoveCollisionLayer(const std::string& layer);
 
+		std::string GetLayer() { return m_Layer; };
+
 		void Update()override;
 	private:
 
@@ -24,5 +26,6 @@ namespace bdnG
 		float m_Radius = 0;
 		void HandleCollision();
 		float GetWorldRadius();
+		std::string m_Layer;
 	};
 }

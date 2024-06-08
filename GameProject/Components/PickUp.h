@@ -18,9 +18,10 @@ namespace bdnG
 	public:
 
 		explicit PickUp(bdnE::GameObject* owner, ItemType type);
-		void PickUpItem(int itemId);
 		void CollidedWithPlayer(CircleCollider* other);
 		void Render() const override;
+
+		ItemType GetType() const { return m_Type; }
 
 		virtual void OnNotify(const std::string& eventName, const std::unordered_map<std::string, std::any>& eventData) override;
 	private:
