@@ -178,10 +178,16 @@
     <ClCompile Include="Components\PacmanRender.cpp" />
     <ClCompile Include="Components\PickUp.cpp" />
     <ClCompile Include="Components\PickupSpawner.cpp" />
-    <ClCompile Include="Components\PacmanController.cpp" />
+    <ClCompile Include="CharacterControllers\PacmanController.cpp" />
     <ClCompile Include="Components\ScoreDisplay.cpp" />
     <ClCompile Include="Components\SceneChanger.cpp" />
     <ClCompile Include="Components\TextRender.cpp" />
+    <ClCompile Include="CharacterControllers\GhostController.cpp" />
+    <ClCompile Include="Components\GhostRenderer.cpp" />
+    <ClCompile Include="GhostStates\GhostStateScatter.cpp" />
+    <ClCompile Include="GhostStates\GhostStateFrightened.cpp" />
+    <ClCompile Include="GhostStates\GhostStateDead.cpp" />
+    <ClCompile Include="GhostStates\GhostStateChase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\CircleCollider.h" />
@@ -189,12 +195,19 @@
     <ClInclude Include="Components\PacmanMovement.h" />
     <ClInclude Include="Components\PacmanRender.h" />
     <ClInclude Include="Commands\PacmanMoveCommand.h" />
-    <ClInclude Include="Components\PacmanController.h" />
+    <ClInclude Include="CharacterControllers\PacmanController.h" />
     <ClInclude Include="Components\PickUp.h" />
     <ClInclude Include="Components\PickupSpawner.h" />
     <ClInclude Include="Components\ScoreDisplay.h" />
     <ClInclude Include="Components\SceneChanger.h" />
     <ClInclude Include="Components\TextRender.h" />
+    <ClInclude Include="CharacterControllers\GhostController.h" />
+    <ClInclude Include="Components\GhostRenderer.h" />
+    <ClInclude Include="GhostStates\GhostStateScatter.h" />
+    <ClInclude Include="GhostStates\GhostStateFrightened.h" />
+    <ClInclude Include="GhostStates\GhostStateDead.h" />
+    <ClInclude Include="GhostStates\GhostStateChase.h" />
+    <ClInclude Include="GhostStates\GhostState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

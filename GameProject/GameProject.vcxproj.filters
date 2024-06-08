@@ -39,13 +39,31 @@
     <ClCompile Include="Components\CircleCollider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\PacmanController.cpp">
+    <ClCompile Include="CharacterControllers\PacmanController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\ScoreDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\SceneChanger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostStates\GhostStateChase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostStates\GhostStateDead.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostStates\GhostStateFrightened.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostStates\GhostStateScatter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterControllers\GhostController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\GhostRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,13 +92,34 @@
     <ClInclude Include="Components\CircleCollider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\PacmanController.h">
+    <ClInclude Include="CharacterControllers\PacmanController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\ScoreDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\SceneChanger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostStates\GhostState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostStates\GhostStateChase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostStates\GhostStateDead.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostStates\GhostStateFrightened.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostStates\GhostStateScatter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterControllers\GhostController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\GhostRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

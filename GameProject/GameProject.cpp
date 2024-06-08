@@ -30,9 +30,9 @@
 //Sound
 #include "SoundLocator.h"
 #include "SDLSoundService.h"
+#include "CharacterControllers/PacmanController.h"
 #include "Commands/PacmanMoveCommand.h"
 #include "Components/CircleCollider.h"
-#include "Components/PacmanController.h"
 #include "Components/PacmanMovement.h"
 #include "Components/PacmanRender.h"
 #include "Components/PickupSpawner.h"
@@ -54,7 +54,7 @@ void load()
 		const auto pacMan = level01->CreateGameObject();
 		pacMan->AddComponent<bdnG::PacmanRender>("PacMan.png");
 		pacMan->AddComponent<bdnG::CircleCollider>(5.f, "Pacman");
-		pacMan->AddComponent<bdnG::PacmanMovement>(gameMap);
+		pacMan->AddComponent<bdnG::PacmanMovement>(gameMap, bdnG::CellType::pacmanSpawn,true);
 		pacMan->SetLocalScale(2.f);
 		pacMan->AddComponent<bdnG::PacmanController>(0);
 

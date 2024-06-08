@@ -1,13 +1,16 @@
 #include "PacmanMovement.h"
 
+#include <queue>
+#include <set>
 #include <glm/detail/func_geometric.inl>
 
-bdnG::PacmanMovement::PacmanMovement(bdnE::GameObject* owner, Grid* mapObject,
-                                                       float speed): GameComponent(owner)
+bdnG::PacmanMovement::PacmanMovement(bdnE::GameObject* owner, Grid* mapObject, CellType spawnPoint, bool useGhostTypeMovement , float speed ): GameComponent(owner)
 {
 	m_Speed = speed;
 	m_pGridComponent = mapObject; 
-	SpawnPacmanOnSpawnPoint();
+	m_SpawnPoint = spawnPoint;
+	m_GhostTypeMovement = useGhostTypeMovement;
+	SpawnOnSpawnPoint();
 }
 
 void bdnG::PacmanMovement::Update()
@@ -19,7 +22,7 @@ void bdnG::PacmanMovement::Update()
 
 }
 
-void bdnG::PacmanMovement::SpawnPacmanOnSpawnPoint()
+void bdnG::PacmanMovement::SpawnOnSpawnPoint() const
 {
 	if (m_pGridComponent == nullptr) return;
 	glm::vec2 spawnPosition = { 0,0 };
@@ -31,7 +34,7 @@ void bdnG::PacmanMovement::SpawnPacmanOnSpawnPoint()
 	{
 		for (const GridCell& gridCell : column)
 		{
-			if (gridCell.cellType == CellType::pacmanSpawn)
+			if (gridCell.cellType == m_SpawnPoint)
 			{
 				spawnPosition += m_pGridComponent->GetPointPosWorld(gridCell.gridIdx.first, gridCell.gridIdx.second);
 				pointsFound++;
@@ -95,7 +98,7 @@ bdnG::GridCell* bdnG::PacmanMovement::FindNewTarget()
 
 	auto cellIdx = m_pGridComponent->GetClosestPointIdxWorld(m_pOwner->GetWorldTransform().Position);
 	const std::vector<std::vector<GridCell>> grid = *m_pGridComponent->GetGrid();
-	auto currentCell = grid[cellIdx.first][cellIdx.second];
+	auto& currentCell = grid[cellIdx.first][cellIdx.second];
 
 	switch (m_DesiredMoveDirection)
 	{
@@ -105,13 +108,38 @@ bdnG::GridCell* bdnG::PacmanMovement::FindNewTarget()
 			m_CurrentMoveDirection = MoveDirections::up;
 			return currentCell.pathUp.connectedPoint;
 		}
-
+		//--added logic for ghost movement
+		if (m_GhostTypeMovement)
+		{
+			if (currentCell.pathUp.connectionType == ConnectionType::ghostOnly)
+			{
+				m_CurrentMoveDirection = MoveDirections::up;
+				return currentCell.pathUp.connectedPoint;
+			}
+			else
+			{
+				return FindClosestTargetWithDirection(MoveDirections::up, currentCell);
+			}				
+		}
+		//--
 		break;
 	case bdnG::MoveDirections::down:
 		if (currentCell.pathDown.connectionType == ConnectionType::connected)
 		{
 			m_CurrentMoveDirection = MoveDirections::down;
 			return currentCell.pathDown.connectedPoint;
+		}
+		if (m_GhostTypeMovement)
+		{
+			if (currentCell.pathUp.connectionType == ConnectionType::ghostOnly)
+			{
+				m_CurrentMoveDirection = MoveDirections::up;
+				return currentCell.pathUp.connectedPoint;
+			}
+			else
+			{
+				return FindClosestTargetWithDirection(MoveDirections::down, currentCell);
+			}
 		}
 		break;
 	case bdnG::MoveDirections::left:
@@ -120,12 +148,36 @@ bdnG::GridCell* bdnG::PacmanMovement::FindNewTarget()
 			m_CurrentMoveDirection = MoveDirections::left;
 			return currentCell.pathLeft.connectedPoint;
 		}
+		if (m_GhostTypeMovement)
+		{
+			if (currentCell.pathUp.connectionType == ConnectionType::ghostOnly)
+			{
+				m_CurrentMoveDirection = MoveDirections::up;
+				return currentCell.pathUp.connectedPoint;
+			}
+			else
+			{
+				return FindClosestTargetWithDirection(MoveDirections::left, currentCell);
+			}
+		}
 		break;
 	case bdnG::MoveDirections::right:
 		if (currentCell.pathRight.connectionType == ConnectionType::connected)
 		{
 			m_CurrentMoveDirection = MoveDirections::right;
 			return currentCell.pathRight.connectedPoint;
+		}
+		if (m_GhostTypeMovement)
+		{
+			if (currentCell.pathUp.connectionType == ConnectionType::ghostOnly)
+			{
+				m_CurrentMoveDirection = MoveDirections::up;
+				return currentCell.pathUp.connectedPoint;
+			}
+			else
+			{
+				return FindClosestTargetWithDirection(MoveDirections::right, currentCell);
+			}
 		}
 		break;
 	case bdnG::MoveDirections::none:
@@ -158,5 +210,83 @@ bdnG::GridCell* bdnG::PacmanMovement::FindNewTarget()
 	default:
 		break;
 	}
+	return nullptr;
+}
+
+bdnG::GridCell* bdnG::PacmanMovement::FindClosestTargetWithDirection(MoveDirections direction, bdnG::GridCell currentCell)
+{
+
+	if (m_pGridComponent == nullptr) return nullptr;
+
+	// To keep track of visited cells
+	std::set<std::pair<int, int>> visited;
+
+	// Queue for BFS
+	std::queue<GridCell*> queue;
+	queue.push(&currentCell);
+
+	while (!queue.empty())
+	{
+		GridCell* cell = queue.front();
+		queue.pop();
+
+		// Check if cell has already been visited
+		auto cellIdx = cell->gridIdx;
+		if (visited.find(cellIdx) != visited.end())
+		{
+			continue;
+		}
+		visited.insert(cellIdx);
+
+		// Check if this cell has a path in the desired direction
+		switch (direction)
+		{
+		case MoveDirections::up:
+			if (cell->pathUp.connectionType == ConnectionType::connected || cell->pathUp.connectionType == ConnectionType::ghostOnly)
+			{
+				return cell;
+			}
+			break;
+		case MoveDirections::down:
+			if (cell->pathDown.connectionType == ConnectionType::connected || cell->pathDown.connectionType == ConnectionType::ghostOnly)
+			{
+				return cell;
+			}
+			break;
+		case MoveDirections::left:
+			if (cell->pathLeft.connectionType == ConnectionType::connected || cell->pathLeft.connectionType == ConnectionType::ghostOnly)
+			{
+				return cell;
+			}
+			break;
+		case MoveDirections::right:
+			if (cell->pathRight.connectionType == ConnectionType::connected || cell->pathRight.connectionType == ConnectionType::ghostOnly)
+			{
+				return cell;
+			}
+			break;
+		default:
+			break;
+		}
+
+		// Add all connected cells to the queue, except for the opposite direction
+		if ((cell->pathUp.connectionType == ConnectionType::connected || cell->pathUp.connectionType == ConnectionType::ghostOnly) && direction != MoveDirections::down)
+		{
+			queue.push(cell->pathUp.connectedPoint);
+		}
+		if ((cell->pathDown.connectionType == ConnectionType::connected || cell->pathDown.connectionType == ConnectionType::ghostOnly) && direction != MoveDirections::up)
+		{
+			queue.push(cell->pathDown.connectedPoint);
+		}
+		if ((cell->pathLeft.connectionType == ConnectionType::connected || cell->pathLeft.connectionType == ConnectionType::ghostOnly) && direction != MoveDirections::right)
+		{
+			queue.push(cell->pathLeft.connectedPoint);
+		}
+		if ((cell->pathRight.connectionType == ConnectionType::connected || cell->pathRight.connectionType == ConnectionType::ghostOnly) && direction != MoveDirections::left)
+		{
+			queue.push(cell->pathRight.connectedPoint);
+		}
+	}
+
 	return nullptr;
 }

@@ -1,7 +1,7 @@
 #include "PacmanController.h"
 
 #include "InputManager.h"
-#include "PacmanMovement.h"
+#include "../Components/PacmanMovement.h"
 #include "../Commands/PacmanMoveCommand.h"
 
 bdnG::PacmanController::PacmanController(bdnE::GameObject* owner, int id):GameComponent(owner), m_Id{id}

@@ -1,6 +1,6 @@
 #include "ScoreDisplay.h"
 #include "GameObject.h"
-#include "PacmanController.h"
+#include "../CharacterControllers/PacmanController.h"
 #include "PickUp.h"
 #include <SDL_ttf.h>
 

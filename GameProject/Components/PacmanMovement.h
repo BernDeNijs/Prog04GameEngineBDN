@@ -16,11 +16,12 @@ namespace bdnG
 	class PacmanMovement final : public bdnE::GameComponent
 	{
 	public:
-		explicit PacmanMovement(bdnE::GameObject* owner, Grid* mapObject, float speed = 100.f);
+		explicit PacmanMovement(bdnE::GameObject* owner, Grid* mapObject, CellType spawnPoint, bool useGhostTypeMovement = false , float speed = 100.f);
 		void Update() override;
 
-		void SpawnPacmanOnSpawnPoint();
+		void SpawnOnSpawnPoint() const;
 		void SetMoveDirection(MoveDirections direction);
+		void SetSpeed(float speed) { m_Speed = speed; }
 	private:
 		float m_Speed{ 100.f };
 		Grid* m_pGridComponent = nullptr;
@@ -29,8 +30,14 @@ namespace bdnG
 		MoveDirections m_DesiredMoveDirection = MoveDirections::none;
 		GridCell* m_CurrentTarget = nullptr;
 
+		CellType m_SpawnPoint;
+		bool m_GhostTypeMovement;
+
 		GridCell* FindNewTarget();
+		GridCell* FindClosestTargetWithDirection(MoveDirections direction, GridCell currentCell);
 		void MoveToTarget(float moveDistance);
+
+
 	};
 
 }
