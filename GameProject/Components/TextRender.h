@@ -17,6 +17,7 @@ namespace bdnG
 		explicit TextRender(bdnE::GameObject* owner, const std::string& text, const std::shared_ptr<bdnE::Font>& font);
 
 		void Update() override;
+		void Render() const override;
 
 		void SetText(const std::string& text);
 		void SetText(const std::string& text, int fontSize);
@@ -25,10 +26,11 @@ namespace bdnG
 		void SetColor(SDL_Color newColor) { m_Color = newColor; m_needsUpdate = true; }
 	private:
 		bool m_needsUpdate{ true };
-		std::string m_text{ "Lorem Ipsum" };
+		std::vector<std::string> m_text{ "Lorem Ipsum" };
 		std::shared_ptr<bdnE::Font> m_font{};
-		std::shared_ptr<bdnE::Texture2D> m_textTexture;
+		std::vector<std::shared_ptr<bdnE::Texture2D>> m_textTexture;
 		SDL_Color m_Color = { 255,255,255 };
+		std::vector<std::string> SplitString(const std::string& str, char delimiter) const;
 	};
 }
 

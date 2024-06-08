@@ -10,15 +10,18 @@
 
 bdnG::ScoreDisplay::ScoreDisplay(bdnE::GameObject* owner): GameComponent(owner)
 {
-	for (const auto& object : m_pOwner->GetScene()->GetAllObjectsInScene())
+	std::vector<bdnE::GameObject*> sceneObjects = m_pOwner->GetScene()->GetAllObjectsInScene();
+
+
+	for (const auto& object : sceneObjects)
 	{
 		const auto pickupComponent = object->GetComponent<PickUp>();
-		if (pickupComponent == nullptr) return;
+		if (pickupComponent == nullptr) continue;
 		pickupComponent->AddObserver(this);
 		m_NrOfPickups++;
 	}
 	m_pTextRenderer = m_pOwner->AddComponent<TextRender>();
-
+	AddScore(0, 0);
 
 }
 
@@ -50,6 +53,10 @@ void bdnG::ScoreDisplay::OnNotify(const std::string& eventName,
 		if (itemType == ItemType::powerPellet)
 		{
 			AddScore(50, collidingObject->GetComponent<PacmanController>()->GetId());
+		}
+		if (itemType == ItemType::bonus)
+		{
+			AddScore(300, collidingObject->GetComponent<PacmanController>()->GetId());
 		}
 	}
 }

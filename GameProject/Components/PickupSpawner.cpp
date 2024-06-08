@@ -8,7 +8,6 @@ bdnG::PickupSpawner::PickupSpawner(bdnE::GameObject* owner, bdnG::Grid* mapObjec
 	SpawnPickups(m_Grid);
 
     m_BonusTimer = 10.f;
-    //SpawnBonus();
 }
 
 void bdnG::PickupSpawner::Update()
@@ -20,7 +19,7 @@ void bdnG::PickupSpawner::Update()
         if (m_BonusTimer <= 0)
         {
             m_BonusTimer = 0;
-            SpawnBonus();
+            PlaceBonus();
         }
     }
     
@@ -51,17 +50,21 @@ void bdnG::PickupSpawner::SpawnPickups(bdnG::Grid* mapObject)
                 pickup->SetLocalPosition(mapObject->GetPointPosWorld(gridCell.gridIdx));
                 pickup->SetLocalScale(scale);
             }
-            //if (gridCell.cellType == CellType::bonus)
-            //{
-            //    const auto pickup = m_pOwner->GetScene()->CreateGameObject(m_pOwner, false);
-            //    pickup->AddComponent<PickUp>(ItemType::bonus);
-            //    pickup->SetLocalPosition(mapObject->GetPointPosWorld(gridCell.gridIdx));
-            //}
+            if (gridCell.cellType == CellType::bonus)
+            {
+                if (m_BonusItem == nullptr)
+                {
+                    const auto pickup = m_pOwner->GetScene()->CreateGameObject(m_pOwner, false);
+                    pickup->AddComponent<PickUp>(ItemType::bonus);
+                    pickup->SetLocalPosition({ -1000, 0 });
+                    m_BonusItem = pickup;
+                }
+            }
         }
     }
 }
 
-void bdnG::PickupSpawner::SpawnBonus()
+void bdnG::PickupSpawner::PlaceBonus()
 {
     const std::vector<std::vector<GridCell>> grid = *m_Grid->GetGrid();
     glm::vec2 scale = m_Grid->GetOwner()->GetWorldTransform().Scale;
@@ -87,9 +90,7 @@ void bdnG::PickupSpawner::SpawnBonus()
     if (positionsFound > 0)
     {
         spawnPos /= static_cast<float>(positionsFound);
-        const auto pickup = m_pOwner->GetScene()->CreateGameObject(m_pOwner, false);
-        pickup->AddComponent<PickUp>(ItemType::bonus);
-        pickup->SetLocalPosition(spawnPos);
-        pickup->SetLocalScale(scale);
+        m_BonusItem->SetLocalPosition(spawnPos);
+        m_BonusItem->SetLocalScale(scale);
     }
 }

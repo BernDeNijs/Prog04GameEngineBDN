@@ -11,10 +11,12 @@ namespace bdnG
 		void Update()override;
 	private:
 		void SpawnPickups(bdnG::Grid* mapObject);
-		void SpawnBonus();
+		void PlaceBonus();
 
 		bdnG::Grid* m_Grid = nullptr;
 		float m_BonusTimer = 0;
+
+		bdnE::GameObject* m_BonusItem = nullptr;
 	};
 }
 

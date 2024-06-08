@@ -2,6 +2,7 @@
 #include "GameObject.h"
 
 #include <algorithm>
+#include <iostream>
 #include <map>
 
 using namespace bdnE;
@@ -11,10 +12,13 @@ unsigned int Scene::m_IdCounter = 0;
 std::vector<GameObject*> Scene::GetAllObjectsInScene() const
 {
 	std::vector<GameObject*> tempVec{};
+	std::cout << "m_Objects size: " << m_Objects.size() << std::endl;
 	for (const auto& object : m_Objects)
 	{
+		std::cout << "Looping over object" << std::endl;
 		tempVec.push_back(object.get());
 	}
+	std::cout << "tempVec size after loop: " << tempVec.size() << std::endl;
 
 	return tempVec;
 }
