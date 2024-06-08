@@ -34,7 +34,7 @@ namespace bdnG
 		bool m_GhostTypeMovement;
 
 		GridCell* FindNewTarget();
-		GridCell* FindClosestTargetWithDirection(MoveDirections direction, GridCell currentCell);
+		GridCell* FindClosestTargetWithDirection(MoveDirections direction, MoveDirections currentDirection, GridCell currentCell);
 		void MoveToTarget(float moveDistance);
 
 

@@ -118,7 +118,7 @@ bdnG::GridCell* bdnG::PacmanMovement::FindNewTarget()
 			}
 			else
 			{
-				return FindClosestTargetWithDirection(MoveDirections::up, currentCell);
+				return FindClosestTargetWithDirection(MoveDirections::up, m_CurrentMoveDirection, currentCell);
 			}				
 		}
 		//--
@@ -138,7 +138,7 @@ bdnG::GridCell* bdnG::PacmanMovement::FindNewTarget()
 			}
 			else
 			{
-				return FindClosestTargetWithDirection(MoveDirections::down, currentCell);
+				return FindClosestTargetWithDirection(MoveDirections::down, m_CurrentMoveDirection, currentCell);
 			}
 		}
 		break;
@@ -157,7 +157,7 @@ bdnG::GridCell* bdnG::PacmanMovement::FindNewTarget()
 			}
 			else
 			{
-				return FindClosestTargetWithDirection(MoveDirections::left, currentCell);
+				return FindClosestTargetWithDirection(MoveDirections::left, m_CurrentMoveDirection, currentCell);
 			}
 		}
 		break;
@@ -176,7 +176,7 @@ bdnG::GridCell* bdnG::PacmanMovement::FindNewTarget()
 			}
 			else
 			{
-				return FindClosestTargetWithDirection(MoveDirections::right, currentCell);
+				return FindClosestTargetWithDirection(MoveDirections::right, m_CurrentMoveDirection, currentCell);
 			}
 		}
 		break;
@@ -213,7 +213,7 @@ bdnG::GridCell* bdnG::PacmanMovement::FindNewTarget()
 	return nullptr;
 }
 
-bdnG::GridCell* bdnG::PacmanMovement::FindClosestTargetWithDirection(MoveDirections direction, bdnG::GridCell currentCell)
+bdnG::GridCell* bdnG::PacmanMovement::FindClosestTargetWithDirection(MoveDirections direction, bdnG::MoveDirections currentDirection, bdnG::GridCell currentCell)
 {
 
 	if (m_pGridComponent == nullptr) return nullptr;
@@ -270,19 +270,32 @@ bdnG::GridCell* bdnG::PacmanMovement::FindClosestTargetWithDirection(MoveDirecti
 		}
 
 		// Add all connected cells to the queue, except for the opposite direction
-		if ((cell->pathUp.connectionType == ConnectionType::connected || cell->pathUp.connectionType == ConnectionType::ghostOnly) && direction != MoveDirections::down)
+		if ((cell->pathUp.connectionType == ConnectionType::connected || 
+			cell->pathUp.connectionType == ConnectionType::ghostOnly) && 
+			currentDirection != MoveDirections::down && 
+			direction != MoveDirections::down
+			)
 		{
 			queue.push(cell->pathUp.connectedPoint);
 		}
-		if ((cell->pathDown.connectionType == ConnectionType::connected || cell->pathDown.connectionType == ConnectionType::ghostOnly) && direction != MoveDirections::up)
+		if ((cell->pathDown.connectionType == ConnectionType::connected || 
+			cell->pathDown.connectionType == ConnectionType::ghostOnly) && 
+			currentDirection != MoveDirections::up &&
+			direction != MoveDirections::up)
 		{
 			queue.push(cell->pathDown.connectedPoint);
 		}
-		if ((cell->pathLeft.connectionType == ConnectionType::connected || cell->pathLeft.connectionType == ConnectionType::ghostOnly) && direction != MoveDirections::right)
+		if ((cell->pathLeft.connectionType == ConnectionType::connected || 
+			cell->pathLeft.connectionType == ConnectionType::ghostOnly) && 
+			currentDirection != MoveDirections::right &&
+			direction != MoveDirections::right)
 		{
 			queue.push(cell->pathLeft.connectedPoint);
 		}
-		if ((cell->pathRight.connectionType == ConnectionType::connected || cell->pathRight.connectionType == ConnectionType::ghostOnly) && direction != MoveDirections::left)
+		if ((cell->pathRight.connectionType == ConnectionType::connected || 
+			cell->pathRight.connectionType == ConnectionType::ghostOnly) && 
+			currentDirection != MoveDirections::left &&
+			direction != MoveDirections::left)
 		{
 			queue.push(cell->pathRight.connectedPoint);
 		}

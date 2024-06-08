@@ -30,6 +30,7 @@
 //Sound
 #include "SoundLocator.h"
 #include "SDLSoundService.h"
+#include "CharacterControllers/GhostController.h"
 #include "CharacterControllers/PacmanController.h"
 #include "Commands/PacmanMoveCommand.h"
 #include "Components/CircleCollider.h"
@@ -37,6 +38,7 @@
 #include "Components/PacmanRender.h"
 #include "Components/PickupSpawner.h"
 #include "Components/ScoreDisplay.h"
+#include "Components/GhostRenderer.h"
 
 
 void load()
@@ -48,13 +50,12 @@ void load()
 		const auto background = level01->CreateGameObject();
 		auto gameMap = background->AddComponent<bdnG::Grid>("Level01.txt","GridTiles.png");
 		background->SetLocalScale(2.f);
-		background->SetLocalPosition({ 0,0,-1 });
 		background->SetLocalPosition({ 0,50,-1 });
 
 		const auto pacMan = level01->CreateGameObject();
 		pacMan->AddComponent<bdnG::PacmanRender>("PacMan.png");
 		pacMan->AddComponent<bdnG::CircleCollider>(5.f, "Pacman");
-		pacMan->AddComponent<bdnG::PacmanMovement>(gameMap, bdnG::CellType::pacmanSpawn,true);
+		pacMan->AddComponent<bdnG::PacmanMovement>(gameMap, bdnG::CellType::pacmanSpawn);
 		pacMan->SetLocalScale(2.f);
 		pacMan->AddComponent<bdnG::PacmanController>(0);
 
@@ -64,6 +65,14 @@ void load()
 		const auto pointsDisplay = level01->CreateGameObject();
 		pointsDisplay->AddComponent<bdnG::ScoreDisplay>();
 		pointsDisplay->SetLocalPosition({ 0.f, 0.f, 1.f });
+
+
+		const auto blinky = level01->CreateGameObject();
+		blinky->AddComponent<bdnG::PacmanMovement>(gameMap, bdnG::CellType::blinkySpawn, true);
+		blinky->AddComponent<bdnG::GhostRenderer>();
+		blinky->AddComponent<bdnG::GhostController>( pacMan);
+	}
+	{
 
 	}
 
