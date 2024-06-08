@@ -8,6 +8,17 @@ using namespace bdnE;
 
 unsigned int Scene::m_IdCounter = 0;
 
+std::vector<GameObject*> Scene::GetAllObjectsInScene() const
+{
+	std::vector<GameObject*> tempVec{};
+	for (const auto& object : m_Objects)
+	{
+		tempVec.push_back(object.get());
+	}
+
+	return tempVec;
+}
+
 Scene::Scene(const std::string& name) : m_Name(name) {}
 
 Scene::~Scene() = default;

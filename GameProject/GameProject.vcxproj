@@ -191,7 +191,9 @@
     <ClCompile Include="PowerPelletComponent.cpp" />
     <ClCompile Include="RemainingLivesDisplayComponent.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
-    <ClCompile Include="TextComponent.cpp" />
+    <ClCompile Include="Components\ScoreDisplay.cpp" />
+    <ClCompile Include="Components\SceneChanger.cpp" />
+    <ClCompile Include="Components\TextRender.cpp" />
     <ClCompile Include="TTCComponent.cpp" />
     <ClCompile Include="MoveComponent.cpp" />
   </ItemGroup>
@@ -221,7 +223,9 @@
     <ClInclude Include="PowerPelletComponent.h" />
     <ClInclude Include="RemainingLivesDisplayComponent.h" />
     <ClInclude Include="RenderComponent.h" />
-    <ClInclude Include="TextComponent.h" />
+    <ClInclude Include="Components\ScoreDisplay.h" />
+    <ClInclude Include="Components\SceneChanger.h" />
+    <ClInclude Include="Components\TextRender.h" />
     <ClInclude Include="TTCComponent.h" />
     <ClInclude Include="MoveComponent.h" />
     <ClInclude Include="WakaCommand.h" />

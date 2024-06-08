@@ -6,11 +6,24 @@ bdnG::PickupSpawner::PickupSpawner(bdnE::GameObject* owner, bdnG::Grid* mapObjec
 {
     m_Grid = mapObject;
 	SpawnPickups(m_Grid);
-    SpawnBonus();
+
+    m_BonusTimer = 10.f;
+    //SpawnBonus();
 }
 
 void bdnG::PickupSpawner::Update()
 {
+    auto& time = bdnE::GameTime::GetInstance();
+    if (m_BonusTimer > 0)
+    {
+        m_BonusTimer -= time.GetDeltaTime();
+        if (m_BonusTimer <= 0)
+        {
+            m_BonusTimer = 0;
+            SpawnBonus();
+        }
+    }
+    
 	GameComponent::Update();
 }
 

@@ -14,6 +14,7 @@ namespace bdnG
 		void SpawnBonus();
 
 		bdnG::Grid* m_Grid = nullptr;
+		float m_BonusTimer = 0;
 	};
 }
 

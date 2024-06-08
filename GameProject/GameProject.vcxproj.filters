@@ -39,7 +39,7 @@
     <ClCompile Include="RenderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextComponent.cpp">
+    <ClCompile Include="Components\TextRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TTCComponent.cpp">
@@ -84,6 +84,12 @@
     <ClCompile Include="Components\PacmanController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\ScoreDisplay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\SceneChanger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DamageCommand.h">
@@ -116,7 +122,7 @@
     <ClInclude Include="RenderComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TextComponent.h">
+    <ClInclude Include="Components\TextRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TTCComponent.h">
@@ -171,6 +177,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\PacmanController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\ScoreDisplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SceneChanger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,20 +2,19 @@
 #include "GameComponent.h"
 #include "Font.h"
 #include <string>
-#include "RenderComponent.h"
 #include "Texture2D.h"
 
 #include <stdexcept>
 #include <SDL_ttf.h>
 namespace bdnG
 {
-	class TextComponent final : public bdnE::GameComponent
+	class TextRender final : public bdnE::GameComponent
 	{
 	public:
-		explicit TextComponent(bdnE::GameObject* owner);
-		explicit TextComponent(bdnE::GameObject* owner, const std::string& text);
-		explicit TextComponent(bdnE::GameObject* owner, const std::string& text, int fontSize);
-		explicit TextComponent(bdnE::GameObject* owner, const std::string& text, const std::shared_ptr<bdnE::Font>& font);
+		explicit TextRender(bdnE::GameObject* owner);
+		explicit TextRender(bdnE::GameObject* owner, const std::string& text);
+		explicit TextRender(bdnE::GameObject* owner, const std::string& text, int fontSize);
+		explicit TextRender(bdnE::GameObject* owner, const std::string& text, const std::shared_ptr<bdnE::Font>& font);
 
 		void Update() override;
 
@@ -30,8 +29,6 @@ namespace bdnG
 		std::shared_ptr<bdnE::Font> m_font{};
 		std::shared_ptr<bdnE::Texture2D> m_textTexture;
 		SDL_Color m_Color = { 255,255,255 };
-		bdnG::RenderComponent* m_pRenderer;
-
 	};
 }
 
